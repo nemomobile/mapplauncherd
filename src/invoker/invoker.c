@@ -85,7 +85,6 @@ static bool invoker_send_magic(int fd, int options)
 {
     /* Send magic. */
     invoke_send_msg(fd, INVOKER_MSG_MAGIC | INVOKER_MSG_MAGIC_VERSION | options);
-
     invoke_recv_ack(fd);
 
     return true;
@@ -96,7 +95,6 @@ static bool invoker_send_name(int fd, char *name)
     /* Send action. */
     invoke_send_msg(fd, INVOKER_MSG_NAME);
     invoke_send_str(fd, name);
-
     invoke_recv_ack(fd);
 
     return true;
@@ -107,7 +105,6 @@ static bool invoker_send_exec(int fd, char *exec)
     /* Send action. */
     invoke_send_msg(fd, INVOKER_MSG_EXEC);
     invoke_send_str(fd, exec);
-
     invoke_recv_ack(fd);
 
     return true;
@@ -150,7 +147,6 @@ static bool invoker_send_end(int fd)
 {
     /* Send action. */
     invoke_send_msg(fd, INVOKER_MSG_END);
-
     invoke_recv_ack(fd);
 
     return true;
@@ -166,7 +162,7 @@ static void usage(int status)
 {
     printf("\nUsage: %s TYPE [options] file [file-options]\n"
            "Launch dui or qt application. \n"
-           "Example %s --type=dui /usr/bin/hello \n"
+           "Example %s --type=dui /usr/bin/helloworld \n"
            "TYPE: \n"
            "  dui               Launch DUI application. \n"
            "  qt                Launch Qt application.  \n"
@@ -193,7 +189,12 @@ int main(int argc, char *argv[])
     if (strstr(argv[0], PROG_NAME))
     {
         /* Check application type to start */
-        if (strcmp(argv[1], "--type=dui") == 0)
+        if (argc < 2)
+        {
+            report(report_error, "application type is missing \n");
+            usage(1);
+        }
+        else if (strcmp(argv[1], "--type=dui") == 0)
             app_type = DUI_APP;
         else if (strcmp(argv[1], "--type=qt") == 0)
             app_type = QT_APP;
@@ -208,6 +209,11 @@ int main(int argc, char *argv[])
         }
 
         /* Parse invoker options and search binary to launch */
+        if (argc < 3)
+        {
+            report(report_error, "application name is missing \n");
+            usage(1);
+        }
         for (i = 2; i < argc; ++i)
         {
             if (strcmp(argv[i], "--delay") == 0)
@@ -230,7 +236,7 @@ int main(int argc, char *argv[])
                 prog_name = search_program(argv[i]);
                 if (!prog_name)
                 {
-                    report(report_error, "nothing to invoke\n");
+                    report(report_error, "can't find application to invoke\n");
                     usage(0);
                 }
 
@@ -247,7 +253,7 @@ int main(int argc, char *argv[])
     else
     {
         /* Called with a different name, old way of using invoker */
-        die(1, "wrong way of using, call dui-invoker or qt-invoker");
+        die(1, "wrong way of using, don't use symlinks");
     }
 
 

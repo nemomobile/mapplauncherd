@@ -53,15 +53,15 @@ static void vreport(enum report_type type, char *msg, va_list arg)
         log_type = LOG_INFO;
         break;
     case report_warning:
-        str_type = "warning ";
+        str_type = "warning: ";
         log_type = LOG_WARNING;
         break;
     case report_error:
-        str_type = "error ";
+        str_type = "error: ";
         log_type = LOG_ERR;
         break;
     case report_fatal:
-        str_type = "died ";
+        str_type = "died: ";
         log_type = LOG_ERR;
         break;
     }
