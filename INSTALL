@@ -1,0 +1,32 @@
+BUILD & INSTALL
+===============
+
+Applauncherd uses the CMake build system.
+
+
+Configure
+---------
+
+Applauncherd only:
+
+cmake .
+
+Applauncherd + tests:
+
+BUILD_TESTS=1 cmake .
+
+
+Build
+-----
+
+make
+
+
+Install
+-------
+
+make install
+
+
+-- Jussi Lind <jussi.lind@nokia.com>
+

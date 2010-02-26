@@ -11,3 +11,31 @@ Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: Launcher daemon and invoker to speed up launches
  Launcher daemon and invoker to speed up launches. 
  Special boosters for DUI and Qt.
+ 
+Package: applauncherd-tests
+Section: extra
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, libdui0, testrunner, applauncherd, ci-testing 
+XB-Maemo-CI-Packages: applauncherd
+XB-Maemo-CI-Stage: fast, staging, acceptance, validation
+Description: applauncherd unit tests
+ Unit testing binaries and shellscripts for testing applauncherd. 
+
+Package: applauncherd-functional-tests
+Section: extra
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, libdui0, testrunner, applauncherd, ci-testing, matti
+XB-Maemo-CI-Packages: applauncherd
+XB-Maemo-CI-Stage: fast, staging, acceptance, validation
+Description: applauncherd functional tests
+ Functional testing binaries and shellscripts for testing applauncherd.
+
+Package: applauncherd-performance-tests
+Section: extra
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, libdui0, testrunner, applauncherd, ci-testing
+XB-Maemo-CI-Packages: applauncherd
+XB-Maemo-CI-Stage: fast, acceptance, validation
+Description: applauncherd performance tests
+ Performance testing binaries and shellscripts for testing applauncherd. 
+
