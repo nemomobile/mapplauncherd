@@ -1,0 +1,13 @@
+Package: maemo-launcher
+Version: 0.35-6
+Section: embedded
+Priority: optional
+Architecture: armel
+Depends: libalarm2, libatk1.0-0 (>= 1.24.0), libc6 (>= 2.5.0-1), libcairo2, libconic0, libdbus-1-3 (>= 1.1.4), libdbus-glib-1-2 (>= 0.76), libebook (>= 1.4.2.1), libedata-book (>= 1.4.2.1), libedataserver (>= 1.4.2.1), libfontconfig1 (>= 2.6.0), libfreetype6 (>= 2.3.9), libgcc1 (>= 1:4.2.1), libgconf2-6 (>= 2.13.5), libglib2.0-0 (>= 2.20.0), libgtk2.0-0 (>= 2:2.12.9-0osso1), libgvfscommon0 (>= 0.99.6), libhildon1, libhildondesktop1, libhildonfm2 (>= 1:2.22+0m5), libhildonmime0 (>= 2.1.3), libi18n0, libjpeg62, libmodest-dbus-client, libosso-gnomevfs2-0, libosso1 (>= 2.21), libpango1.0-0, libpulse0 (>= 0.9.15~test5), libsqlite3-0 (>= 3.6.14), libstdc++6 (>= 4.2.1), libtelepathy-glib0 (>= 0.7.32), libxml2, hildon-initscripts
+Replaces: system-services
+Installed-Size: 236
+Maintainer: Janne Karhunen <Janne.Karhunen@nokia.com>
+Description: application startup accelerator for maemo
+ Maemo launcher tries to reduce startup time by pre-initializing the state
+ of some libraries using the booster modules and then dynamically loading
+ the applications. It currently supports null, GTK+, QT and CPP boosters.

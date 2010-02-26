@@ -1,0 +1,93 @@
+#!/usr/bin/perl
+
+=head1 NAME
+
+dh_maemolauncher - prepare a package to use maemo-launcher
+
+=cut
+
+use strict;
+use warnings;
+use Debian::Debhelper::Dh_Lib;
+
+=head1 SYNOPSIS
+
+B<dh_maemolauncher> [S<I<debhelper options>>] [S<I<shared object ...>>]
+
+=head1 DESCRIPTION
+
+dh_maemolauncher is a debhelper program that is responsible for adding
+the ${launcher:Depends} into the substvars file and creating the proper
+symlinks for launcherizable programs.
+
+Any shared object specified as parameteres will be prepared to be used
+by maemo-launcher into the first package dh_maemolauncher is told to act
+on. By default, this is the first binary package in debian/control, but
+if you use -p, -i or -a flags, it will be the first package specified by
+those flags.
+
+Files named debian/package.launcher (or debian/launcher source packages
+produging a single binary) can list other shared objects to be prepared.
+
+=head1 OPTIONS
+
+=over 4
+
+=item I<shared object ...>
+
+Prepare these shared objects to be used by the launcher. Namely, renaming
+them to use the proper extension, and symlink the original name to
+maemo-invoker.
+
+=back
+
+=head1 NOTES
+
+If the DEB_BUILD_OPTIONS environment variable contains "nolauncher", no
+binary will be prepared to support maemo-launcher.
+
+=head1 EXAMPLES
+
+	dh_maemolauncher usr/bin/foo
+
+=cut
+
+init();
+
+if (defined $ENV{DEB_BUILD_OPTIONS} &&
+    $ENV{DEB_BUILD_OPTIONS} =~ /nolauncher/) {
+	exit;
+}
+
+foreach my $package (@{$dh{DOPACKAGES}}) {
+	my $tmp = tmpdir($package);
+	my $launcher_file = pkgfile($package, "launcher");
+	my @binaries;
+
+	addsubstvar($package, "launcher:Depends", "maemo-launcher");
+
+	if ($launcher_file) {
+		@binaries = filearray($launcher_file, ".");
+	}
+
+	if (($package eq $dh{FIRSTPACKAGE} || $dh{PARAMS_ALL}) && @ARGV) {
+		push @binaries, @ARGV;
+	}
+
+	foreach my $so (@binaries) {
+		doit("mv", "-f", "$tmp/$so", "$tmp/$so.launch");
+		doit("ln", "-s", "/usr/bin/maemo-invoker", "$tmp/$so");
+	}
+}
+
+=head1 SEE ALSO
+
+L<debhelper(7)>
+
+This program is a part of maemo-launcher but is made to work with debhelper.
+
+=head1 AUTHOR
+
+Guillem Jover <guillem.jover@nokia.com>
+
+=cut

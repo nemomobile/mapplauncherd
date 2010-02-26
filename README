@@ -1,0 +1,208 @@
+
+  $Id: README 15546 2008-05-12 14:04:24Z guillem $
+
+
+What is the maemo-launcher?
+===========================
+
+The maemo-launcher is a daemon to speedup applications startup time and
+memory sharing between processes. It supports booster modules, which are
+the ones in charge of preinitializing and keeping the interesting state.
+
+The only current useful booster module is for gtk, with an option to
+link against the hildon library to speedup symbol resolving. This module
+preinitializes components like pango and cairo.
+
+When an application is invoked, it forks, tries to restore the state it
+might have saved during the preinitialization step and the environment as
+if it had been started directy, dynamically opens the application, and
+afterwards launches the application by calling the "main" function. The
+maemo-invoker will proxy the application exit status back by default.
+
+The launcher is listening to a unix socket for notifications of new
+applications to be launched. The maemo-invoker is the program in charge to
+notify the launcher of which application to run.
+
+Read the man pages for further information.
+
+
+Current known issues
+====================
+
+If maemo-invoker has been told not to wait for the application to exit and
+use a delay instead and that application takes too much time to register the
+DBUS service the maemo-invoker may have exited already, so dbus will not
+allow the application to register it after the process it has started has
+finished already.
+
+Binaries intended to be run by maemo-launcher must be linked with the
+"-pie -rdynamic" linker flags if they should transparently work as
+executables and dlopen()-able objects. If running them as executable is not
+a requirement, "-rdynamic" or "-shared" is good enough.
+
+gnome_vfs_init() cannot be called by the daemon because it opens a pipe to
+the vfs daemon.
+
+Children using GThread should use
+
+  if (!g_thread_supported())
+    g_thread_init(NULL);
+
+to be safe against possible future changes in maemo-launcher.
+
+The children are dlopen()ed using RTLD_LAZY, so symbol relocation errors are
+not caught at the time we call dlopen(). Instead, the child will crash
+randomly at any later point if the libraries it depends on are somehow messed
+up.
+
+
+Integrating the maemo-launcher painlessly
+=========================================
+
+These are the detailed changes needed to add support for the new
+maemo-launcher.
+
+The changes are meant for normal Maemo packages using automake (there's now
+some notes for make based build systems, but those might need more changes
+not documented here, as Makefiles can vary from writer to writer). If yours
+differ feel free to contact me (Guillem Jover <guillem.jover@nokia.com>)
+and I can help you on the process.
+
+
+Upstream Changes (automake based build system)
+----------------
+
+On configure.ac (or the deprecated configure.in) add something like:
+
+,----X<----
+|AC_ARG_ENABLE([maemo-launcher],
+|              [AS_HELP_STRING([--enable-maemo-launcher],
+|                              [build with maemo-launcher support])],
+|                              [case "${enableval}" in
+|                               yes) maemo_launcher=true ;;
+|                               no)  maemo_launcher=false ;;
+|                               *) AC_MSG_ERROR([bad value ${enableval} for --enable-maemo-launcher]) ;;
+|                               esac], [maemo_launcher=false])
+|
+|if test x$maemo_launcher = xtrue
+|then
+|	PKG_CHECK_MODULES(MAEMO_LAUNCHER, [maemo-launcher-app])
+|	AC_SUBST(MAEMO_LAUNCHER_CFLAGS)
+|	AC_SUBST(MAEMO_LAUNCHER_LIBS)
+|fi
+`----X<----
+
+On the Makefile.am that is creating the final application binary, add to
+the application_CFLAGS variable:
+
+	$(MAEMO_LAUNCHER_CFLAGS)
+
+And to the the application_LIBS variable:
+
+	$(MAEMO_LAUNCHER_LIBS)
+
+
+Upstream Changes (make based build system)
+----------------
+
+On the Makefile(s) responsible of compiling the object files and linking the
+application to be launcherized, the following can be used to obtain the
+proper flags:
+
+,----X<----
+|ifeq ($(USE_LAUNCHER),yes)
+|  application_CFLAGS := $(shell pkg-config --cflags maemo-launcher-app)
+|  application_LDFLAGS := $(shell pkg-config --libs maemo-launcher-app)
+|endif
+`----X<----
+
+Those new variables can then be added on the respective linking and compiling
+rules for the desired application in the Makefile.
+
+
+Debian Changes
+--------------
+
+* debian/control:
+
+  - Add 'maemo-launcher-dev (>= 0.23-1)' to Build-Depends.
+
+  - Add a "${launcher:Depends} to the "Depends:" line of the package
+    containing the application to be launched.
+
+* debian/rules (debhelper):
+
+  - At the top of the file around other code processing DEB_BUILD_OPTIONS,
+    for automake base build systems add:
+
+,----X<----
+|ifeq (,$(findstring nolauncher,$(DEB_BUILD_OPTIONS)))
+|       conf_opt := --enable-maemo-launcher
+|endif
+`----X<----
+
+    For make based ones:
+
+,----X<----
+|ifeq (,$(findstring nolauncher,$(DEB_BUILD_OPTIONS)))
+|       USE_LAUNCHER := yes
+|endif
+`----X<----
+
+  - To notify the upstream build system that we might want to enable the
+    launcher support, for automake based build systems on the configure
+    call, add $(conf_opt), so that it becomes something like:
+
+,----X<----
+|	./configure --enable-foo --enable-bar $(conf_opt)
+`----X<----
+
+    For make based ones:
+
+,----X<----
+|	$(MAKE) $(ARG_FOO) USE_LAUNCHER=$(USE_LAUNCHER)
+`----X<----
+
+  - On the binary target producing the package with launcherized files,
+    add a call to dh_maemolauncher.
+
+* debian/package.launcher or debian/launcher
+
+  - Create either, depending if there's multiple binary packages being
+    build from the same source or only one.
+
+  - Add to it the list of programs that are being built with maemo-launcher
+    support. Some example content:
+
+,----X<----
+|/usr/bin/application-foo
+|/usr/bin/application-bar
+`----X<----
+
+
+Using a linker script
+=====================
+
+When an application is built as a library as required by maemo-launcher,
+symbols for all of its non-static functions will be exported, which can be
+a memory usage and startup performance issue if there are lots of them. In
+addition to marking functions static where possible the amount of symbols
+exported can be reduced by means of a version script. Please check the ld
+info page («info ld Scripts VERSION») for its syntax. There's an example
+on the client/ directory in this source tree.
+
+
+Development and testing
+=======================
+
+
+Testing w/o launcher support
+----------------------------
+
+Sometimes during development, or in some cases when bugs appear, and one
+wants to discard the launcher from the diagnosis, it's useful to be able
+to disable it. This can be done by building with the following command
+line:
+
+	DEB_BUILD_OPTIONS=nolauncher dpkg-buildpackage -us -uc -b
+

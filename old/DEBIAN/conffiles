@@ -1,0 +1,3 @@
+/etc/init.d/maemo-launcher
+/etc/X11/Xsession.d/42maemo-launcher
+/etc/X11/Xsession.d/02maemo-launcher

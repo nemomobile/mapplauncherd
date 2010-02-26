@@ -1,0 +1,513 @@
+maemo-launcher (0.35-6+0m5) unstable; urgency=low
+
+  * This entry has been added by BIFH queue processor
+    Suffix +0m5 added to package revision
+
+ -- pekka lundstrom <pekka.lundstrom@nokia.com>  Sun, 09 Aug 2009 09:50:24 +0300
+
+maemo-launcher (0.35-6) unstable; urgency=low
+
+  * Revise hildon booster library listing, Fixes: NB#129909
+
+ -- Janne Karhunen <Janne.Karhunen@nokia.com>  Tue, 04 Aug 2009 10:25:04 +0300
+
+maemo-launcher (0.35-5) unstable; urgency=low
+
+  * Add timestamping to dlopen calls
+  * Initialize gnome volume manager (Fixes: NB#129288)
+  * Do not link against clinkc (Fixes: NB#128425)  
+
+ -- Janne Karhunen <Janne.Karhunen@nokia.com>  Fri, 24 Jul 2009 09:02:02 +0300
+
+maemo-launcher (0.35-4) unstable; urgency=low
+
+  * Remove obsolete fork from 'appdied'
+
+ -- Janne Karhunen <Janne.Karhunen@nokia.com>  Mon, 18 May 2009 09:43:55 +0300
+
+maemo-launcher (0.35-3) unstable; urgency=low
+
+  * Suw restart support, Fixes: NB#110612
+  * Omit missing 'ApplicationDied', Fixes: NB#113378
+
+ -- Janne Karhunen <Janne.Karhunen@nokia.com>  Mon, 04 May 2009 12:49:28 +0300
+
+maemo-launcher (0.35-2) unstable; urgency=low
+
+  * Fix typo in booster initialization
+
+ -- Janne Karhunen <Janne.Karhunen@nokia.com>  Mon, 20 Apr 2009 11:48:57 +0300
+
+maemo-launcher (0.35-1) unstable; urgency=low
+
+  * Adds cpp booster (Fixes: NB#108695)
+  * Reconstruct svn tree (duh)
+
+ -- Janne Karhunen <Janne.Karhunen@nokia.com>  Tue, 07 Apr 2009 13:36:27 +0300
+
+maemo-launcher (0.34-1) unstable; urgency=low
+
+  * New upstream release.
+    - Make the hildon booster link against: libdrm, xcomposite, xdamage, xv,
+      gstreamer-base-0.10, gstreamer-controller-0.10, liboil-0.3, bluez,
+      libpulse, and alarm. (Fixes: NB#96648)
+  * Use ${binary:Version} instead of deprecated ${Source-Version}.
+  * Switch to debhelper compatibility level 5.
+    - Fix dh_strip --dbg-package argument to be the debug package.
+  * Rename debian/init.d to debian/maemo-launcher.init.
+  * Remove obsolete libhildonhelp-dev. Fixes: NB#105122
+
+ -- Guillem Jover <guillem.jover@nokia.com>  Tue, 17 Mar 2009 20:13:27 +0200
+
+maemo-launcher (0.33-1) unstable; urgency=low
+
+  * New upstream release.
+    - Remove RCS keywords.
+    - Use UTF-8 copyright symbol.
+    - Rename client test application to to app-hildon.
+    - Add a new app-console test client.
+    - Connect stdio descriptors from invoked program to the invoker.
+    - Forward environment variables from invoker to the launcher.
+      (Fixes: NB#92995)
+  * Take over Xsession script from upstart. (Fixes: NB#103352)
+  * Reference GPL-2 from common-licenses instead of just GPL.
+  * Set Priority for maemo-launcher-dbg to extra.
+  * Improve package descriptions.
+  * Update upstream copyright years in debian/copyright.
+  * Update Build-Depends:
+    - Remove obsolete libhildonhelp-dev.
+    - Rename gtkhtml-dev to gtkhtml3.14-dev. (Fixes: NB#105122)
+
+ -- Guillem Jover <guillem.jover@nokia.com>  Tue, 10 Mar 2009 22:30:43 +0200
+
+maemo-launcher (0.32-1) unstable; urgency=low
+
+  * New Upstream Release.
+    - Add support for a Qt booster (not built by default).
+  * Switch from libhildondesktop-dev to libhildondesktop1-dev.
+    (Fixes: #95532)
+
+ -- Guillem Jover <guillem.jover@nokia.com>  Fri, 19 Dec 2008 15:03:22 +0200
+
+maemo-launcher (0.31-4) unstable; urgency=low
+
+  * Export USER, LOGNAME, SHELL and HOME to maemo-launcher again,
+    but this time do it before and after sourcing af-defines.sh as it
+    likes to make a mess and stomp on our variables. (Fixes: NM#1131)
+
+ -- Guillem Jover <guillem.jover@nokia.com>  Thu, 09 Oct 2008 22:46:32 +0300
+
+maemo-launcher (0.31-3) unstable; urgency=low
+
+  * Revert "Export USER, LOGNAME, SHELL and HOME to maemo-launcher".
+
+ -- Guillem Jover <guillem.jover@nokia.com>  Fri, 11 Jul 2008 17:24:20 +0300
+
+maemo-launcher (0.31-2) unstable; urgency=low
+
+  * Sources af-defines.sh at the beginning to avoid it unconditionally
+    overriding the USER variable (among others). (Fixes: NB#86855)
+
+ -- Guillem Jover <guillem.jover@nokia.com>  Thu, 10 Jul 2008 19:29:18 +0300
+
+maemo-launcher (0.31-1) unstable; urgency=low
+
+  * Export USER, LOGNAME, SHELL and HOME to maemo-launcher. (Fixes: NM#1131)
+  * Add comment in the init.d script about the wrongess of the current
+    approach.
+  * Disable the application crash notifications. (Fixes: NB#86711)
+  * Disable self core dumping on maemo-invoker just before enabling signal
+    forwarding. (Fixes: NB#86713)
+
+ -- Guillem Jover <guillem.jover@nokia.com>  Thu, 03 Jul 2008 18:00:08 +0300
+
+maemo-launcher (0.30-1) unstable; urgency=low
+
+  * New Upstream Release.
+    - README: Typo fix and additional information for symbol versioning.
+      Thanks to Eero Tamminen <eero.tamminen@nokia.com>.
+  * Replace libosso-help-dev with libhildonhelp-dev in Build-Depends.
+    (Fixes: NB#85923)
+
+ -- Guillem Jover <guillem.jover@nokia.com>  Thu, 29 May 2008 18:33:55 +0300
+
+maemo-launcher (0.29-1) unstable; urgency=low
+
+  * New Upstream Release.
+    - Destroy and store state only for valid childs. (Fixes: NB#85166)
+
+ -- Guillem Jover <guillem.jover@nokia.com>  Mon, 05 May 2008 16:56:36 +0300
+
+maemo-launcher (0.28-1) unstable; urgency=low
+
+  * New Upstream Release.
+    - Fix memory leaks for comm_msg from the upgrade in-place support.
+      (Fixes: NB#84534)
+
+ -- Guillem Jover <guillem.jover@nokia.com>  Sun, 27 Apr 2008 23:04:41 +0300
+
+maemo-launcher (0.27-1) unstable; urgency=low
+
+  * New Upstream Release.
+    - Port client to Hildon 1.x.
+    - Use compile options determined from configure to build the client.
+    - Use exit(3) instead of _exit(2) so that things like atexit(3) work.
+      (Fixes: NB#80273)
+    - Support upgrading the launcher via in-memory hot-swap while preserving
+      the state. (Fixes: NB#82624)
+    - Document changes needed for make based build systems and mention the
+      possible usage of version scripts. (Fixes: NB#72805)
+  * Update copyright year in debian/copyright.
+
+ -- Guillem Jover <guillem.jover@nokia.com>  Wed, 16 Apr 2008 00:52:25 +0300
+
+maemo-launcher (0.26-1) unstable; urgency=low
+
+  * New Upstream Release.
+    - Fix memory leak when failing to allocate the childs structure.
+
+ -- Guillem Jover <guillem.jover@nokia.com>  Wed, 03 Oct 2007 22:12:20 +0300
+
+maemo-launcher (0.25-1) unstable; urgency=low
+
+  * New Upstream Release.
+    - Do not link against libstdc++ anymore. (Fixes: NB#69684)
+
+ -- Guillem Jover <guillem.jover@nokia.com>  Tue, 25 Sep 2007 20:04:09 +0300
+
+maemo-launcher (0.24-1) unstable; urgency=low
+
+  * New Upstream Release.
+    - Do not call dbus_shutdown as libdbus is too eager to abort.
+      (Fixes: NB#65588)
+  * Place maemo-launcher-dev on the libdevel Section.
+
+ -- Guillem Jover <guillem.jover@nokia.com>  Thu, 30 Aug 2007 21:20:12 +0300
+
+maemo-launcher (0.23-1) unstable; urgency=low
+
+  * New Upstream Release.
+    - Do not close D-Bus shared connections on the child sending the
+      ApplicationDied signal. (Fixes: NB#65588)
+    - Update documentation on how to integrate the launcher support into
+      other projects.
+    - Add support for nolauncher on DEB_BUILD_OPTIONS to dh_maemolauncher.
+
+ -- Guillem Jover <guillem.jover@nokia.com>  Wed, 15 Aug 2007 20:36:19 +0300
+
+maemo-launcher (0.22-1) unstable; urgency=low
+
+  * New Upstream Release.
+    - Update gtk booster module to support gtk+ 2.10. (Fixes: NM#952)
+      Thanks to Johannes Schmid <johannes.schmid@openismus.com> for the
+      initial patch.
+    - Use memmove over overlapping memory in maemo-summoner. (Fixes: NB#49872)
+    - Support path resolution from maemo-summoner and maemo-invoker.
+      (Fixes: NM#1741, NB#55873)
+    - Strip '.launch' from invoked or summoned programs. (Fixes: NB#52432)
+    - Correctly set argv contents for summoned programs.
+      (Fixes: NB#52434, NB#52435)
+    - Add an pkgconfig file for launcherized applications. (Fixes: NB#52992)
+    - Load the program binary after having adjusted the process priority and
+      oom_adj value. (Fixes: NB#59173)
+  * Remove Build-Depends on libxft-dev.
+  * Add new package maemo-launcher-dev and include the header file
+    for the boosters and the pkgconfig file. (Fixes: NM#1027)
+  * Remove clinkc-av-dev, hildon-base-lib-dev and hildon-status-bar-lib-dev
+    Build-Depends.
+  * Update Build-Depends to the new counterparts:
+    - Replace hildon-libs-dev with libhildon1-dev.
+    - Replace hildon-fm-dev with libhildonfm2-dev.
+    - Replace libossomime-dev with libhildonmime-dev.
+    - Replace libhildonmenu-dev with libhildondesktop-dev.
+  * Add a dh_maemolauncher to automate launcherizing packages.
+    - Add a Build-Depends on debhelper to maemo-launcher-dev.
+    - Generate and install the manpage from the perl script.
+  * Do not ignore errors from "make distclean".
+
+ -- Guillem Jover <guillem.jover@nokia.com>  Thu, 02 Aug 2007 01:47:36 +0300
+
+maemo-launcher (0.21-1) unstable; urgency=low
+
+  * New Upstream Release.
+    - Link against libstdc++, clinkc and clinkcav (add build dependencies
+      on clinkc-dev and clinkc-av-dev). (Fixes: NB#47726)
+    - Initialize Xft by calling its constructors (add a build dependency
+      on libxft-dev). (Fixes: NB#17937)
+    - Check for asprintf errors. (Fixes: NB#45396)
+  * Fix chmod instance following upstream maemo-defender to defender rename.
+
+ -- Guillem Jover <guillem.jover@nokia.com>  Wed, 29 Nov 2006 00:00:32 +0200
+
+maemo-launcher (0.20-1) unstable; urgency=low
+
+  * New Upstream Release.
+    - Unprotect non-essential user processes from the OOM killer.
+      (Fixes: NB#46702)
+  * Make the hildon enabled booster link against even more libraries, so
+    that we can "preload" and share them across the childs. Added to
+    Build-Depends gtkhtml-dev, libosso-dev, libossomime-dev, libosso-help-dev,
+    hildon-fm-dev, libhildonmenu-dev hildon-status-bar-lib-dev and
+    hildon-base-lib-dev. (Fixes: NB#17937)
+
+ -- Guillem Jover <guillem.jover@nokia.com>  Tue, 14 Nov 2006 15:50:46 +0200
+
+maemo-launcher (0.19-1) unstable; urgency=low
+
+  * New Upstream Release.
+  * Add a maemo-launcher-dbg package. (Closes: #41746@Nokia)
+
+ -- Guillem Jover <guillem.jover@nokia.com>  Tue, 10 Oct 2006 16:52:43 +0300
+
+maemo-launcher (0.18-1) unstable; urgency=low
+
+  * New Upstream Release.
+    - Create a new session id for the childs. (Closes: #28627@Nokia)
+    - Use new --booster option and select the gtk module.
+    - Use the renamed --enable-hildon-booster instead of --extra-libs in
+      configure.
+    - Remove the now not required LD_BIND_NOW environment variable from
+      the init script (as it's implemented using the boosters).
+      (Closes: #28055@Nokia)
+    - Add new maemo-summoner, to load directly .launch applications.
+      (Closes: #38580@Nokia)
+  * Add support in DEB_BUILD_OPTIONS with nohildong to not enable the
+    hildon enhancment to the gtk booster
+  * Enable again sending the application died signal.
+
+ -- Guillem Jover <guillem.jover@nokia.com>  Thu, 28 Sep 2006 03:39:07 +0300
+
+maemo-launcher (0.17-1) unstable; urgency=low
+
+  * New Upstream Release.
+    - Do not send the application died signal by default, because some
+      people believe that by not showing applications crashing, that
+      will fix their bugs... (Closes: #32915@Nokia)
+
+ -- Guillem Jover <guillem.jover@nokia.com>  Mon, 19 Jun 2006 12:29:20 +0300
+
+maemo-launcher (0.16-1) unstable; urgency=low
+
+  * New Upstream Release.
+    - Ignore SIGPIPE in the launcher, so that it does not die miserably.
+      (Closes: #32718@Nokia)
+
+ -- Guillem Jover <guillem.jover@nokia.com>  Thu, 15 Jun 2006 17:18:42 +0300
+
+maemo-launcher (0.15-1) unstable; urgency=low
+
+  * New Upstream Release.
+    - Relicense to GPL version 2 only.
+    - Change copyright holder to "Nokia Corporation".
+  * Enable yet again LD_BIND_NOW=1 on startup. (Closes: #28055@Nokia)
+
+ -- Guillem Jover <guillem.jover@nokia.com>  Fri,  9 Jun 2006 15:24:06 +0300
+
+maemo-launcher (0.14-2) unstable; urgency=low
+
+  * Disable for now LD_BIND_NOW=1 in the init script due to it "breaking"
+    the browser plugins...
+
+ -- Guillem Jover <guillem.jover@nokia.com>  Tue, 23 May 2006 17:26:44 +0300
+
+maemo-launcher (0.14-1) unstable; urgency=low
+
+  * New Upstream Release.
+    - Force all relocations to be resolved at startup time, but not for the
+      childs. (Closes: #28055@Nokia)
+    - Protect the childs that have negative priority from the OOM killer by
+      setting the adjust value to -17. (Closes: #29529@Nokia)
+  * Bump Standards-Version to 3.7.2 (no changes needed).
+
+ -- Guillem Jover <guillem.jover@nokia.com>  Thu, 18 May 2006 21:13:52 +0300
+
+maemo-launcher (0.13-1) unstable; urgency=low
+
+  * New Upstream Release.
+    - Fork when sending the dbus signal, due to libdbus being unable to
+      cleanup and reopen connections. Which fixes:
+    - Applications not running on first boot. (Closes: #26599@Nokia)
+    - DBus autoactivation after crashed application. (Closes: #27158@Nokia)
+
+ -- Guillem Jover <guillem.jover@nokia.com>  Fri, 21 Apr 2006 22:57:42 +0300
+
+maemo-launcher (0.12-1) unstable; urgency=low
+
+  * New Upstream Release.
+  * Do not source the .defs files anymore from the init script.
+  * Only set PATH when not in Scratchbox in the init script.
+    (Closes: #25123@Nokia)
+
+ -- Guillem Jover <guillem.jover@nokia.com>  Tue, 11 Apr 2006 00:09:27 +0300
+
+maemo-launcher (0.11-1) unstable; urgency=low
+
+  * New Upstream Release.
+  * Do not use ndm, yet.
+  * Remove Build-Dependency on deprecated hildon-lgpl-dev.
+  * Add Build-Dependency on libdbus-1-dev (>= 0.60-1).
+  * Check for DAEMON instead of LAUNCHER in init.d.
+
+ -- Guillem Jover <guillem.jover@nokia.com>  Tue,  4 Apr 2006 22:38:50 +0300
+
+maemo-launcher (0.10.1-1) unstable; urgency=low
+
+  * New Upstream Release.
+  * Link init scripts into /etc/ndm/session.d, not with update-rc.d.
+    Thanks to Daniel Stone <daniel.stone@nokia.com>.
+  * Depend on ndm.
+
+ -- Guillem Jover <guillem.jover@nokia.com>  Tue, 14 Mar 2006 15:49:04 +0200
+
+maemo-launcher (0.10-1) unstable; urgency=low
+
+  * New Upstream Release.
+  * Autoconfiscate if needed or if outdated.
+  * Update upstream copyright years.
+  * Add libfontconfig1-dev and libpango1.0-dev to Build-Depends.
+  * Load the applications using RTLD_GLOBAL. (Closes: #22725@Nokia)
+
+ -- Guillem Jover <guillem.jover@nokia.com>  Mon, 13 Feb 2006 13:53:08 +0200
+
+maemo-launcher (0.9-1) unstable; urgency=low
+
+  * New Upstream Release.
+    - Restore the process priority to 0 for the launched processes.
+      (Closes: #21337@Nokia)
+    - Fix possible heap overflow by untrusted invoker programs.
+
+ -- Guillem Jover <guillem.jover@nokia.com>  Thu, 17 Nov 2005 22:38:02 +0200
+
+maemo-launcher (0.8-1) unstable; urgency=low
+
+  * New Upstream Release.
+  * Do not update config.*, assume upstream has the latest ones.
+
+ -- Guillem Jover <guillem.jover@nokia.com>  Tue, 25 Oct 2005 14:36:15 +0300
+
+maemo-launcher (0.7-1) unstable; urgency=low
+
+  * New Upstream Release.
+    - Do not leave ghost processes after launching applications.
+      (Closes: #20215@Nokia)
+
+ -- Guillem Jover <guillem.jover@nokia.com>  Fri,  7 Oct 2005 18:05:49 +0300
+
+maemo-launcher (0.6-1) unstable; urgency=low
+
+  * New Upstream Release.
+
+ -- Guillem Jover <guillem.jover@nokia.com>  Wed, 28 Sep 2005 21:44:18 +0300
+
+maemo-launcher (0.5-1) unstable; urgency=low
+
+  * New Upstream Release.
+    - With hildon-control-panel-personalisation 0.1.15-2.1 honours theme
+      changes on newly launched applications. (Closes: #16356@Nokia)
+      Thanks to Tommi Komulainen <tommi.komulainen@nokia.com>.
+    - Restore signal handlers just before launching the child. Thus fixing
+      osso-chess not being able to restart/continue. (Closes: #18716@Nokia)
+    - Log child exit status. (Closes: #17530@Nokia)
+    - Increase the invoker timeout to 6, otherwise osso-chess fails to start
+      on the first run. (Closes: #16026@Nokia, #18104@Nokia, #18634@Nokia)
+    - Thus fixing the chess related bugs. (Closes: #18849@Nokia)
+  * Do not start in the acting dead runlevel. (Closes: #18010@Nokia)
+  * Handle gracefully starting running in scratchbox and don't try to run
+    things as 'user'.
+    Thanks to Tommi Komulainen <tommi.komulainen@nokia.com>.
+  * Make sure the launcher is not an OOM candidate by increasing the process
+    priority. (Closes: #19073@Nokia)
+  * Do not be quiet inside scratchbox. (Closes: #19147@Nokia)
+  * Remove autotools-dev from Build-Depends, as upstream sources have more up
+    to date vesion of config.* files.
+  * Update FSF's address.
+
+ -- Guillem Jover <guillem.jover@nokia.com>  Wed, 14 Sep 2005 13:13:32 +0300
+
+maemo-launcher (0.4-1) unstable; urgency=low
+
+  * New Upstream Release.
+  * Minor cosmetic fixes.
+
+ -- Guillem Jover <guillem.jover@nokia.com>  Mon, 25 Jul 2005 23:24:38 +0300
+
+maemo-launcher (0.3-2) unstable; urgency=low
+
+  * Do not start the daemon using run-standalone.sh, source the needed
+    files ourselves, so now start-stop-daemon can find if it is running
+    already.
+  * Add autotools-dev to Build-Depends to get config.guess and config.sub.
+
+ -- Guillem Jover <guillem.jover@nokia.com>  Fri, 22 Jul 2005 21:55:55 +0300
+
+maemo-launcher (0.3-1) unstable; urgency=low
+
+  * New Upstream Release.
+  * Only change uid to 'user' when needed. (Closes: #15503@Nokia)
+
+ -- Guillem Jover <guillem.jover@nokia.com>  Mon, 11 Jul 2005 21:32:44 +0300
+
+maemo-launcher (0.2-1) unstable; urgency=low
+
+  * New Upstream Release.
+
+ -- Guillem Jover <guillem.jover@nokia.com>  Wed,  6 Jul 2005 23:49:22 +0300
+
+maemo-launcher (0.1.0-2) unstable; urgency=low
+
+  * Change section from gnome to embedded.
+  * Bump Standards-Version to 3.6.2 (no changes needed).
+  * Workaround the fact that HOME is not defined anymore.
+
+ -- Guillem Jover <guillem.jover@nokia.com>  Tue, 21 Jun 2005 21:40:05 +0300
+
+maemo-launcher (0.1.0-1) unstable; urgency=low
+
+  * New Upstream Release.
+    - License under the GPL.
+  * Update copyright file accordingly.
+  * Remove unused variable dependency misc:Depends.
+  * Enable dh_installman (at least for the check phase).
+  * Correct mandir location.
+
+ -- Guillem Jover <guillem.jover@nokia.com>  Fri, 17 Jun 2005 16:21:49 +0300
+
+maemo-launcher (0.0.10-1) unstable; urgency=low
+
+  * New Upstream Release.
+  * Rename package to maemo-launcher.
+  * Match program names with new upstream changes.
+
+ -- Guillem Jover <guillem.jover@nokia.com>  Thu, 16 Jun 2005 23:05:57 +0300
+
+gtk-launcher (0.0.9-3) unstable; urgency=low
+
+  * Depend on hildon-initscripts.
+  * Do not fail if config.* are not present.
+
+ -- Guillem Jover <guillem.jover@nokia.com>  Tue, 14 Jun 2005 22:00:05 +0300
+
+gtk-launcher (0.0.9-2) unstable; urgency=low
+
+  * Install the init script with sequence code 45.
+
+ -- Guillem Jover <guillem.jover@nokia.com>  Thu,  9 Jun 2005 15:18:12 +0300
+
+gtk-launcher (0.0.9-1) unstable; urgency=low
+
+  * New Upstream Release.
+
+ -- Guillem Jover <guillem.jover@noia.com>  Wed,  8 Jun 2005 17:43:25 +0300
+
+gtk-launcher (0.0.8-2) unstable; urgency=low
+
+  * Specify the real binary when stoppig so start-stop-daemon can find it.
+
+ -- Guillem Jover <guillem.jover@nokia.com>  Tue, 17 May 2005 18:03:17 +0300
+
+gtk-launcher (0.0.8-1) unstable; urgency=low
+
+  * Initial Release.
+
+ -- Guillem Jover <guillem.jover@nokia.com>  Fri, 13 May 2005 15:36:26 +0300
+

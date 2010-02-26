@@ -1,0 +1,112 @@
+#!/usr/bin/make -f
+#
+
+DEB_HOST_GNU_TYPE   ?= $(shell dpkg-architecture -qDEB_HOST_GNU_TYPE)
+DEB_BUILD_GNU_TYPE  ?= $(shell dpkg-architecture -qDEB_BUILD_GNU_TYPE)
+
+POD2MAN := pod2man -c maemo-launcher
+
+CFLAGS = -g -Wall
+
+ifneq (,$(findstring noopt,$(DEB_BUILD_OPTIONS)))
+	CFLAGS += -O0
+else
+	CFLAGS += -O2
+endif
+
+ifneq (,$(findstring nohildon,$(DEB_BUILD_OPTIONS)))
+	opt_hildon :=
+else
+	opt_hildon := --enable-hildon-booster --enable-cpp-booster
+endif
+
+# Nasty thing due to having the upstream and debian stuff merged.
+configure: configure.ac
+	autoreconf -f -i -Wall
+	rm -rf autom4te.cache
+
+config.status: configure
+	dh_testdir
+	
+	CFLAGS="$(CFLAGS)" ./configure \
+	  --host=$(DEB_HOST_GNU_TYPE) --build=$(DEB_BUILD_GNU_TYPE) \
+	  $(opt_hildon) \
+	  --mandir=\$${prefix}/share/man \
+	  --prefix=/usr
+
+build: config.status
+	dh_testdir
+	
+	$(MAKE)
+	
+#	$(POD2MAN) $(CURDIR)/debian/dh_maemolauncher > \
+#	           $(CURDIR)/debian/dh_maemolauncher.1
+
+clean:
+	dh_testdir
+	dh_testroot
+	rm -f build-stamp
+	
+	[ ! -f Makefile ] || $(MAKE) distclean
+	
+	dh_clean
+
+install: build
+	dh_testdir
+	dh_testroot
+	dh_clean -k
+	dh_installdirs -a
+	
+	$(MAKE) install DESTDIR=$(CURDIR)/debian/tmp
+	
+#	install -D $(CURDIR)/debian/maemo-launcher.Xsession \
+#		$(CURDIR)/debian/tmp/etc/X11/Xsession.d/02maemo-launcher
+
+#	install -D $(CURDIR)/debian/maemo-launcher.Xsession-restart \
+#		$(CURDIR)/debian/tmp/etc/X11/Xsession.d/42maemo-launcher
+	
+#	cp $(CURDIR)/debian/dh_maemolauncher \
+#	   $(CURDIR)/debian/tmp/usr/bin
+#	cp $(CURDIR)/debian/dh_maemolauncher.1 \
+#	   $(CURDIR)/debian/tmp/usr/share/man/man1/
+
+binary-indep: build install
+	dh_testdir
+	dh_testroot
+	dh_installchangelogs -i ChangeLog*
+	dh_installdocs -i
+	dh_install -i --sourcedir=$(CURDIR)/debian/tmp
+	dh_link -i
+	dh_compress -i
+	dh_fixperms -i
+	dh_installdeb -i
+	dh_gencontrol -i
+	dh_md5sums -i
+	dh_builddeb -i
+
+binary-arch: build install
+	dh_testdir
+	dh_testroot
+	dh_installchangelogs -a ChangeLog*
+	dh_installdocs -a
+	dh_installexamples -a
+	dh_install -a --sourcedir=$(CURDIR)/debian/tmp
+#	dh_installlogrotate
+	dh_installinit -a --no-start -- start 45 2 3 4 . stop 45 0 1 5 6 .
+	dh_installman -a
+	dh_link -a
+	dh_strip -p maemo-launcher --dbg-package=maemo-launcher-dbg
+	dh_compress -a
+	dh_fixperms -a
+#	chmod u+s $(CURDIR)/debian/maemo-launcher/usr/lib/maemo-launcher/defender
+#	dh_makeshlibs
+	dh_installdeb -a
+	dh_shlibdeps -a
+	dh_gencontrol -a
+	dh_md5sums -a
+	dh_builddeb -a
+
+binary: binary-indep binary-arch
+
+.PHONY: build clean binary-indep binary-arch binary install
+

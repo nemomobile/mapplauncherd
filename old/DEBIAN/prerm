@@ -1,0 +1,16 @@
+#!/bin/sh
+
+set -e
+
+if [ -x "/etc/init.d/maemo-launcher" ] && [ "$1" = remove ]; then
+	if [ -x "`which invoke-rc.d 2>/dev/null`" ]; then
+		invoke-rc.d maemo-launcher stop || exit $?
+	else
+		/etc/init.d/maemo-launcher stop || exit $?
+	fi
+fi
+
+
+
+exit 0
+

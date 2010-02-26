@@ -1,0 +1,13 @@
+Source: launcher
+Section: admin
+Priority: important
+Maintainer: Jussi Lind <jussi.lind@nokia.com>
+Build-Depends: cdbs, debhelper (>= 7), libqt4-dev (>= 4.5.0), libdui-dev
+Standards-Version: 3.8.0
+
+Package: applauncherd
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: Launcher daemon and invoker to speed up launches
+ Launcher daemon and invoker to speed up launches. 
+ Special boosters for DUI and Qt.

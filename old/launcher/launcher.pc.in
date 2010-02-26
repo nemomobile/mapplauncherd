@@ -1,0 +1,10 @@
+#
+# $Id: launcher.pc.in 12859 2007-07-26 16:43:40Z guillem $
+#
+
+Name: maemo-launcher-app
+Description: maemo-launcher application startup accelerator
+Version: @VERSION@
+Libs: -shared @PIC@ -export-dynamic
+Cflags: -shared @PIC@
+

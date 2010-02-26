@@ -1,0 +1,13 @@
+1147a346b5329a363b17df2a395bd0e6  usr/bin/maemo-launcher
+93a8c58abe2e1bcfa3543de45c59ff1e  usr/bin/maemo-summoner
+e94565cd403936a9f6b7b5d789af31d6  usr/bin/maemo-invoker
+1d55d5d60e7fabb1e9e788df5c67e3f1  usr/lib/maemo-launcher/booster-gtk.so
+5fcdd287f01d3d90db3ec6d08b84c812  usr/lib/maemo-launcher/booster-null.so
+8dc800f92abf7160fd7c17cb315145b0  usr/lib/maemo-launcher/booster-cpp.so
+3a55d62db010f427dd88bda4304a8bb2  usr/lib/maemo-launcher/defender
+0218d0e273eda54c4881657df81fccbc  usr/share/man/man1/maemo-summoner.1.gz
+cfd06889e41dc261e9309341d1fa765f  usr/share/man/man1/maemo-invoker.1.gz
+9d0f71e2f9606593d436f6ec4f3bc731  usr/share/man/man1/maemo-launcher.1.gz
+808792d9dce3e17026f03667643df257  usr/share/doc/maemo-launcher/copyright
+e2d831d32341827078398b273532a2fe  usr/share/doc/maemo-launcher/changelog.gz
+373538ef2af6c1f9e0ee14923f2bba75  usr/share/doc/maemo-launcher/changelog.Debian.gz

@@ -1,0 +1,40 @@
+
+  $Id: INSTALL 1935 2006-01-16 13:28:37Z guillem $
+
+
+Installation Notes
+==================
+
+SVN Sources
+-----------
+
+0) Maintainer setup
+
+  You will need this software:
+
+    autoconf >= 2.59
+    automake >= 1.7
+    gtk+ >= 2.6.4
+
+  And running the following command on the source dir:
+
+	$ autoreconf -f -i
+
+  At this stage the source should be equivalent to the distributed tar
+  source.
+
+Distributed tar Sources
+-----------------------
+
+1) Configuring
+
+	$ ./configure [options]
+
+  For all available options see "configure --help". If you want to install
+  later in a different directory you may be interested in the "--prefix"
+  option.
+
+2) Building
+
+	$ make && make install
+

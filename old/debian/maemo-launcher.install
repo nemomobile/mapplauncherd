@@ -1,0 +1,4 @@
+#etc/X11/Xsession.d/
+usr/bin/maemo-*
+usr/lib/maemo-launcher
+usr/share/man/man1/maemo-*
