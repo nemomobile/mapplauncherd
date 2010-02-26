@@ -1,7 +1,7 @@
 /*
  * logger.h
  *
- * This file is part of launcher
+ * This file is part of applauncherd
  *
  * Copyright (C) 2009 Nokia Corporation. All rights reserved.
  *
