@@ -1,1 +1,5 @@
-####
+usr/share/applauncherd-performance-tests/tests.xml
+usr/share/applauncherd-performance-tests/test-perf-launcher.py
+usr/bin/waitforwindow
+usr/bin/helloworld.launch
+usr/bin/helloworld

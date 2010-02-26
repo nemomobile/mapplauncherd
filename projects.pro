@@ -4,4 +4,4 @@
 
 CONFIG  += ordered
 TEMPLATE = subdirs
-SUBDIRS += src/launcher src/invoker
+SUBDIRS += src/launcher src/invoker 

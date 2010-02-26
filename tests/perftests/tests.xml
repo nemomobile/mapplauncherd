@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<testdefinition version="0.1">
+
+<!-- Test suite, name mandatory - the same as test package name -->
+  <!-- Schema: https://projects.maemo.org/docs/testing/xml-definition.html -->
+  <suite name="launcher-performance-tests" domain="Application framework"> 
+
+    <set name="launcher-performance-tests" description="Applifed prestart performance tests" feature="DUI">   
+
+      <case name="launcher1" type="Performance" description="Measure launcher performance" timeout="120" level="System">
+          <step expected_result="0">source /tmp/session_bus_address.user; DISPLAY=:0 `pyversions -d` /usr/share/launcher-performance-tests/test-perf-launcher.py /usr/bin/helloworld &gt; /tmp/launcher_perf.txt</step>
+      </case>
+
+      <environments>
+          <scratchbox>false</scratchbox>
+          <hardware>true</hardware>    
+      </environments>
+
+      <get>
+          <file>/tmp/launcher_perf.txt</file>
+      </get>
+    </set>
+
+  </suite>
+</testdefinition>
+
+

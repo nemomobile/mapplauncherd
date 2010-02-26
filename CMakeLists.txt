@@ -28,8 +28,6 @@ if ($ENV{BUILD_TESTS})
 	add_subdirectory(tests/functests)
 	# Sub build: tests
 	add_subdirectory(tests/perftests)
-	# Sub build: tests
-	add_subdirectory(tests/unittests)
 endif ($ENV{BUILD_TESTS})
 
 

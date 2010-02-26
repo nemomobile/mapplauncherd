@@ -1,0 +1,5 @@
+#!/bin/sh
+
+echo "/usr/bin/invoker --type=qt" helloworld.launch $@
+
+/usr/bin/invoker --type=qt helloworld.launch $@

@@ -1,14 +1,20 @@
 #include <DuiApplication>
 #include <DuiApplicationPage>
 #include <DuiApplicationWindow>
-//#include <DuiComponentCache>
 #include <QDebug>
+
+#ifdef HAVE_DUI
+#include <duicomponentcache.h>
+#endif
 
 
 int main(int argc, char ** argv)
 {
-    //DuiApplication *app = DuiComponentCache::duiApplication(argc, argv);
+    #ifdef HAVE_DUI
+    DuiApplication *app = DuiComponentCache::duiApplication(argc, argv);
+    #else
     DuiApplication *app = new DuiApplication(argc, argv);
+    #endif
     DuiApplicationPage mainPage;
     DuiApplicationWindow window;
 
