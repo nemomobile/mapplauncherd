@@ -1,4 +1,4 @@
-Source: launcher
+Source: applauncherd
 Section: admin
 Priority: important
 Maintainer: Jussi Lind <jussi.lind@nokia.com>

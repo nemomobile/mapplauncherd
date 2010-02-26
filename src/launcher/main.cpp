@@ -21,6 +21,7 @@
 #include <cstdlib>
 #include <signal.h>
 #include <fcntl.h>
+#include <sys/file.h>
 
 //! Signal handler to reap zombies
 void reapZombies(int)
@@ -30,7 +31,7 @@ void reapZombies(int)
 }
 
 //! Lock file to prevent launch of second instance
-int get_lock(void)
+bool getLock(void)
 {
     struct flock fl;
     int fd;
@@ -40,13 +41,13 @@ int get_lock(void)
     fl.l_start = 0;
     fl.l_len = 1;
     
-    if((fd = open("/tmp/applauncherd.lock", O_WRONLY|O_CREAT)) == -1)
-        return 0;
+    if((fd = open("/tmp/applauncherd.lock", O_WRONLY | O_CREAT, 0666)) == -1)
+        return false;
     
     if(fcntl(fd, F_SETLK, &fl) == -1)
-        return 0;
-    
-    return 1;
+        return false;
+   
+    return true;
 }
 
 
@@ -57,7 +58,7 @@ int main(int argc, char * argv[])
     Logger::openLog(PROG_NAME);
     Logger::logNotice("%s starting..", PROG_NAME);
 
-    if(!get_lock())
+    if(!getLock())
     {
         Logger::logErrorAndDie(EXIT_FAILURE, "try to launch second instance");
     }
