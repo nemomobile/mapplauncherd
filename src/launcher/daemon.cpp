@@ -24,6 +24,7 @@
 
 #include <cstdlib>
 #include <errno.h>
+#include <stdlib.h>
 
 #include <sys/socket.h>
 #include <sys/stat.h>
@@ -143,6 +144,9 @@ bool Daemon::forkBooster(char type, int pipefd[2])
         {
             Logger::logErrorAndDie(EXIT_FAILURE, "Unknown booster type \n");
         }
+
+        // clean-up all the env variables
+        clearenv();
 
         // Preload stuff
         booster->preload();

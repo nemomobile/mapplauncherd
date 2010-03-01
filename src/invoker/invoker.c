@@ -256,7 +256,6 @@ int main(int argc, char *argv[])
         die(1, "wrong way of using, don't use symlinks");
     }
 
-
     info("invoking execution: '%s'\n", prog_name);
 
     fd = invoker_init(app_type);
