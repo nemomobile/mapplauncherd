@@ -1,4 +1,4 @@
-project(Applifed)
+project(ApplauncherD)
 
 set(CMAKE_VERBOSE_MAKEFILE OFF)
 
@@ -13,7 +13,6 @@ cmake_minimum_required(VERSION 2.5)
 
 # Find Qt4
 find_package(Qt4 4.6.0 REQUIRED)
-
 include(${QT_USE_FILE})
 if (${QTVERSION} VERSION_LESS 4.6.0)
     message(FATAL_ERROR "You need Qt4.6, found ${QTVERSION}.")
@@ -25,9 +24,10 @@ add_subdirectory(src)
 # Build tests if BUILD_TESTS environment variable is set
 if ($ENV{BUILD_TESTS})
 	# Sub build: tests
-	add_subdirectory(tests/functests)
-	# Sub build: tests
-	add_subdirectory(tests/perftests)
+	# This will build the HelloWorld test library, unit tests, functional tests
+	# and performance tests
+	add_subdirectory(tests)
+	
 endif ($ENV{BUILD_TESTS})
 
 

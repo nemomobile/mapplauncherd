@@ -7,7 +7,7 @@ configure: configure-stamp
 configure-stamp: 
 	dh_testdir
 	# Configure Applauncherd to be build with tests
-	BUILD_TESTS=1 cmake .
+	BUILD_TESTS=1 ./configure
 
 	touch configure-stamp
 
