@@ -20,7 +20,7 @@
 #include <duicomponentcache.h>
 #endif
 
-const string DuiBooster::soketId  = "/tmp/duilnchr";
+const string DuiBooster::m_socketId  = "/tmp/duilnchr";
 
 DuiBooster::DuiBooster()
 {
@@ -32,7 +32,7 @@ DuiBooster::~DuiBooster()
 
 const string DuiBooster::socketId() const
 {
-    return soketId;
+    return m_socketId;
 }
 
 bool DuiBooster::preload()
@@ -45,7 +45,7 @@ bool DuiBooster::preload()
 
 const string DuiBooster::socketName()
 {
-    return soketId;
+    return m_socketId;
 }
 
 char DuiBooster::type()

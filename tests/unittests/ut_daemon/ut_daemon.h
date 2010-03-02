@@ -6,10 +6,12 @@
 
 class Ut_Daemon : public QObject
 {
+    Q_OBJECT
+
 public:
-	Ut_Daemon();
-	~Ut_Daemon();
-public slots:
+    Ut_Daemon();
+    ~Ut_Daemon();
+private Q_SLOTS:
 
 private:
 

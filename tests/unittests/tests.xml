@@ -16,6 +16,14 @@
           <step expected_result="0">/usr/share/applauncherd-tests/ut_daemon</step>
       </case>
 
+      <case name="DuiBooster" type="Functional" description="Unit tests for DuiBooster class" level="Component" timeout="20">
+          <step expected_result="0">/usr/share/applauncherd-tests/ut_duibooster</step>
+      </case>
+
+      <case name="QtBooster" type="Functional" description="Unit tests for QtBooster class" level="Component" timeout="20">
+          <step expected_result="0">/usr/share/applauncherd-tests/ut_qtbooster</step>
+      </case>
+
       <environments>
           <scratchbox>true</scratchbox>
           <hardware>true</hardware>    
