@@ -143,6 +143,42 @@ static bool invoker_send_env(int fd)
     return true;
 }
 
+static bool invoker_send_io(int fd)
+{
+    struct msghdr msg;
+    struct cmsghdr *cmsg;
+    int io[3] = { 0, 1, 2 };
+    char buf[CMSG_SPACE(sizeof(io))];
+    struct iovec iov;
+    int dummy;
+
+    iov.iov_base = &dummy;
+    iov.iov_len = 1;
+
+    msg.msg_iov = &iov;
+    msg.msg_iovlen = 1;
+    msg.msg_control = buf;
+    msg.msg_controllen = sizeof(buf);
+
+    cmsg = CMSG_FIRSTHDR(&msg);
+    cmsg->cmsg_len = CMSG_LEN(sizeof(io));
+    cmsg->cmsg_level = SOL_SOCKET;
+    cmsg->cmsg_type = SCM_RIGHTS;
+
+    memcpy(CMSG_DATA(cmsg), io, sizeof(io));
+
+    msg.msg_controllen = cmsg->cmsg_len;
+
+    invoke_send_msg(fd, INVOKER_MSG_IO);
+    if (sendmsg(fd, &msg, 0) < 0)
+    {
+        warning("sendmsg failed in invoker_send_io: %s", strerror(errno));
+        return  false;
+    }
+
+    return true;
+}
+
 static bool invoker_send_end(int fd)
 {
     /* Send action. */
@@ -264,6 +300,7 @@ int main(int argc, char *argv[])
     invoker_send_name(fd, prog_argv[0]);
     invoker_send_exec(fd, prog_name);
     invoker_send_args(fd, prog_argc, prog_argv);
+    invoker_send_io(fd);
     invoker_send_env(fd);
     invoker_send_end(fd);
 

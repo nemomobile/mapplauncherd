@@ -63,6 +63,9 @@ bool Booster::readCommand()
         m_app.fileName = conn.fileName();
         m_app.argc     = conn.argc();
         m_app.argv     = conn.argv();
+
+        for(int i = 0; i < 3; i++)
+            m_app.ioDescriptors[i] = conn.ioDescriptors()[i];
     }
     else
         return false;
@@ -130,6 +133,10 @@ void Booster::launchProcess()
 {
     // Load the application and find out the address of main()
     loadMain();
+
+    for (int i = 0; i < 3; i++)
+      if (m_app.ioDescriptors[i] > 0)
+        dup2(m_app.ioDescriptors[i], i);
 
     Logger::logNotice("launching process: '%s' ", m_app.fileName.c_str());
 

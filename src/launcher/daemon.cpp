@@ -56,6 +56,10 @@ Daemon::Daemon(int & argc, char * argv[]) :
     // Parse arguments
     parseArgs(vector<string>(argv, argv + argc));
 
+    // Disable console output
+    if (quiet)
+        consoleQuiet();
+
     // Store arguments list
     initialArgv = argv;
     initialArgc = argc;
@@ -66,6 +70,20 @@ Daemon::Daemon(int & argc, char * argv[]) :
         daemonize();
     }
 }
+
+void Daemon::consoleQuiet(void)
+{
+    close(0);
+    close(1);
+    close(2);
+
+    if (open("/dev/null", O_RDONLY) < 0)
+        Logger::logErrorAndDie(EXIT_FAILURE, "opening /dev/null readonly");
+
+    if (dup(open("/dev/null", O_WRONLY)) < 0)
+        Logger::logErrorAndDie(EXIT_FAILURE, "opening /dev/null writeonly");
+}
+
 
 Daemon * Daemon::instance()
 {
