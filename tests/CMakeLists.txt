@@ -12,7 +12,7 @@ endif(NOT dui_LIBRARY)
 add_subdirectory(helloworld)
 
 # Sub build: unit tests
-#add_subdirectory(unittests)
+add_subdirectory(unittests)
 
 # Sub build: perftests
 add_subdirectory(perftests)

@@ -1,5 +1,3 @@
-project(HelloWorld)
-
 # Set sources
 set(HelloWorldSRC helloworld.cpp)
 

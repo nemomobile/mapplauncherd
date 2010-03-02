@@ -1,4 +1,4 @@
-project(ApplauncherD)
+project(AppLauncherD)
 
 set(CMAKE_VERBOSE_MAKEFILE OFF)
 

@@ -1,5 +1,3 @@
-project(PerfTests)
-
 # Sub build: waitforwindow
 add_subdirectory(waitforwindow)
 

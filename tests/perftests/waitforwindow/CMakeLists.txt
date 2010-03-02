@@ -1,5 +1,3 @@
-project(WaitForWindow)
-
 # Set sources
 set(WaitForWindowSRC waitforwindow.c)
 

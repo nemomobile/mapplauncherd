@@ -1,4 +1,5 @@
 usr/share/applauncherd-functional-tests/tests.xml
 usr/share/applauncherd-functional-tests/test-func-launcher.py
 usr/bin/helloworld
+usr/bin/qhelloworld
 usr/bin/helloworld.launch
