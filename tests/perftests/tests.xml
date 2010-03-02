@@ -3,12 +3,12 @@
 
 <!-- Test suite, name mandatory - the same as test package name -->
   <!-- Schema: https://projects.maemo.org/docs/testing/xml-definition.html -->
-  <suite name="launcher-performance-tests" domain="Application framework"> 
+  <suite name="applauncherd-performance-tests" domain="Application framework"> 
 
-    <set name="launcher-performance-tests" description="Applifed prestart performance tests" feature="DUI">   
+    <set name="applauncherd-performance-tests" description="Applifed prestart performance tests" feature="DUI">   
 
       <case name="launcher1" type="Performance" description="Measure launcher performance" timeout="120" level="System">
-          <step expected_result="0">source /tmp/session_bus_address.user; DISPLAY=:0 `pyversions -d` /usr/share/launcher-performance-tests/test-perf-launcher.py /usr/bin/helloworld &gt; /tmp/launcher_perf.txt</step>
+          <step expected_result="0">source /tmp/session_bus_address.user; DISPLAY=:0 `pyversions -d` /usr/share/applauncherd-performance-tests/test-perf-launcher.py /usr/bin/helloworld &gt; /tmp/launcher_perf.txt</step>
       </case>
 
       <environments>
