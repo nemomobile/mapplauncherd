@@ -1,0 +1,8 @@
+project(UnitTests)
+
+add_subdirectory(ut_daemon)
+add_subdirectory(ut_duibooster)
+add_subdirectory(ut_qtbooster)
+
+install(FILES tests.xml DESTINATION /usr/share/applauncherd-tests)
+

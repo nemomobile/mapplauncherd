@@ -1,2 +1,4 @@
-####
-
+usr/share/applauncherd-tests/tests.xml
+usr/share/applauncherd-tests/ut_daemon
+usr/share/applauncherd-tests/ut_duibooster
+usr/share/applauncherd-tests/ut_qtbooster

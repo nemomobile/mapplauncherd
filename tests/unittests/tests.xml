@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<testdefinition version="0.1">
+
+<!-- Test suite, name mandatory - the same as test package name -->
+  <!-- Schema: https://projects.maemo.org/docs/testing/xml-definition.html -->
+  <suite name="applauncherd-tests" domain="Application framework"> 
+
+    <set name="launcher-tests" description="Launcher unit tests" feature="DUI">   
+      <pre_steps>
+        <step>export DISPLAY=:0</step>
+        <step>source /tmp/session_bus_address.user</step>
+        <!-- step>other pre steps</step -->
+      </pre_steps>
+
+      <case name="Daemon" type="Functional" description="Unit tests for Daemon class" level="Component" timeout="20">
+          <step expected_result="0">/usr/share/applauncherd-tests/ut_daemon</step>
+      </case>
+
+      <case name="DuiBooster" type="Functional" description="Unit tests for DuiBooster class" level="Component" timeout="20">
+          <step expected_result="0">/usr/share/applauncherd-tests/ut_duibooster</step>
+      </case>
+
+      <case name="QtBooster" type="Functional" description="Unit tests for QtBooster class" level="Component" timeout="20">
+          <step expected_result="0">/usr/share/applauncherd-tests/ut_qtbooster</step>
+      </case>
+
+      <environments>
+          <scratchbox>true</scratchbox>
+          <hardware>true</hardware>    
+      </environments>
+
+      <!--get>
+      </get-->
+    </set>
+
+  </suite>
+</testdefinition>
+
+

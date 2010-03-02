@@ -57,7 +57,11 @@ protected:
 
 private:
 
-    static const string soketId;
+    static const string m_socketId;
+
+#ifdef UNIT_TEST
+    friend class Ut_QtBooster;
+#endif
 };
 
 #endif //QTBOOSTER_H

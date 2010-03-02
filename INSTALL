@@ -9,11 +9,11 @@ Configure
 
 Applauncherd only:
 
-cmake .
+./configure
 
 Applauncherd + tests:
 
-BUILD_TESTS=1 cmake .
+BUILD_TESTS=1 ./configure
 
 
 Build

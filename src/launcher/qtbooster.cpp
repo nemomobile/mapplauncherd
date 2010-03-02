@@ -16,7 +16,7 @@
 
 #include "qtbooster.h"
 
-const string QtBooster::soketId = "/tmp/qtlnchr";
+const string QtBooster::m_socketId = "/tmp/qtlnchr";
 
 QtBooster::QtBooster()
 {
@@ -28,12 +28,12 @@ QtBooster::~QtBooster()
 
 const string QtBooster::socketId() const
 {
-    return soketId;
+    return m_socketId;
 }
 
 const string QtBooster::socketName()
 {
-    return soketId;
+    return m_socketId;
 }
 
 char QtBooster::type()

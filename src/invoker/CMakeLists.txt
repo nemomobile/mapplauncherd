@@ -1,5 +1,3 @@
-project(Invoker)
-
 set(InvokerSRC invokelib.c invoker.c report.c search.c)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 

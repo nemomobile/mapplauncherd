@@ -1,5 +1,3 @@
-project(AppLauncherD)
-
 # Set sources
 set(LauncherSRC booster.cpp connection.cpp daemon.cpp duibooster.cpp global.cpp logger.cpp main.cpp qtbooster.cpp)
 
@@ -7,7 +5,7 @@ set(LauncherSRC booster.cpp connection.cpp daemon.cpp duibooster.cpp global.cpp 
 set(DUISRCINCLUDE /usr/include/dui)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${DUISRCINCLUDE})
 
-# Set programs name define
+# Set the program name define used in daemon.cpp
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DPROG_NAME=\\\"applauncherd\\\"")
 
 # Check if it's possible to compile DuiBooster
