@@ -30,7 +30,7 @@ DuiBooster::~DuiBooster()
 {
 }
 
-const string DuiBooster::socketId() const
+const string & DuiBooster::socketId() const
 {
     return m_socketId;
 }
@@ -43,7 +43,7 @@ bool DuiBooster::preload()
     return true;
 }
 
-const string DuiBooster::socketName()
+const string & DuiBooster::socketName()
 {
     return m_socketId;
 }

@@ -1,6 +1,7 @@
 project(UnitTests)
 
 add_subdirectory(ut_daemon)
+add_subdirectory(ut_booster)
 add_subdirectory(ut_duibooster)
 add_subdirectory(ut_qtbooster)
 

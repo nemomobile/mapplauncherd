@@ -38,7 +38,7 @@ public:
     virtual ~QtBooster();
 
     //! Return the socket name
-    static const string socketName();
+    static const string & socketName();
 
     //! \reimp
     virtual char boosterType() const { return type(); }
@@ -53,7 +53,7 @@ public:
 
 protected:
 
-    virtual const string socketId() const;
+    virtual const string & socketId() const;
 
 private:
 

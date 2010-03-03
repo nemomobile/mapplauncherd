@@ -80,7 +80,7 @@ public:
 
 protected:
 
-    virtual const string socketId() const = 0;
+    virtual const string & socketId() const = 0;
 
 private:
 

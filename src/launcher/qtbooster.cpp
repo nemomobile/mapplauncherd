@@ -26,12 +26,12 @@ QtBooster::~QtBooster()
 {
 }
 
-const string QtBooster::socketId() const
+const string & QtBooster::socketId() const
 {
     return m_socketId;
 }
 
-const string QtBooster::socketName()
+const string & QtBooster::socketName()
 {
     return m_socketId;
 }
