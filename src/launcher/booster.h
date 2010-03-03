@@ -90,6 +90,10 @@ private:
 
     //! Application data read from the invoker
     AppData m_app;
+
+#ifdef UNIT_TEST
+    friend class Ut_Booster;
+#endif
 };
 
 #endif // BOOSTER_H

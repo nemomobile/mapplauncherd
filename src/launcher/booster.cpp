@@ -93,36 +93,43 @@ void Booster::renameProcess(int parentArgc, char** parentArgv)
 {
     Logger::logInfo("set new process name: '%s' ", basename(m_app.argv[0]));
 
-    //modify cmdline of the process, add only application name
-    int argvlen = 0;
-    int proglen = strlen(m_app.argv[0]) + 1;
-
-    for (int i = 0; i < parentArgc; i++)
-      argvlen += strlen(parentArgv[i]) + 1;
-
-    if (proglen > argvlen)
-        proglen = argvlen;
-
-    memmove(parentArgv[0], m_app.argv[0], proglen);
-
-    parentArgv[1] = parentArgv[0] + proglen;
-
-    int paramSpace = argvlen - proglen;
-
-    if (paramSpace > 0)
+    // This code copies the new process name to the original argv[0].
+    // If the new name won't fit, then it'll be cut. This is used to
+    // "fool" e.g. top and ps to show the correct name. Otherwise they
+    // would show the name of the launcher itself.
+    int min = std::min(strlen(parentArgv[0]), strlen(m_app.argv[0]));
+    if (min)
     {
-        memset(parentArgv[1], '\0', paramSpace);
-        for (int i = 1; i < m_app.argc; i++)
-        {
-            int freeSpace = paramSpace - strlen(parentArgv[1]) - 1;
-            if (freeSpace <= 1)
-                break;
+        memmove(parentArgv[0], m_app.argv[0], min);
+        parentArgv[0][min] = '\0';
+    }
 
-            strncat(parentArgv[1], " ", freeSpace--);
-            strncat(parentArgv[1], m_app.argv[i], freeSpace);
+    // This code copies rest of the new argument to the space reserved
+    // in the old argv[1]. If an argument won't fit then the algorithm
+    // leaves it fully out and terminates.
+    if (parentArgc > 1)
+    {
+        int spaceAvailable = static_cast<int>(strlen(parentArgv[1]));
+        if (spaceAvailable)
+        {
+            memset(parentArgv[1], '\0', spaceAvailable);
+            for (int i = 1; i < m_app.argc; i++)
+            {
+                if (spaceAvailable > static_cast<int>(strlen(m_app.argv[i])))
+                {
+                    strcat(parentArgv[1], " ");
+                    strcat(parentArgv[1], m_app.argv[i]);
+                    spaceAvailable -= strlen(m_app.argv[i] + 1);
+                }
+                else
+                {
+                    break;
+                }
+            }
         }
     }
 
+    // Set the process name using prctl
     if ( prctl(PR_SET_NAME, basename(m_app.argv[0])) == -1 )
         Logger::logError("on set new process name: %s ", strerror(errno));
 

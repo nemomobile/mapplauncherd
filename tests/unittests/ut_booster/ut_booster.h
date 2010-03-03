@@ -20,6 +20,10 @@ public:
 
 private Q_SLOTS:
     void initTestCase();
+    void testRenameProcess();
+    void testRenameProcessNotEnoughSpace();
+    void testRenameProcessNotEnoughSpace2();
+    void testRenameProcessNoArgs();
     void cleanupTestCase();
 
 private:
