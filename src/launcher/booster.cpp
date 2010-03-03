@@ -104,7 +104,7 @@ void Booster::renameProcess(int parentArgc, char** parentArgv)
         parentArgv[0][min] = '\0';
     }
 
-    // This code copies rest of the new argument to the space reserved
+    // This code copies the rest of the new arguments to the space reserved
     // in the old argv[1]. If an argument won't fit then the algorithm
     // leaves it fully out and terminates.
     if (parentArgc > 1)
