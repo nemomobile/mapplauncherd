@@ -45,6 +45,10 @@ Connection::Connection(const string socketId) :
     m_fd(-1),
     m_curSocket(getSocket(socketId))
 {
+    m_io[0] = -1;
+    m_io[1] = -1;
+    m_io[2] = -1;
+
     if (m_curSocket == -1)
     {
         Logger::logErrorAndDie(EXIT_FAILURE, "socket isn't initialized\n");
@@ -293,6 +297,55 @@ bool Connection::getEnv()
     return true;
 }
 
+bool Connection::getIo()
+{
+    struct msghdr msg;
+    struct cmsghdr *cmsg;
+    char buf[CMSG_SPACE(sizeof(m_io))];
+    struct iovec iov;
+    int dummy;
+
+    iov.iov_base = &dummy;
+    iov.iov_len = 1;
+
+    msg.msg_iov = &iov;
+    msg.msg_iovlen = 1;
+    msg.msg_control = buf;
+    msg.msg_controllen = sizeof(buf);
+
+    cmsg = CMSG_FIRSTHDR(&msg);
+    cmsg->cmsg_len = CMSG_LEN(sizeof(m_io));
+    cmsg->cmsg_level = SOL_SOCKET;
+    cmsg->cmsg_type = SCM_RIGHTS;
+
+    memcpy(CMSG_DATA(cmsg), m_io, sizeof(m_io));
+
+    if (recvmsg(m_fd, &msg, 0) < 0)
+    {
+        Logger::logWarning("recvmsg failed in invoked_get_io: %s", strerror(errno));
+        return false;
+    }
+
+    if (msg.msg_flags)
+    {
+        Logger::logWarning("unexpected msg flags in invoked_get_io");
+        return false;
+    }
+
+    cmsg = CMSG_FIRSTHDR(&msg);
+    if (cmsg == NULL || cmsg->cmsg_len != CMSG_LEN(sizeof(m_io)) ||
+        cmsg->cmsg_level != SOL_SOCKET || cmsg->cmsg_type != SCM_RIGHTS)
+    {
+        Logger::logWarning("invalid cmsg in invoked_get_io");
+        return false;
+    }
+
+    memcpy(m_io, CMSG_DATA(cmsg), sizeof(m_io));
+
+    return true;
+}
+
+
 bool Connection::receiveActions()
 {
     Logger::logInfo("enter: %s", __FUNCTION__);
@@ -318,6 +371,7 @@ bool Connection::receiveActions()
         case INVOKER_MSG_PRIO:
             break;
         case INVOKER_MSG_IO:
+            getIo();
             break;
         case INVOKER_MSG_END:
             sendMsg(INVOKER_MSG_ACK);

@@ -65,6 +65,8 @@ public:
     //! Return argument list
     char** argv() { return m_argv; }
 
+    int* ioDescriptors() { return m_io; }
+
     //! Initialize socket for provided socket id
     static void initSocket(const string socketId);
 
@@ -76,6 +78,7 @@ private:
     bool  getExec();
     bool  getArgs();
     bool  getEnv();
+    bool  getIo();
 
     static const unsigned int  INVOKER_MSG_MASK                =    0xffff0000;
     static const unsigned int  INVOKER_MSG_MAGIC               =    0xb0070000;
@@ -107,6 +110,7 @@ private:
     string    m_fileName;
     uint32_t  m_argc;
     char    **m_argv;
+    int       m_io[3];
 };
 
 #endif //CONNECTION_H

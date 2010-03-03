@@ -69,6 +69,9 @@ private:
     //! Forks and initializes a new Booster
     bool forkBooster(char type, int pipefd[2]);
 
+    //! Don't use console for output
+    void consoleQuiet(void);
+
     //! Test mode flag
     bool testMode;
 

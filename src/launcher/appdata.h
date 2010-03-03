@@ -45,6 +45,7 @@ struct AppData
     string  fileName;
     int     prio;
     entry_t entry;
+    int     ioDescriptors[3];
 };
 
 #endif // APPDATA_H
