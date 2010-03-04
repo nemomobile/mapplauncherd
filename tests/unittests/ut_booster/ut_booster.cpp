@@ -57,7 +57,7 @@ void Ut_Booster::testRenameProcess()
     const int INIT_ARGS = 2;
     char ** initialArgv = new char * [INIT_ARGS];
 
-    // Note!!: it's assumed (which is wrong! :) that these are allocated consecutively
+    // Note!!: it's assumed (FIX THIS) that these are allocated consecutively
     // in the memory. This is how arguments are really allocated in Linux.
     initialArgv[0] = strdup("oldName");
     initialArgv[1] = strdup("                                                  ");
