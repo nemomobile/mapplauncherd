@@ -11,3 +11,6 @@ install(PROGRAMS libhelloworld.launch.so DESTINATION /usr/bin RENAME helloworld.
 install(PROGRAMS scripts/helloworld DESTINATION /usr/bin/)
 install(PROGRAMS scripts/qhelloworld DESTINATION /usr/bin/)
 
+# Install symlinks so that /usr/bin/helloworld_X launches /usr/bin/helloworld_X.launch
+install(SCRIPT scripts/create_links.cmake)
+

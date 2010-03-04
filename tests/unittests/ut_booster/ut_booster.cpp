@@ -39,8 +39,6 @@ void Ut_Booster::initTestCase()
 void Ut_Booster::cleanupTestCase()
 {}
 
-#include <iostream>
-
 void Ut_Booster::testRenameProcess()
 {
     m_subject.reset(new MyBooster);
@@ -58,16 +56,17 @@ void Ut_Booster::testRenameProcess()
     // of the launched process
     const int INIT_ARGS = 2;
     char ** initialArgv = new char * [INIT_ARGS];
-    initialArgv[0]      = strdup("applauncherd");
-    initialArgv[1]      = strdup("                                                  ");
+
+    // Note!!: it's assumed (FIX THIS) that these are allocated consecutively
+    // in the memory. This is how arguments are really allocated in Linux.
+    initialArgv[0] = strdup("oldName");
+    initialArgv[1] = strdup("                                                  ");
 
     m_subject->renameProcess(INIT_ARGS, const_cast<char **>(initialArgv));
 
-    QVERIFY2(strcmp(initialArgv[0], m_subject->m_app.argv[0]) == 0, "Failure");
-    QVERIFY2(strcmp(initialArgv[1], " --foo --bar") == 0, "Failure");
+    // New name and arguments fit and are correct
+    QVERIFY2(strcmp(initialArgv[0], "newName --foo --bar") == 0, "Failure");
 
-    delete initialArgv[0];
-    delete initialArgv[1];
     delete [] initialArgv;
 }
 
@@ -75,28 +74,27 @@ void Ut_Booster::testRenameProcessNotEnoughSpace()
 {
     m_subject.reset(new MyBooster);
 
-    // Define and copy args because it's assumed that they are allocated in the heap
-    // (AppData deletes the argv on exit)
     const int ARGS = 3;
     m_subject->m_app.argc    = ARGS;
     m_subject->m_app.argv    = new char * [ARGS];
-    m_subject->m_app.argv[0] = strdup("newNameLongLong");
+    m_subject->m_app.argv[0] = strdup("newNameLong");
     m_subject->m_app.argv[1] = strdup("--foo");
     m_subject->m_app.argv[2] = strdup("--bar");
 
     const int INIT_ARGS = 2;
     char ** initialArgv = new char * [INIT_ARGS];
-    initialArgv[0]      = strdup("applauncherd");
+    initialArgv[0]      = strdup("oldName");
     initialArgv[1]      = strdup("");
 
     int initLen = strlen(initialArgv[0]);
     m_subject->renameProcess(INIT_ARGS, initialArgv);
 
+    // Not enough space for the new name nor the arguments:
+    // name should be cut
+
     QVERIFY2(strncmp(initialArgv[0], m_subject->m_app.argv[0], initLen - 1) == 0, "Failure");
     QVERIFY2(strcmp(initialArgv[1], "") == 0, "Failure");
 
-    delete initialArgv[0];
-    delete initialArgv[1];
     delete [] initialArgv;
 }
 
@@ -104,8 +102,58 @@ void Ut_Booster::testRenameProcessNotEnoughSpace2()
 {
     m_subject.reset(new MyBooster);
 
-    // Define and copy args because it's assumed that they are allocated in the heap
-    // (AppData deletes the argv on exit)
+    const int ARGS = 3;
+    m_subject->m_app.argc    = ARGS;
+    m_subject->m_app.argv    = new char * [ARGS];
+    m_subject->m_app.argv[0] = strdup("newName");
+    m_subject->m_app.argv[1] = strdup("--foo");
+    m_subject->m_app.argv[2] = strdup("--bar");
+
+    const int INIT_ARGS = 2;
+    char ** initialArgv = new char * [INIT_ARGS];
+    initialArgv[0]      = strdup("oldName");
+    initialArgv[1]      = strdup("       ");
+
+    m_subject->renameProcess(INIT_ARGS, initialArgv);
+
+    // Not enough space for the second argument:
+    // second argument should be left out
+
+    QVERIFY2(strcmp(initialArgv[0], "newName --foo") == 0, "Failure");
+
+    delete [] initialArgv;
+}
+
+void Ut_Booster::testRenameProcessNotEnoughSpace3()
+{
+    m_subject.reset(new MyBooster);
+
+    const int ARGS = 3;
+    m_subject->m_app.argc    = ARGS;
+    m_subject->m_app.argv    = new char * [ARGS];
+    m_subject->m_app.argv[0] = strdup("newName");
+    m_subject->m_app.argv[1] = strdup("--foo");
+    m_subject->m_app.argv[2] = strdup("--bar");
+
+    const int INIT_ARGS = 2;
+    char ** initialArgv = new char * [INIT_ARGS];
+    initialArgv[0]      = strdup("app");
+    initialArgv[1]      = strdup("    ");
+
+    m_subject->renameProcess(INIT_ARGS, initialArgv);
+
+    // Not enough space for arguments but just enough space
+    // for the new name
+
+    QVERIFY2(strcmp(initialArgv[0], "newName") == 0, "Failure");
+
+    delete [] initialArgv;
+}
+
+void Ut_Booster::testRenameProcessNotEnoughSpace4()
+{
+    m_subject.reset(new MyBooster);
+
     const int ARGS = 3;
     m_subject->m_app.argc    = ARGS;
     m_subject->m_app.argv    = new char * [ARGS];
@@ -115,15 +163,15 @@ void Ut_Booster::testRenameProcessNotEnoughSpace2()
 
     const int INIT_ARGS = 2;
     char ** initialArgv = new char * [INIT_ARGS];
-    initialArgv[0]      = strdup("applauncherd");
-    initialArgv[1]      = strdup("      ");
+    initialArgv[0]      = strdup("app");
+    initialArgv[1]      = strdup("   ");
 
     m_subject->renameProcess(INIT_ARGS, initialArgv);
 
-    QVERIFY2(strcmp(initialArgv[1], " --foo") == 0, "Failure");
+    // Not enough space for newName, but dummy space exist: should be cut
 
-    delete initialArgv[0];
-    delete initialArgv[1];
+    QVERIFY2(strcmp(initialArgv[0], "newName") == 0, "Failure");
+
     delete [] initialArgv;
 }
 
@@ -131,8 +179,6 @@ void Ut_Booster::testRenameProcessNoArgs()
 {
     m_subject.reset(new MyBooster);
 
-    // Define and copy args because it's assumed that they are allocated in the heap
-    // (AppData deletes the argv on exit)
     const int ARGS = 2;
     m_subject->m_app.argv    = new char * [ARGS];
     m_subject->m_app.argc    = ARGS;
@@ -141,13 +187,14 @@ void Ut_Booster::testRenameProcessNoArgs()
 
     const int INIT_ARGS = 1;
     char ** initialArgv = new char * [INIT_ARGS];
-    initialArgv[0]      = strdup("applauncherd");
+    initialArgv[0]      = strdup("oldName");
 
     m_subject->renameProcess(INIT_ARGS, initialArgv);
 
+    // No dummy space argument at all, only name fits
+
     QVERIFY2(strcmp(initialArgv[0], m_subject->m_app.argv[0]) == 0, "Failure");
 
-    delete initialArgv[0];
     delete [] initialArgv;
 }
 

@@ -23,6 +23,8 @@ private Q_SLOTS:
     void testRenameProcess();
     void testRenameProcessNotEnoughSpace();
     void testRenameProcessNotEnoughSpace2();
+    void testRenameProcessNotEnoughSpace3();
+    void testRenameProcessNotEnoughSpace4();
     void testRenameProcessNoArgs();
     void cleanupTestCase();
 

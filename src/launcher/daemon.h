@@ -89,6 +89,10 @@ private:
     char** initialArgv;
 
     static Daemon * m_instance;
+
+#ifdef UNIT_TEST
+    friend class Ut_Daemon;
+#endif
 };
 
 #endif // DAEMON_H
