@@ -1,13 +1,30 @@
+/*
+ * ut_daemon.cpp
+ *
+ * This file is part of applauncherd
+ *
+ * Copyright (C) 2010 Nokia Corporation. All rights reserved.
+ *
+ * This software, including documentation, is protected by copyright
+ * controlled by Nokia Corporation. All rights are reserved.
+ * Copying, including reproducing, storing, adapting or translating,
+ * any or all of this material requires the prior written consent of
+ * Nokia Corporation. This material also contains confidential
+ * information which may not be disclosed to others without the prior
+ * written consent of Nokia.
+ */
+
 #include "ut_daemon.h"
 #include "daemon.h"
 
 Ut_Daemon::Ut_Daemon()
 {
     int argc = 3;
-    char **argv    = new char * [argc];
+    char **argv = new char * [argc];
     argv[0] = strdup("app");
     argv[1] = strdup("--testParameter");
     argv[2] = strdup("--123");
+
     m_subject.reset(new Daemon( argc, argv ));
 }
 
@@ -49,6 +66,12 @@ void Ut_Daemon::testParseArgs()
     QVERIFY2(m_subject->daemon == true, "Failure");
     QVERIFY2(m_subject->quiet == true, "Failure");
     QVERIFY2(m_subject->testMode == true, "Failure");
+
+    delete argv[0];
+    delete argv[1];
+    delete argv[2];
+    delete argv[3];
+    delete [] argv;
 }
 
 void Ut_Daemon::testVerifyInstance()
@@ -71,6 +94,4 @@ void Ut_Daemon::testReapZombies()
     QVERIFY2(m_subject->m_children.size() == 0, "Failure");
 }
 
-
 QTEST_APPLESS_MAIN(Ut_Daemon);
-
