@@ -39,6 +39,24 @@ void Ut_Booster::initTestCase()
 void Ut_Booster::cleanupTestCase()
 {}
 
+char ** Ut_Booster::packTwoArgs(const char * arg0, const char * arg1)
+{
+    char ** argv  = new char * [2];
+    char * result = new char[strlen(arg0) + strlen(arg1) + 2];
+    memset(result, '\0', strlen(arg0) + strlen(arg1) + 2);
+
+    strcat(result, arg0);
+    strcat(result, " ");
+    strcat(result, arg1);
+
+    // Arguments are allocated consecutively in Linux
+    argv[0] = result;
+    argv[1] = argv[0] + strlen(arg0) + 1;
+    argv[0][strlen(arg0)] = '\0';
+
+    return argv;
+}
+
 void Ut_Booster::testRenameProcess()
 {
     m_subject.reset(new MyBooster);
@@ -52,21 +70,15 @@ void Ut_Booster::testRenameProcess()
     m_subject->m_app.argv[1] = strdup("--foo");
     m_subject->m_app.argv[2] = strdup("--bar");
 
-    // 50 chars buffer used to fool ps and top to show correct process name
-    // of the launched process
+    // 20 chars dummy buffer used to fool ps to show correct process name with args
     const int INIT_ARGS = 2;
-    char ** initialArgv = new char * [INIT_ARGS];
-
-    // Note!!: it's assumed (FIX THIS) that these are allocated consecutively
-    // in the memory. This is how arguments are really allocated in Linux.
-    initialArgv[0] = strdup("oldName");
-    initialArgv[1] = strdup("                                                  ");
-
+    char ** initialArgv = packTwoArgs("oldName", "                    ");
     m_subject->renameProcess(INIT_ARGS, const_cast<char **>(initialArgv));
 
     // New name and arguments fit and are correct
     QVERIFY2(strcmp(initialArgv[0], "newName --foo --bar") == 0, "Failure");
 
+    delete initialArgv[0];
     delete [] initialArgv;
 }
 
@@ -82,19 +94,15 @@ void Ut_Booster::testRenameProcessNotEnoughSpace()
     m_subject->m_app.argv[2] = strdup("--bar");
 
     const int INIT_ARGS = 2;
-    char ** initialArgv = new char * [INIT_ARGS];
-    initialArgv[0]      = strdup("oldName");
-    initialArgv[1]      = strdup("");
-
+    char ** initialArgv = packTwoArgs("oldName", "   ");
     int initLen = strlen(initialArgv[0]);
     m_subject->renameProcess(INIT_ARGS, initialArgv);
 
     // Not enough space for the new name nor the arguments:
     // name should be cut
-
     QVERIFY2(strncmp(initialArgv[0], m_subject->m_app.argv[0], initLen - 1) == 0, "Failure");
-    QVERIFY2(strcmp(initialArgv[1], "") == 0, "Failure");
 
+    delete [] initialArgv[0];
     delete [] initialArgv;
 }
 
@@ -110,17 +118,14 @@ void Ut_Booster::testRenameProcessNotEnoughSpace2()
     m_subject->m_app.argv[2] = strdup("--bar");
 
     const int INIT_ARGS = 2;
-    char ** initialArgv = new char * [INIT_ARGS];
-    initialArgv[0]      = strdup("oldName");
-    initialArgv[1]      = strdup("       ");
-
+    char ** initialArgv = packTwoArgs("oldName", "        ");
     m_subject->renameProcess(INIT_ARGS, initialArgv);
 
     // Not enough space for the second argument:
     // second argument should be left out
-
     QVERIFY2(strcmp(initialArgv[0], "newName --foo") == 0, "Failure");
 
+    delete initialArgv[0];
     delete [] initialArgv;
 }
 
@@ -136,17 +141,15 @@ void Ut_Booster::testRenameProcessNotEnoughSpace3()
     m_subject->m_app.argv[2] = strdup("--bar");
 
     const int INIT_ARGS = 2;
-    char ** initialArgv = new char * [INIT_ARGS];
-    initialArgv[0]      = strdup("app");
-    initialArgv[1]      = strdup("    ");
+    char ** initialArgv = packTwoArgs("app", "....");
 
     m_subject->renameProcess(INIT_ARGS, initialArgv);
 
     // Not enough space for arguments but just enough space
     // for the new name
-
     QVERIFY2(strcmp(initialArgv[0], "newName") == 0, "Failure");
 
+    delete initialArgv[0];
     delete [] initialArgv;
 }
 
@@ -162,16 +165,13 @@ void Ut_Booster::testRenameProcessNotEnoughSpace4()
     m_subject->m_app.argv[2] = strdup("--bar");
 
     const int INIT_ARGS = 2;
-    char ** initialArgv = new char * [INIT_ARGS];
-    initialArgv[0]      = strdup("app");
-    initialArgv[1]      = strdup("   ");
-
+    char ** initialArgv = packTwoArgs("app", "   ");
     m_subject->renameProcess(INIT_ARGS, initialArgv);
 
     // Not enough space for newName, but dummy space exist: should be cut
-
     QVERIFY2(strcmp(initialArgv[0], "newName") == 0, "Failure");
 
+    delete initialArgv[0];
     delete [] initialArgv;
 }
 
@@ -195,6 +195,7 @@ void Ut_Booster::testRenameProcessNoArgs()
 
     QVERIFY2(strcmp(initialArgv[0], m_subject->m_app.argv[0]) == 0, "Failure");
 
+    delete initialArgv[0];
     delete [] initialArgv;
 }
 

@@ -29,6 +29,7 @@ private Q_SLOTS:
     void cleanupTestCase();
 
 private:
+    char ** packTwoArgs(const char * arg0, const char * arg1);
     std::tr1::shared_ptr<Booster> m_subject;
 };
 
