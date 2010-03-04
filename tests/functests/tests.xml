@@ -37,6 +37,10 @@
           <step expected_result="0">`pyversions -d` /usr/share/applauncherd-functional-tests/test-func-launcher.py test_006</step>
       </case-->
 
+      <!--case name="launcher7" type="Functional" description="To check the pipes used communication between parent and childrens" timeout="120" level="System">
+          <step expected_result="0">`pyversions -d` /usr/share/applauncherd-functional-tests/check_pipes.py</step>
+      </case-->
+
       <environments>
           <scratchbox>false</scratchbox>
           <hardware>true</hardware>    
