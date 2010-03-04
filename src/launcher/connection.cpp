@@ -82,7 +82,7 @@ void Connection::initSocket(const string socketId)
         unlink(socketId.c_str());
 
         struct sockaddr sun;
-        sun.sa_family = AF_FILE; //AF_UNIX;
+        sun.sa_family = AF_UNIX;
         strcpy(sun.sa_data, socketId.c_str());
 
         if (bind(sockfd, &sun, sizeof(sun)) < 0)
