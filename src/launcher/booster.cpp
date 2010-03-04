@@ -93,32 +93,43 @@ void Booster::renameProcess(int parentArgc, char** parentArgv)
 {
     Logger::logInfo("set new process name: '%s' ", basename(m_app.argv[0]));
 
-    // This code copies the new process name to the original argv[0].
-    // If the new name won't fit, then it'll be cut. This is used to
-    // "fool" e.g. top and ps to show the correct name. Otherwise they
-    // would show the name of the launcher itself.
-    int min = std::min(strlen(parentArgv[0]), strlen(m_app.argv[0]));
-    if (min)
+    if (parentArgc < 2)
     {
-        memmove(parentArgv[0], m_app.argv[0], min);
-        parentArgv[0][min] = '\0';
-    }
+        // This code copies the new process name to the original argv[0].
+        // If the new name won't fit, then it'll be cut. This is used to
+        // "fool" e.g. top and ps to show the correct name. Otherwise they
+        // would show the name of the launcher itself.
 
-    // This code copies the rest of the new arguments to the space reserved
-    // in the old argv[1]. If an argument won't fit then the algorithm
-    // leaves it fully out and terminates.
-    if (parentArgc > 1)
-    {
-        int spaceAvailable = static_cast<int>(strlen(parentArgv[1]));
-        if (spaceAvailable)
+        int min = std::min(strlen(parentArgv[0]), strlen(m_app.argv[0]));
+        if (min)
         {
-            memset(parentArgv[1], '\0', spaceAvailable);
+            memset(parentArgv[0], '\0', strlen(parentArgv[0]));
+            memmove(parentArgv[0], m_app.argv[0], min);
+        }
+    }
+    else
+    {
+        // This code copies all the new arguments to the space reserved
+        // in the old argv[0] + argv[1]. If an argument won't fit then the algorithm
+        // leaves it fully out and terminates.
+
+        int spaceAvailable = 0;
+        for (int i = 0; i < parentArgc; i++)
+            spaceAvailable += strlen(parentArgv[i]) + 1;
+        spaceAvailable--;
+
+        if (spaceAvailable > 0)
+        {
+            memset(parentArgv[0], '\0', spaceAvailable);
+            strncat(parentArgv[0], m_app.argv[0], spaceAvailable);
+            spaceAvailable -= strlen(parentArgv[0]);
+
             for (int i = 1; i < m_app.argc; i++)
             {
-                if (spaceAvailable > static_cast<int>(strlen(m_app.argv[i])))
+                if (spaceAvailable > static_cast<int>(strlen(m_app.argv[i])) + 1)
                 {
-                    strcat(parentArgv[1], " ");
-                    strcat(parentArgv[1], m_app.argv[i]);
+                    strcat(parentArgv[0], " ");
+                    strcat(parentArgv[0], m_app.argv[i]);
                     spaceAvailable -= strlen(m_app.argv[i] + 1);
                 }
                 else
