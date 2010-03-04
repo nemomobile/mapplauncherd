@@ -28,6 +28,10 @@
           <step expected_result="0">/usr/share/applauncherd-tests/ut_booster</step>
       </case>
 
+      <case name="Booster" type="Functional" description="Unit tests for Connection class" level="Component" timeout="20">
+          <step expected_result="0">/usr/share/applauncherd-tests/ut_connection</step>
+      </case>
+
       <environments>
           <scratchbox>true</scratchbox>
           <hardware>true</hardware>    
