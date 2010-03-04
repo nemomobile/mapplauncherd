@@ -66,7 +66,7 @@ static int invoker_init(enum APP_TYPE app_type)
     if (fd < 0)
         die(1, "opening invoker socket\n");
 
-    sun.sun_family = AF_FILE; //AF_UNIX;
+    sun.sun_family = AF_UNIX;  //AF_FILE;
 
     if(app_type ==  DUI_APP)
         strcpy(sun.sun_path, INVOKER_DUI_SOCK);
@@ -172,7 +172,7 @@ static bool invoker_send_io(int fd)
     invoke_send_msg(fd, INVOKER_MSG_IO);
     if (sendmsg(fd, &msg, 0) < 0)
     {
-        warning("sendmsg failed in invoker_send_io: %s", strerror(errno));
+        warning("sendmsg failed in invoker_send_io: %s /n", strerror(errno));
         return  false;
     }
 

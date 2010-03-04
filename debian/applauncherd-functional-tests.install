@@ -1,5 +1,6 @@
 usr/share/applauncherd-functional-tests/tests.xml
 usr/share/applauncherd-functional-tests/test-func-launcher.py
+usr/share/applauncherd-functional-tests/check_pipes.py
 usr/bin/helloworld
 usr/bin/helloworld_1
 usr/bin/helloworld_2
