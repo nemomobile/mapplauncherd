@@ -23,6 +23,7 @@
 #include <string.h>
 #include <signal.h>
 #include <sys/socket.h>
+#include <bits/socket.h>
 #include <sys/un.h>
 #include <sys/uio.h>
 #include <sys/time.h>
@@ -73,7 +74,7 @@ static int invoker_init(enum APP_TYPE app_type)
     else if (app_type ==  QT_APP)
         strcpy(sun.sun_path, INVOKER_QT_SOCK);
     else
-        die(1, "unknown type of application: %d\n", app_type);
+        die(1, "unknown type of application: %d \n", app_type);
 
     if (connect(fd, (struct sockaddr *)&sun, sizeof(sun)) < 0)
         die(1, "connecting to the launcher\n");
@@ -151,6 +152,8 @@ static bool invoker_send_io(int fd)
     char buf[CMSG_SPACE(sizeof(io))];
     struct iovec iov;
     int dummy;
+
+    memset(&msg, 0, sizeof(struct msghdr));
 
     iov.iov_base = &dummy;
     iov.iov_len = 1;
