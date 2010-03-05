@@ -26,76 +26,106 @@ using std::map;
 
 typedef map<string, int> poolType;
 
-//! Wrapper class for the connection between invoker and launcher
+/*!
+ * \class
+ * \brief Wrapper class for the connection between invoker and launcher
+ *
+ * This class wraps up the UNIX file socket connection between the invoker
+ * and the launcher daemon.
+ */
 class Connection
 {
 public:
 
-    //! Constructor
+    //! \brief Constructor
     Connection(const string socketId);
 
-    //! Destructor
+    //! \brief Destructor
     virtual ~Connection();
 
-    /*! Accept connection
-     * \return True on success
+    /*! \brief Accept connection
+     * Accept a socket connection from the invoker.
+     * \return true on success
      */
     bool acceptConn();
 
-    //! Close connection
+    //! \brief Close the socket connection
     void closeConn();
 
-    //! Return the magic number
+    /*! \brief Return the magic number
+     * \return The magic number received from the invoker.
+     */
     int getMagic();
 
-    //! Return the application name
+    /*! \brief Return the application name
+     * \return Name string
+     */
     string getAppName();
 
-    /*! Receive actions
+    /*! \brief Receive actions
+     * This method executes the actual data-receiving loop and terminates
+     * after INVOKER_MSG_END is received.
      * \return True on success
      */
     bool receiveActions();
 
-    //! Return the file name
-    string  fileName() { return m_fileName; }
+    /*! \brief Return the file name
+     * Return the executable file name received from the invoker.
+     * \return Name string
+     */
+    string fileName() const;
 
-    //! Return argument count
-    int argc() { return static_cast<int>(m_argc);}
+    /*! \brief Return the argument count
+     * Return the CLI argument count received from the invoker.
+     * \return Argument count
+     */
+    int argc() const;
 
-    //! Return argument list
-    char** argv() { return m_argv; }
+    /*! \brief Return the argument list
+     * Return the CLI argument list received from the invoker.
+     * \return Pointer to the argument list
+     */
+    char** argv() const;
 
-    int* ioDescriptors() { return m_io; }
+    /*! \brief Return I/O file descriptors
+     * Return the I/O file descriptors received from the invoker.
+     * \return Pointer to the three-element list of fd's.
+     */
+    int* ioDescriptors();
 
-    //! Initialize socket for provided socket id
+    /*! Initialize a file socket
+     * \param socketId Path to the socket file
+     */
     static void initSocket(const string socketId);
 
-    //! Return initialized socket identified by socket id
-    static int   getSocket(const string socketId);
+    /*! Return initialized socket
+     * \param socketId Path to the socket file
+     */
+    static int getSocket(const string socketId);
 
 private:
 
-    bool  getExec();
-    bool  getArgs();
-    bool  getEnv();
-    bool  getIo();
+    bool getExec();
+    bool getArgs();
+    bool getEnv();
+    bool getIo();
 
-    static const unsigned int  INVOKER_MSG_MASK                =    0xffff0000;
-    static const unsigned int  INVOKER_MSG_MAGIC               =    0xb0070000;
-    static const unsigned int  INVOKER_MSG_MAGIC_VERSION_MASK  =    0x0000ff00;
-    static const unsigned int  INVOKER_MSG_MAGIC_VERSION       =    0x00000300;
-    static const unsigned int  INVOKER_MSG_MAGIC_OPTION_MASK   =    0x000000ff;
-    static const unsigned int  INVOKER_MSG_MAGIC_OPTION_WAIT   =    0x00000001;
-    static const unsigned int  INVOKER_MSG_NAME                =    0x5a5e0000;
-    static const unsigned int  INVOKER_MSG_EXEC                =    0xe8ec0000;
-    static const unsigned int  INVOKER_MSG_ARGS                =    0xa4650000;
-    static const unsigned int  INVOKER_MSG_ENV                 =    0xe5710000;
-    static const unsigned int  INVOKER_MSG_PRIO                =    0xa1ce0000;
-    static const unsigned int  INVOKER_MSG_IO                  =    0x10fd0000;
-    static const unsigned int  INVOKER_MSG_END                 =    0xdead0000;
-    static const unsigned int  INVOKER_MSG_PID                 =    0x1d1d0000;
-    static const unsigned int  INVOKER_MSG_EXIT                =    0xe4170000;
-    static const unsigned int  INVOKER_MSG_ACK                 =    0x600d0000;
+    static const unsigned int INVOKER_MSG_MASK               = 0xffff0000;
+    static const unsigned int INVOKER_MSG_MAGIC              = 0xb0070000;
+    static const unsigned int INVOKER_MSG_MAGIC_VERSION_MASK = 0x0000ff00;
+    static const unsigned int INVOKER_MSG_MAGIC_VERSION      = 0x00000300;
+    static const unsigned int INVOKER_MSG_MAGIC_OPTION_MASK  = 0x000000ff;
+    static const unsigned int INVOKER_MSG_MAGIC_OPTION_WAIT  = 0x00000001;
+    static const unsigned int INVOKER_MSG_NAME               = 0x5a5e0000;
+    static const unsigned int INVOKER_MSG_EXEC               = 0xe8ec0000;
+    static const unsigned int INVOKER_MSG_ARGS               = 0xa4650000;
+    static const unsigned int INVOKER_MSG_ENV                = 0xe5710000;
+    static const unsigned int INVOKER_MSG_PRIO               = 0xa1ce0000;
+    static const unsigned int INVOKER_MSG_IO                 = 0x10fd0000;
+    static const unsigned int INVOKER_MSG_END                = 0xdead0000;
+    static const unsigned int INVOKER_MSG_PID                = 0x1d1d0000;
+    static const unsigned int INVOKER_MSG_EXIT               = 0xe4170000;
+    static const unsigned int INVOKER_MSG_ACK                = 0x600d0000;
 
     bool  sendMsg(uint32_t msg);
     bool  recvMsg(uint32_t *msg);
@@ -105,17 +135,16 @@ private:
     static poolType socketPool;
 
     //! socket
-    int       m_fd;
-    int       m_curSocket;
-    string    m_fileName;
-    uint32_t  m_argc;
-    char    **m_argv;
-    int       m_io[3];
+    int      m_fd;
+    int      m_curSocket;
+    string   m_fileName;
+    uint32_t m_argc;
+    char   **m_argv;
+    int      m_io[3];
 
 #ifdef UNIT_TEST
     friend class Ut_Connection;
 #endif
-
 };
 
 #endif //CONNECTION_H
