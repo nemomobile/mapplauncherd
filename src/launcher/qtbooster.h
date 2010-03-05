@@ -58,6 +58,12 @@ protected:
 
 private:
 
+    //! Disable copy-constructor
+    QtBooster(const QtBooster & r);
+
+    //! Disable assignment operator
+    QtBooster & operator= (const QtBooster & r);
+
     static const string m_socketId;
 
 #ifdef UNIT_TEST
