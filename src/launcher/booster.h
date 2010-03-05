@@ -23,7 +23,6 @@
 using std::string;
 
 #include "appdata.h"
-#include "connection.h"
 
 /*!
     \class Booster
