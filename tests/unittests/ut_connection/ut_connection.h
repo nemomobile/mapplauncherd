@@ -40,6 +40,7 @@ private Q_SLOTS:
     void cleanupTestCase();
     void testInitConnection();
     void testAcceptConnection();
+    void testGetEnv();
 
 private:
     std::tr1::shared_ptr<Connection> m_subject;

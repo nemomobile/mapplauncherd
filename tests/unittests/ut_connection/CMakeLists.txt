@@ -15,7 +15,7 @@ ${SRC}/qtbooster.cpp
 # Set moc headers
 set(ut_connection_MOC_HDRS
 ut_connection.h
-${SRC}/connection.h
+#${SRC}/connection.h
 )
 
 # Set the program name define used in daemon.cpp

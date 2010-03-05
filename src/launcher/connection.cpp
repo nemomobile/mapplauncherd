@@ -290,6 +290,8 @@ bool Connection::getEnv()
 
         // In case of error, just warn and try to continue, as the other side is
         // going to keep sending the reset of the message.
+        // String pointed to by var shall become part of the environment, so altering
+        // the string shall change the environment, don't free it
         if (putenv(var) != 0)
             Logger::logWarning("allocating environment variable");
     }
