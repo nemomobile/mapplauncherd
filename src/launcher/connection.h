@@ -26,8 +26,8 @@ using std::map;
 typedef map<string, int> poolType;
 
 /*!
- * \class
- * \brief Wrapper class for the connection between invoker and launcher
+ * \class Connection.
+ * \brief Wrapper class for the connection between invoker and launcher.
  *
  * This class wraps up the UNIX file socket connection between the invoker
  * and the launcher daemon.
@@ -36,7 +36,7 @@ class Connection
 {
 public:
 
-    /*! \brief Constructor
+    /*! \brief Constructor.
      *  \param socketId Path to the UNIX file socket to be used.
      */
     explicit Connection(const string socketId);
@@ -44,62 +44,62 @@ public:
     //! \brief Destructor
     virtual ~Connection();
 
-    /*! \brief Accept connection
+    /*! \brief Accept connection.
      * Accept a socket connection from the invoker.
-     * \return true on success
+     * \return true on success.
      */
     bool acceptConn();
 
     //! \brief Close the socket connection
     void closeConn();
 
-    /*! \brief Return the magic number
+    /*! \brief Return the magic number.
      * \return The magic number received from the invoker.
      */
     int getMagic();
 
-    /*! \brief Return the application name
+    /*! \brief Return the application name.
      * \return Name string
      */
     string getAppName();
 
-    /*! \brief Receive actions
+    /*! \brief Receive actions.
      * This method executes the actual data-receiving loop and terminates
      * after INVOKER_MSG_END is received.
      * \return True on success
      */
     bool receiveActions();
 
-    /*! \brief Return the file name
+    /*! \brief Return the file name.
      * Return the executable file name received from the invoker.
      * \return Name string
      */
     string fileName() const;
 
-    /*! \brief Return the argument count
+    /*! \brief Return the argument count.
      * Return the CLI argument count received from the invoker.
      * \return Argument count
      */
     int argc() const;
 
-    /*! \brief Return the argument list
+    /*! \brief Return the argument list.
      * Return the CLI argument list received from the invoker.
      * \return Pointer to the argument list
      */
     char** argv() const;
 
-    /*! \brief Return I/O file descriptors
+    /*! \brief Return I/O file descriptors.
      * Return the I/O file descriptors received from the invoker.
      * \return Pointer to the three-element list of fd's.
      */
     int* ioDescriptors();
 
-    /*! Initialize a file socket
+    /*! \brief Initialize a file socket.
      * \param socketId Path to the socket file
      */
     static void initSocket(const string socketId);
 
-    /*! Return initialized socket
+    /*! \brief Return initialized socket.
      * \param socketId Path to the socket file
      */
     static int getSocket(const string socketId);

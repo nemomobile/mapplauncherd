@@ -20,17 +20,17 @@
 #include "booster.h"
 
 /*!
- * \class QtBooster
- * \brief Qt-specific version of the Booster
+ * \class QtBooster.
+ * \brief Qt-specific version of the Booster.
  */
 class QtBooster : public Booster
 {
 public:
 
-    //! Constructor
+    //! Constructor.
     QtBooster();
 
-    //! Destructor
+    //! Destructor.
     virtual ~QtBooster();
 
     /*!

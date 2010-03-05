@@ -3,7 +3,6 @@ BUILD & INSTALL
 
 Applauncherd uses the CMake build system.
 
-
 Configure
 ---------
 
@@ -15,12 +14,15 @@ Applauncherd + tests:
 
 BUILD_TESTS=1 ./configure
 
-
 Build
 -----
 
 make
 
+Build Doxygen -documentation if Doxygen was found
+-------------------------------------------------
+
+make doc
 
 Install
 -------

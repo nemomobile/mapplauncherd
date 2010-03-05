@@ -27,7 +27,14 @@ if ($ENV{BUILD_TESTS})
 	# This will build the HelloWorld test library, unit tests, functional tests
 	# and performance tests
 	add_subdirectory(tests)
-	
 endif ($ENV{BUILD_TESTS})
+
+# Target for documentation (make doc)
+find_program(Doxygen NAMES doxygen)
+if (EXISTS ${Doxygen})
+	add_custom_target(doc COMMAND ${Doxygen} doc/Doxyfile)
+else (EXISTS ${Doxygen})
+	message(STATUS "Doxygen not found: you're not able to build documentation.")
+endif (EXISTS ${Doxygen})
 
 

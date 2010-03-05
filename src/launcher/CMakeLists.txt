@@ -10,11 +10,11 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DPROG_NAME=\\\"applauncherd\\\"")
 
 # Check if it's possible to compile DuiBooster
 if(EXISTS ${DUISRCINCLUDE}/duicomponentcache.h)
-	message("Building with DUI Booster")
+	message(STATUS "Building with DUI Booster")
 	find_library(dui_LIBRARY NAMES dui PATHS /usr/lib /usr/local/lib )
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DHAVE_DUI")
 else(EXISTS ${DUISRCINCLUDE}/duicomponentcache.h)
-	message("!! DUI Booster not available !!")
+	message(STATUS "!! DUI Booster not available !!")
 endif(EXISTS ${DUISRCINCLUDE}/duicomponentcache.h)
 
 # Set libraries to be linked (dui_LIBRARY may be empty)

@@ -25,8 +25,8 @@ using std::vector;
 using std::string;
 
 /*!
- * \class Daemon
- * \brief Daemon wraps up the daemonizing functionality
+ * \class Daemon.
+ * \brief Daemon wraps up the daemonizing functionality.
  *
  * Daemon wraps up the daemonizing functionality and is the
  * main object of the launcher program. It runs the main loop of the
@@ -40,7 +40,7 @@ public:
     /*!
      * \brief Constructor
      * \param argc Argument count delivered to main()
-     * \param argc Argument array delivered to main()
+     * \param argv Argument array delivered to main()
      *
      * Supported arguments:
      * --daemon == daemonize
@@ -59,12 +59,12 @@ public:
      */
     void run();
 
-    /*! \brief Return the one-and-only Daemon instance
-     * \return Pointer to the Daemon instance
+    /*! \brief Return the one-and-only Daemon instance.
+     * \return Pointer to the Daemon instance.
      */
     static Daemon * instance();
 
-    //! \brief Reapes children processes gone zombies (finished Boosters)
+    //! \brief Reapes children processes gone zombies (finished Boosters).
     void reapZombies();
 
 private:
