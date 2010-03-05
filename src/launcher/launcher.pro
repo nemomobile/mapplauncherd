@@ -25,7 +25,6 @@ contains(DEFINES, HAVE_DUI) {
 }
 
 SOURCES += logger.cpp \
-    global.cpp \
     main.cpp \
     daemon.cpp \
     connection.cpp \
@@ -34,7 +33,6 @@ SOURCES += logger.cpp \
     duibooster.cpp
 
 HEADERS += logger.h \
-    global.h \
     daemon.h \
     connection.h \
     booster.h \

@@ -1,8 +1,9 @@
-applauncherd (0.2.0~1) unstable; urgency=low
+applauncherd (0.2.0-1) stable; urgency=low
 
-  * Name changed
+  * First released version: basic launcher functionality with basic test set
+  * Implemented: SWP#DUI-2270, SWP#DUI-2128
 
- -- Jussi Lind <jussi.lind@nokia.com>  Fri, 26 Feb 2010 12:16:03 +0200
+ -- Jussi Lind <jussi.lind@nokia.com>  Fri, 05 Mar 2010 11:16:03 +0200
 
 launcher (0.1.0-1) unstable; urgency=low
 

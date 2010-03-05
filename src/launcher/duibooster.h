@@ -23,39 +23,50 @@
     \class DuiBooster
     \brief Dui-specific version of the Booster
 
-    Essentially DuiBooster initializes DuiComponentCache with fresh objects.
+    DuiBooster effectively fills DuiComponentCache with fresh objects.
+    DUI applications can then try to use already initialized objects from DuiComponentCache.
+    This can significantly reduce the startup time of a DUI application.
  */
 class DuiBooster : public Booster
 {
 public:
 
-    /*!
-     * \brief Constructor
-     */
+    //! \brief Constructor
     DuiBooster();
 
-    /*!
-     * \brief Destructor
-     */
+    //! \brief Destructor
     virtual ~DuiBooster();
 
     //! \reimp
     virtual bool preload();
 
-    //! Return the socket name
+    /*!
+     * \brief Return the socket name common to all DuiBooster objects.
+     * \return Path to the socket file.
+     */
     static const string & socketName();
 
     //! \reimp
     virtual char boosterType() const { return type(); }
 
-    //! Static method for getting the type
+    /*!
+     * \brief Return a unique character ('d') represtenting the type of DuiBoosters.
+     * \return Type character.
+     */
     static char type();
 
 protected:
 
+    //! \reimp
     virtual const string & socketId() const;
 
 private:
+
+    //! Disable copy-constructor
+    DuiBooster(const DuiBooster & r);
+
+    //! Disable assignment operator
+    DuiBooster & operator= (const DuiBooster & r);
 
     static const string m_socketId;
 

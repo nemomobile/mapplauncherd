@@ -60,6 +60,26 @@ Connection::~Connection()
     closeConn();
 }
 
+string Connection::fileName() const
+{
+    return m_fileName;
+}
+
+int Connection::argc() const
+{
+    return static_cast<int>(m_argc);
+}
+
+char** Connection::argv() const
+{
+    return m_argv;
+}
+
+int* Connection::ioDescriptors()
+{
+    return m_io;
+}
+
 int Connection::getSocket(const string socketId)
 {
     poolType::iterator it;
