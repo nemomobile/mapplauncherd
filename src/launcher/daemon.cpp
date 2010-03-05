@@ -15,7 +15,6 @@
  */
 
 #include "daemon.h"
-#include "global.h"
 #include "logger.h"
 #include "connection.h"
 #include "booster.h"

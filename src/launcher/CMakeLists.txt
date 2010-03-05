@@ -1,5 +1,5 @@
 # Set sources
-set(LauncherSRC booster.cpp connection.cpp daemon.cpp duibooster.cpp global.cpp logger.cpp main.cpp qtbooster.cpp)
+set(LauncherSRC booster.cpp connection.cpp daemon.cpp duibooster.cpp logger.cpp main.cpp qtbooster.cpp)
 
 # Set include dirs
 set(DUISRCINCLUDE /usr/include/dui)
