@@ -20,39 +20,40 @@
 #include "booster.h"
 
 /*!
-    \class QtBooster
-    \brief Qt-specific version of the Booster
-
+ * \class QtBooster
+ * \brief Qt-specific version of the Booster
  */
 class QtBooster : public Booster
 {
 public:
-    /*!
-     * \brief Construct QtBooster object.
-     */
+
+    //! Constructor
     QtBooster();
 
-    /*!
-     * \brief Destroy QtBooster object.
-     */
+    //! Destructor
     virtual ~QtBooster();
 
-    //! Return the socket name
+    /*!
+     * \brief Return the socket name common to all QtBooster objects.
+     * \return Path to the socket file.
+     */
     static const string & socketName();
 
     //! \reimp
     virtual char boosterType() const { return type(); }
 
-    //! Static method for getting the type
+    /*!
+     * \brief Return a unique character ('q') represtenting the type of QtBoosters.
+     * \return Type character.
+     */
     static char type();
 
-    /*!
-     * \brief Initialize and preload stuff
-     */
+    //! \reimp
     virtual bool preload();
 
 protected:
 
+    //! \reimp
     virtual const string & socketId() const;
 
 private:

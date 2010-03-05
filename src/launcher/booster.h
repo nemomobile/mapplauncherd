@@ -25,17 +25,17 @@ using std::string;
 #include "appdata.h"
 
 /*!
-    \class Booster
-    \brief Abstract base class for all boosters (Qt-booster, DUI-booster and so on..)
-
-    Booster is a class that is used to initialize certain resources in libraries
-    common to all applications of a type.
-
-    Booster also communicates with the invoker process and handles the actual
-    jump to the main() -method of the application to be launched.
-
-    Booster instance dies with the launched application and a new one must be created
-    in advance so as to launch a new application.
+ *  \class Booster
+ *  \brief Abstract base class for all boosters (Qt-booster, DUI-booster and so on..)
+ *
+ *  Booster is a class that is used to initialize certain resources in libraries
+ *  common to all applications of a type.
+ *
+ *  Booster also communicates with the invoker process and handles the actual
+ *  jump to the main() -method of the application to be launched.
+ *
+ *  Booster instance dies with the launched application and a new one must be created
+ *  in advance so as to launch a new application.
  */
 class Booster
 {
@@ -100,7 +100,7 @@ protected:
      * \brief Return the communication socket used by a Booster
      * This method returns the socket used between invoker and the Booster
      * (common to all Boosters of the type). Override in the custom Booster.
-     * \return Path to the socket
+     * \return Path to the socket file
      */
     virtual const string & socketId() const = 0;
 
