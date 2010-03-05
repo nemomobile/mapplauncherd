@@ -97,6 +97,7 @@ public:
     static void setEchoMode(bool enable);
 
 private:
+
     static void writeLog(const int priority, const char * format, va_list ap); 
     //! True if the log is open
     static bool m_isOpened;

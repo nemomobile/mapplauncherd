@@ -17,7 +17,6 @@
 #ifndef CONNECTION_H
 #define CONNECTION_H
 
-#include <stdint.h>
 #include <string>
 #include <map>
 
@@ -37,8 +36,10 @@ class Connection
 {
 public:
 
-    //! \brief Constructor
-    Connection(const string socketId);
+    /*! \brief Constructor
+     *  \param socketId Path to the UNIX file socket to be used.
+     */
+    explicit Connection(const string socketId);
 
     //! \brief Destructor
     virtual ~Connection();
@@ -104,6 +105,12 @@ public:
     static int getSocket(const string socketId);
 
 private:
+
+    //! Disable copy-constructor
+    Connection(const Connection & r);
+
+    //! Disable assignment operator
+    Connection & operator= (const Connection & r);
 
     bool getExec();
     bool getArgs();

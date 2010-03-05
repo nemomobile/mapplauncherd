@@ -70,7 +70,7 @@ Daemon::Daemon(int & argc, char * argv[]) :
     }
 }
 
-void Daemon::consoleQuiet(void)
+void Daemon::consoleQuiet()
 {
     close(0);
     close(1);
@@ -288,7 +288,7 @@ void Daemon::usage() const
               << "Options:\n"
               << "  --daemon            Fork and go into the background.\n"
               //<< "  --pidfile FILE      Specify a different pid file (default " << LAUNCHER_PIDFILE << " ).\n"
-              << "  --send-app-died     Send application died signal.\n"
+              //<< "  --send-app-died     Send application died signal.\n"
               << "  --quiet             Do not print anything.\n"
               << "  --help              Print this help message.\n"
               << "\n"
@@ -319,7 +319,5 @@ void Daemon::parseArgs(const vector<string> & args)
         {
             testMode = true;
         }
-        //else
-        //    usage();
     }
 }

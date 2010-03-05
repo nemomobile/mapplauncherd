@@ -106,6 +106,13 @@ protected:
 
 private:
 
+    //! Disable copy-constructor
+    Booster(const Booster & r);
+
+    //! Disable assignment operator
+    Booster & operator= (const Booster & r);
+
+
     void complainAndExit();
     void launchProcess();
     void loadMain();

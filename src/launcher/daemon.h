@@ -24,29 +24,47 @@
 using std::vector;
 using std::string;
 
+/*!
+ * \class Daemon
+ * \brief Daemon wraps up the daemonizing functionality
+ *
+ * Daemon wraps up the daemonizing functionality and is the
+ * main object of the launcher program. It runs the main loop of the
+ * application, listens connections from the invoker and forks Booster
+ * processes.
+ */
 class Daemon
 {
 public:
 
     /*!
-     * \brief Construct Daemon object in particular mode.
+     * \brief Constructor
+     * \param argc Argument count delivered to main()
+     * \param argc Argument array delivered to main()
+     *
+     * Supported arguments:
+     * --daemon == daemonize
+     * --quiet  == quiet
+     * --help   == print usage
      */
     Daemon(int & argc, char * argv[]);
 
     /*!
-     * \brief Destroy Daemon object.
+     * \brief Destructor
      */
     virtual ~Daemon();
 
     /*!
-     * \brief Run everything
+     * \brief Run main loop and fork Boosters.
      */
     void run();
 
-    //! Return one-and-only Daemon instance
+    /*! \brief Return the one-and-only Daemon instance
+     * \return Pointer to the Daemon instance
+     */
     static Daemon * instance();
 
-    //! Reapes children gone zombies
+    //! \brief Reapes children processes gone zombies (finished Boosters)
     void reapZombies();
 
 private:
@@ -70,7 +88,7 @@ private:
     bool forkBooster(char type, int pipefd[2]);
 
     //! Don't use console for output
-    void consoleQuiet(void);
+    void consoleQuiet();
 
     //! Test mode flag
     bool testMode;
@@ -81,10 +99,9 @@ private:
     //! Debug print flag
     bool quiet;
 
-    //! Vector of current children PID's
+    //! Vector of current child PID's
     vector<pid_t> m_children;
 
-    // main process args list
     int    initialArgc;
     char** initialArgv;
 

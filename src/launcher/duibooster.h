@@ -62,6 +62,12 @@ protected:
 
 private:
 
+    //! Disable copy-constructor
+    DuiBooster(const DuiBooster & r);
+
+    //! Disable assignment operator
+    DuiBooster & operator= (const DuiBooster & r);
+
     static const string m_socketId;
 
 #ifdef UNIT_TEST
