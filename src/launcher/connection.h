@@ -111,6 +111,11 @@ private:
     uint32_t  m_argc;
     char    **m_argv;
     int       m_io[3];
+
+#ifdef UNIT_TEST
+    friend class Ut_Connection;
+#endif
+
 };
 
 #endif //CONNECTION_H
