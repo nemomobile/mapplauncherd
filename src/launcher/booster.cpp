@@ -68,7 +68,9 @@ bool Booster::readCommand()
             m_app.ioDescriptors[i] = conn.ioDescriptors()[i];
     }
     else
+    {
         return false;
+    }
 
     // Close connection
     conn.closeConn();
