@@ -134,10 +134,10 @@ private:
     static const unsigned int INVOKER_MSG_EXIT               = 0xe4170000;
     static const unsigned int INVOKER_MSG_ACK                = 0x600d0000;
 
-    bool  sendMsg(uint32_t msg);
-    bool  recvMsg(uint32_t *msg);
-    bool  sendStr(char *str);
-    char* recvStr();
+    virtual bool  sendMsg(uint32_t msg);
+    virtual bool  recvMsg(uint32_t *msg);
+    virtual bool  sendStr(char *str);
+    virtual char* recvStr();
 
     static poolType socketPool;
 
