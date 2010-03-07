@@ -115,12 +115,13 @@ void Daemon::run()
         char msg;
         read(pipefd[0], reinterpret_cast<void *>(&msg), 1);
 
-        // For a new booster of the given type
-        forkBooster(msg, pipefd);
-
-        // Guarantee some time to the booster to init before creating
-        // a new one (if anything to be created)
+        // Guarantee some time for the just launched application to
+        // start up before forking new booster. Not doing this would
+        // slow down the start-up significantly on single core CPUs.
         sleep(2);
+
+        // Fork a new booster of the given type
+        forkBooster(msg, pipefd);
     }
 }
 
@@ -168,7 +169,7 @@ bool Daemon::forkBooster(char type, int pipefd[2])
         // Clean-up all the env variables
         clearenv();
 
-        // Read commands from the invoker
+        // Wait and read commands from the invoker
         booster->readCommand();
 
         // Rename booster process to cheat 'ps' and 'top' utils
