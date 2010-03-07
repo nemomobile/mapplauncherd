@@ -162,11 +162,11 @@ bool Daemon::forkBooster(char type, int pipefd[2])
             Logger::logErrorAndDie(EXIT_FAILURE, "Unknown booster type \n");
         }
 
-        // clean-up all the env variables
-        clearenv();
-
         // Preload stuff
         booster->preload();
+
+        // Clean-up all the env variables
+        clearenv();
 
         // Read commands from the invoker
         booster->readCommand();
