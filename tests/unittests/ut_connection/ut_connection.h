@@ -41,6 +41,7 @@ private Q_SLOTS:
     void testInitConnection();
     void testAcceptConnection();
     void testGetEnv();
+    void testGetAppName();
 
 private:
     std::tr1::shared_ptr<Connection> m_subject;

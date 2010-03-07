@@ -220,14 +220,16 @@ string Connection::getAppName()
     recvMsg(&msg);
     if (msg != INVOKER_MSG_NAME)
     {
-        Logger::logError("receiving invalid action (%08x)\n", msg);
-        return NULL;
+        Logger::logError("receiving invalid action (%08x)", msg);
+        return string();
     }
 
     char* name = recvStr();
     if (!name)
+    {
+        Logger::logError("receiving application name");
         return string();
-
+    }
     sendMsg(INVOKER_MSG_ACK);
 
     string appName(name);

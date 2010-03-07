@@ -35,6 +35,9 @@ public:
 private:
     virtual bool  recvMsg(uint32_t *msg);
     virtual char* recvStr();
+
+    virtual bool  sendMsg(uint32_t msg);
+    virtual bool  sendStr(char *str);
 };
 bool  MyConnection::acceptConn() { return true; }
 
@@ -46,6 +49,12 @@ bool MyConnection::recvMsg(uint32_t *msg)
     *msg = nextMsg;
     return true;
 }
+bool MyConnection::sendMsg(uint32_t)
+{ return true; }
+
+bool MyConnection::sendStr(char*)
+{ return true; }
+
 
 char* MyConnection::recvStr()
 {
@@ -126,14 +135,48 @@ void  Ut_Connection::testGetEnv()
     char* envVar = (char*) "MY_TEST_ENV_VAR=3";
 
     conn->nextMsg = 1;
-    conn->nextStr = envVar;  // it will be freed by connection class
+    conn->nextStr = envVar; 
 
     QVERIFY2(conn->getEnv() == true,  "Failure");
 
     QVERIFY2(getenv("MY_TEST_ENV_VAR") != NULL,  "Failure");
     QVERIFY2(getenv("PATH") != NULL,  "Failure");
 
-    unlink("testGetEnv");
+    unlink(socketName);
+}
+
+/*
+ * Check getAppName() function correctness
+ */
+void Ut_Connection::testGetAppName()
+{
+    char* socketName = (char*) "testGetAppName";
+    Connection::initSocket(socketName);
+    MyConnection* conn = new MyConnection(socketName);
+
+    // wrong type of message
+    conn->nextMsg = Connection::INVOKER_MSG_EXEC;
+    string wrongStr = conn->getAppName();
+    QVERIFY2(wrongStr.empty(), "Failure");
+
+    // empty app name
+    conn->nextMsg = Connection::INVOKER_MSG_NAME;
+    conn->nextStr = NULL;
+    string emptyName = conn->getAppName();
+    QVERIFY2(emptyName.empty(), "Failure");
+
+    // real name
+    string realName("looooongApplicationName");
+    char* dupName = strdup(realName.c_str());
+
+    conn->nextMsg = Connection::INVOKER_MSG_NAME;
+    conn->nextStr = dupName;
+
+    string resName = conn->getAppName();
+    QVERIFY2(!resName.empty(), "Failure");
+    QVERIFY2(resName.compare(realName) == 0, "Failure");
+
+    unlink(socketName);
 }
 
 QTEST_APPLESS_MAIN(Ut_Connection);
