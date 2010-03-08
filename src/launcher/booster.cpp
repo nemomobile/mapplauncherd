@@ -27,7 +27,7 @@
 
 extern char **environ;
 
-Booster::Booster()
+Booster::Booster() : m_argvArraySize(0)
 {}
 
 Booster::~Booster()
@@ -93,37 +93,59 @@ void Booster::run()
 
 void Booster::renameProcess(int parentArgc, char** parentArgv)
 {
-    Logger::logInfo("set new process name: '%s' ", basename(m_app.argv[0]));
+    if (m_argvArraySize == 0)
+    {
+        // rename process for the first time
+        // calculate and store size of parentArgv array
+
+        for (int i = 0; i < parentArgc; i++)
+            m_argvArraySize += strlen(parentArgv[i]) + 1;
+        m_argvArraySize--;
+    }
+
+    if (m_app.appName.empty())
+    {
+        // application name isn't known yet, let's give to the process
+        // temporary booster name
+
+        string newProcessName("booster-");
+        newProcessName.append(1, boosterType());
+
+        m_app.appName = newProcessName;
+    }
+
+    const char* newProcessName = m_app.appName.c_str();
+    Logger::logNotice("set new name for process: %s", newProcessName);
 
     if (parentArgc < 2)
     {
+        Logger::logWarning("applauncherd process was started without mandatory parameter");
+
         // This code copies the new process name to the original argv[0].
         // If the new name won't fit, then it'll be cut. This is used to
         // "fool" e.g. top and ps to show the correct name. Otherwise they
         // would show the name of the launcher itself.
 
-        int min = std::min(strlen(parentArgv[0]), strlen(m_app.argv[0]));
+        int min = std::min(strlen(parentArgv[0]), strlen(m_app.appName.c_str()));
         if (min)
         {
             memset(parentArgv[0], '\0', strlen(parentArgv[0]));
-            memmove(parentArgv[0], m_app.argv[0], min);
+            memmove(parentArgv[0], newProcessName, min);
         }
     }
     else
     {
         // This code copies all the new arguments to the space reserved
-        // in the old argv[0] + argv[1]. If an argument won't fit then the algorithm
+        // in the old argv array. If an argument won't fit then the algorithm
         // leaves it fully out and terminates.
 
-        int spaceAvailable = 0;
-        for (int i = 0; i < parentArgc; i++)
-            spaceAvailable += strlen(parentArgv[i]) + 1;
-        spaceAvailable--;
+        int spaceAvailable = m_argvArraySize;
 
         if (spaceAvailable > 0)
         {
             memset(parentArgv[0], '\0', spaceAvailable);
-            strncat(parentArgv[0], m_app.argv[0], spaceAvailable);
+            strncat(parentArgv[0], newProcessName, spaceAvailable);
+
             spaceAvailable -= strlen(parentArgv[0]);
 
             for (int i = 1; i < m_app.argc; i++)
@@ -142,11 +164,11 @@ void Booster::renameProcess(int parentArgc, char** parentArgv)
         }
     }
 
-    // Set the process name using prctl
-    if ( prctl(PR_SET_NAME, basename(m_app.argv[0])) == -1 )
+    // Set the process name using prctl, killall and top use it
+    if ( prctl(PR_SET_NAME, basename(newProcessName)) == -1 )
         Logger::logError("on set new process name: %s ", strerror(errno));
 
-    setenv("_", m_app.argv[0], true);
+    setenv("_", newProcessName, true);
 }
 
 void Booster::launchProcess()

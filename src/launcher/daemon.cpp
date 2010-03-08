@@ -169,10 +169,15 @@ bool Daemon::forkBooster(char type, int pipefd[2])
         // Clean-up all the env variables
         clearenv();
 
+        // Rename launcher process to booster
+        booster->renameProcess(initialArgc, initialArgv);
+
+        Logger::logNotice("Wait for message from invoker");
+
         // Wait and read commands from the invoker
         booster->readCommand();
 
-        // Rename booster process to cheat 'ps' and 'top' utils
+        // Give to the process an application specific name
         booster->renameProcess(initialArgc, initialArgv);
 
         // Signal the parent process that it can create a new

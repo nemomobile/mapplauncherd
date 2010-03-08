@@ -24,7 +24,7 @@ typedef int (*entry_t)(int, char **);
 //! Structure for application data read from the invoker
 struct AppData
 {
-    AppData() : argv(NULL)
+    AppData() : argc(0), argv(NULL)
     {}
 
     ~AppData()

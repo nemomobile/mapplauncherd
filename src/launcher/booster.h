@@ -118,6 +118,8 @@ private:
     void loadMain();
     AppData m_app;
 
+    int  m_argvArraySize;
+
 #ifdef UNIT_TEST
     friend class Ut_Booster;
 #endif
