@@ -1,7 +1,0 @@
-#!/bin/sh
-
-# use empty 50 chars length parameter to reserve place for application name and parameters.
-# if length of application name with parameters is longer, only part of params will be shown 
-# in top and ps commands output 
-/usr/bin/applauncherd "                                                  "
-

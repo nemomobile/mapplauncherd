@@ -3,10 +3,10 @@ set(LauncherSRC booster.cpp connection.cpp daemon.cpp duibooster.cpp logger.cpp 
 
 if (EXISTS $ENV{DUI_INCLUDE_DIR})
   set(DUISRCINCLUDE $ENV{DUI_INCLUDE_DIR})
-  message("DUI included from " ${DUISRCINCLUDE})
+  message(STATUS "DUI included from " ${DUISRCINCLUDE})
 else (EXISTS $ENV{DUI_INCLUDE_DIR})
   set(DUISRCINCLUDE /usr/include/dui)
-  message("DUI included from " ${DUISRCINCLUDE} ", use DUI_INCLUDE_DIR to override.")
+  message(STATUS "DUI included from " ${DUISRCINCLUDE} ", use DUI_INCLUDE_DIR to override.")
 endif (EXISTS $ENV{DUI_INCLUDE_DIR})
 
 # Set include dirs
@@ -24,12 +24,12 @@ if(EXISTS ${DUISRCINCLUDE}/duicomponentcache.h)
   endif (EXISTS $ENV{DUI_LIBRARY_FILE})
   
   if (EXISTS ${dui_LIBRARY})
-    message("Linking to " ${dui_LIBRARY} ", use DUI_LIBRARY_FILE to override.")
+    message(STATUS "Linking to " ${dui_LIBRARY} ", use DUI_LIBRARY_FILE to override.")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DHAVE_DUI")
-    message("Building with DUI Booster")
+    message(STATUS "Building with DUI Booster")
   endif (EXISTS ${dui_LIBRARY})
 else(EXISTS ${DUISRCINCLUDE}/duicomponentcache.h)
-  message("!! DUI Booster not available !!")
+  message(STATUS "!! DUI Booster not available !!")
 endif(EXISTS ${DUISRCINCLUDE}/duicomponentcache.h)
 
 # Set libraries to be linked (dui_LIBRARY may be empty)
@@ -39,9 +39,8 @@ link_libraries(${QT_QTCORE_LIBRARY} ${dui_LIBRARY})
 include(${QT_USE_FILE})
 
 # Set executable
-add_executable(applauncherd ${LauncherSRC})
+add_executable(applauncherd.bin ${LauncherSRC})
 
-# Install
-install(PROGRAMS applauncherd scripts/launcher DESTINATION /usr/bin/)
-
+# Install rules
+install(PROGRAMS applauncherd.bin scripts/applauncherd DESTINATION /usr/bin/)
 
