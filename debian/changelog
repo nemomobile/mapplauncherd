@@ -1,3 +1,9 @@
+applauncherd (0.2.0-2) stable; urgency=low
+
+  * Naming changes: launcher => applauncherd, applaucherd => applauncherd.bin
+
+ -- Jussi Lind <jussi.lind@nokia.com>  Mon, 08 Mar 2010 13:13:02 +0200
+
 applauncherd (0.2.0-1) stable; urgency=low
 
   * First released version: basic launcher functionality with basic test set
