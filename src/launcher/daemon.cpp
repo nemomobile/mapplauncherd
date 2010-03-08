@@ -29,6 +29,7 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <sys/wait.h>
+#include <sys/prctl.h>
 
 #include <signal.h>
 
@@ -138,6 +139,9 @@ bool Daemon::forkBooster(char type, int pipefd[2])
         // Reset used signal handlers
         signal(SIGCHLD, SIG_DFL);
 
+        // Will get this signal if applauncherd dies
+        prctl(PR_SET_PDEATHSIG, SIGHUP);
+
         // Close unused read end
         close(pipefd[0]);
 
@@ -185,6 +189,9 @@ bool Daemon::forkBooster(char type, int pipefd[2])
         const char msg = booster->boosterType();
         write(pipefd[1], reinterpret_cast<const void *>(&msg), 1);
         close(pipefd[1]);
+
+        // Don't care about fate of parent applauncherd process any more
+        prctl(PR_SET_PDEATHSIG, 0);
 
         // Run the current Booster
         booster->run();

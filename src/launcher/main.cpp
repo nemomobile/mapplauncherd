@@ -29,6 +29,12 @@ void reapZombies(int)
         Daemon::instance()->reapZombies();
 }
 
+//! Signal handler to kill booster
+void exitBooster(int)
+{
+    Logger::logErrorAndDie(EXIT_FAILURE, "due to parent process applauncherd died, booster exit too");
+}
+
 //! Lock file to prevent launch of second instance
 bool getLock(void)
 {
@@ -62,8 +68,10 @@ int main(int argc, char * argv[])
         Logger::logErrorAndDie(EXIT_FAILURE, "try to launch second instance");
     }
 
-    // Install signal handler
+    // Install signal handlers
     signal(SIGCHLD, reapZombies);
+    signal(SIGHUP,  exitBooster);
+
 
     Daemon myDaemon(argc, argv);
 
