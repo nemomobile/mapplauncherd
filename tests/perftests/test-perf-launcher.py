@@ -22,7 +22,7 @@ import commands
 import time
 import sys
 
-LAUNCHER_BINARY='/usr/bin/applauncherd'
+LAUNCHER_BINARY='/usr/bin/applauncherd.bin'
 WAIT_FOR_WINDOW_BINARY   = '/usr/bin/waitforwindow'
 DEV_NULL = file("/dev/null","w")
 
@@ -62,11 +62,15 @@ def check_prerequisites(appname):
               "(it should be an app that stops when a window is mapped)")
 
 def start_launcher_daemon():
-#not needed if launcher automatically starts
+    temp = basename(LAUNCHER_BINARY)
+    st, op = commands.getstatusoutput("pidof %s" %temp)
+    if st == 0:
+        debug("Launcher already started")
+        return op
+    else:
         p = subprocess.Popen(LAUNCHER_BINARY,
-                             shell=False,
-                             stdout=DEV_NULL, stderr=DEV_NULL)
-
+                shell=False,
+                stdout=DEV_NULL, stderr=DEV_NULL)
         debug("Launcher has started")
         return p
 
