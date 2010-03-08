@@ -150,7 +150,7 @@ class launcher_tests (unittest.TestCase):
         #check if the application is running
         #kill the application (pid = p.pid)
         #check if pidof appname should be nothing
-        #self.kill_process(LAUNCHER_BINARY)
+        self.kill_process(LAUNCHER_BINARY)
         process_handle = self.run_app_with_launcher(PREFERED_APP)
         process_id = self.get_pid(PREFERED_APP)
         self.kill_process(PREFERED_APP)
