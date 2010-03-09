@@ -23,7 +23,7 @@ import time
 import sys
 import unittest
 
-LAUNCHER_BINARY='/usr/bin/applauncherd.bin'
+LAUNCHER_BINARY='/usr/bin/applauncherd'
 DEV_NULL = file("/dev/null","w")
 LAUNCHABLE_APPS = ['/usr/bin/helloworld','/usr/bin/helloworld_1', '/usr/bin/helloworld_2']
 PREFERED_APP = '/usr/bin/helloworld'

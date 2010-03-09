@@ -22,7 +22,7 @@ import commands
 import time
 import sys
 
-LAUNCHER_BINARY='/usr/bin/applauncherd.bin'
+LAUNCHER_BINARY='/usr/bin/applauncherd'
 WAIT_FOR_WINDOW_BINARY   = '/usr/bin/waitforwindow'
 DEV_NULL = file("/dev/null","w")
 
