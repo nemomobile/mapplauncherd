@@ -2,4 +2,4 @@
 
 echo "/usr/bin/invoker --type=dui" $0.launch $@
 
-/usr/bin/invoker --type=dui $0.launch $@
+exec /usr/bin/invoker --type=dui $0.launch $@
