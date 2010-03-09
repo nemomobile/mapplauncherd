@@ -1,29 +1,66 @@
+09.03.2010
 
-  $Id: README 15546 2008-05-12 14:04:24Z guillem $
-
-
-What is the maemo-launcher?
+What is the applauncherd?
 ===========================
 
-The maemo-launcher is a daemon to speedup applications startup time and
-memory sharing between processes. It supports booster modules, which are
-the ones in charge of preinitializing and keeping the interesting state.
+Applauncherd is a daemon and it helps to launch applications faster by 
+preloading DUI and Qt dynamically linked libraries and making some 
+initializations before loading the application binary and executing the 
+main function.
 
-The only current useful booster module is for gtk, with an option to
-link against the hildon library to speedup symbol resolving. This module
-preinitializes components like pango and cairo.
+The applauncherd daemon is started by the upstart as part of XSession, that is,
+at the same level as the desktop (DUI homescreen). The applauncherd forks the 
+will-be-application process a.k.a booster before knowing which application 
+is going to be launched next. The booster process does some initializations 
+that cannot be shared among other processes and therefore have to be done after 
+the fork. This allows, for instance instantiating DUI application before knowing 
+the name of the application. Then booster process waits for connection from the
+invoker with the information which application 
+should be launched. Each application type (e.g. Qt and DUI) has its own booster
+process. When booster launches the application by calling the "main" function,
+applauncherd will create new booster process.
 
-When an application is invoked, it forks, tries to restore the state it
-might have saved during the preinitialization step and the environment as
-if it had been started directy, dynamically opens the application, and
-afterwards launches the application by calling the "main" function. The
-maemo-invoker will proxy the application exit status back by default.
+The invoker tells a per-process boosted process to load an application
+binary. Before loading, per-process boosted process changes its security cre-
+dentials so that the code in the application binary will be executed with the
+correct credentials. Loading the binary is done with dlopen(), and therefore
+the application needs to be compiled and linked as a shared library or a po-
+sition independent executable. The per-process boosted process also sets the
+environment variables, nice level. Finally, it finds the main function in the
+application binary with dlsym() and calls the main() with the command line
+arguments given by the invoker.
 
-The launcher is listening to a unix socket for notifications of new
-applications to be launched. The maemo-invoker is the program in charge to
-notify the launcher of which application to run.
+The original application binary is replaced by a script that executes the
+invoker with correct application type and the name of the application binary
+as parameters.
 
-Read the man pages for further information.
+Launcher speeds up the launch of DUI applications. However, launching
+of Qt applications, other native applications and web applications can be
+boosted with a special per-process boosters that initialize components fitting
+their purposes (such as QApplication and QWebView for web applications).
+
+
+
+
+
+The applauncherd is based on the maemo launcher, but there are is one radical 
+structural modification: per-process initializations have been added. The
+launcher now forks the will-be-application process before knowing which application 
+is going to be launched next. The will-be-application process does
+some initializations that cannot be shared among other processes and there-
+fore have to be done after the fork. This allows, for instance instantiating
+DUI application before knowing the name of the application. Then will-be-
+application process waits for which application should be launched. There-
+fore, there can be n + 1 launcher processes running if launching of n appli-
+cation types is supported.
+
+Per-process initialization changes also the invoker structure. In Fremantle, 
+invoker connected always the same launcher process to tell it which application 
+to launch. In Harmattan, the launcher process the invoker connects
+to is one of the will-be-application processes and thus depends on the type of
+the application. The invoker is given a commandline argument that specifies
+which will-be-application launcher it must connect to.
+
 
 
 Current known issues
