@@ -63,7 +63,7 @@ def check_prerequisites(appname):
 
 def start_launcher_daemon():
     temp = basename(LAUNCHER_BINARY)
-    st, op = commands.getstatusoutput("pidof %s" %temp)
+    st, op = commands.getstatusoutput("pgrep %s" %temp)
     if st == 0:
         debug("Launcher already started")
         return op
