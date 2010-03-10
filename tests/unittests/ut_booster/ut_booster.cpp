@@ -86,6 +86,8 @@ void Ut_Booster::testRenameProcess()
     m_subject->m_app.argv[1] = strdup("--foo");
     m_subject->m_app.argv[2] = strdup("--bar");
 
+    m_subject->m_app.appName = string(m_subject->m_app.argv[0]);
+
     // 20 chars dummy buffer used to fool ps to show correct process name with args
     const int INIT_ARGS = 2;
     char ** initialArgv = packTwoArgs("oldName", "                    ");
@@ -108,6 +110,8 @@ void Ut_Booster::testRenameProcessNotEnoughSpace()
     m_subject->m_app.argv[0] = strdup("newNameLong");
     m_subject->m_app.argv[1] = strdup("--foo");
     m_subject->m_app.argv[2] = strdup("--bar");
+
+    m_subject->m_app.appName = string(m_subject->m_app.argv[0]);
 
     const int INIT_ARGS = 2;
     char ** initialArgv = packTwoArgs("oldName", "   ");
@@ -133,6 +137,8 @@ void Ut_Booster::testRenameProcessNotEnoughSpace2()
     m_subject->m_app.argv[1] = strdup("--foo");
     m_subject->m_app.argv[2] = strdup("--bar");
 
+    m_subject->m_app.appName = string(m_subject->m_app.argv[0]);
+
     const int INIT_ARGS = 2;
     char ** initialArgv = packTwoArgs("oldName", "        ");
     m_subject->renameProcess(INIT_ARGS, initialArgv);
@@ -155,6 +161,8 @@ void Ut_Booster::testRenameProcessNotEnoughSpace3()
     m_subject->m_app.argv[0] = strdup("newName");
     m_subject->m_app.argv[1] = strdup("--foo");
     m_subject->m_app.argv[2] = strdup("--bar");
+
+    m_subject->m_app.appName = string(m_subject->m_app.argv[0]);
 
     const int INIT_ARGS = 2;
     char ** initialArgv = packTwoArgs("app", "....");
@@ -180,6 +188,8 @@ void Ut_Booster::testRenameProcessNotEnoughSpace4()
     m_subject->m_app.argv[1] = strdup("--foo");
     m_subject->m_app.argv[2] = strdup("--bar");
 
+    m_subject->m_app.appName = string(m_subject->m_app.argv[0]);
+
     const int INIT_ARGS = 2;
     char ** initialArgv = packTwoArgs("app", "   ");
     m_subject->renameProcess(INIT_ARGS, initialArgv);
@@ -200,6 +210,8 @@ void Ut_Booster::testRenameProcessNoArgs()
     m_subject->m_app.argc    = ARGS;
     m_subject->m_app.argv[0] = strdup("newName");
     m_subject->m_app.argv[1] = strdup("--foo");
+
+    m_subject->m_app.appName = string(m_subject->m_app.argv[0]);
 
     const int INIT_ARGS = 1;
     char ** initialArgv = new char * [INIT_ARGS];
