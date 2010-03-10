@@ -1,7 +1,7 @@
 09.03.2010
 
 What is the applauncherd?
-===========================
+==============================
 
 Applauncherd is a daemon and it helps to launch applications faster by 
 preloading DUI and Qt dynamically linked libraries and making some 
@@ -15,231 +15,49 @@ is going to be launched next. The booster process does some initializations
 that cannot be shared among other processes and therefore have to be done after 
 the fork. This allows, for instance instantiating DUI application before knowing 
 the name of the application. Then booster process waits for connection from the
-invoker with the information which application 
-should be launched. Each application type (e.g. Qt and DUI) has its own booster
-process. When booster launches the application by calling the "main" function,
-applauncherd will create new booster process.
+invoker with the information which application should be launched. Each application 
+type (e.g. Qt and DUI) has its own booster process. When booster launches the 
+application by calling the "main" function, applauncherd will create new booster 
+process.
 
-The invoker tells a per-process boosted process to load an application
-binary. Before loading, per-process boosted process changes its security cre-
-dentials so that the code in the application binary will be executed with the
-correct credentials. Loading the binary is done with dlopen(), and therefore
-the application needs to be compiled and linked as a shared library or a po-
-sition independent executable. The per-process boosted process also sets the
-environment variables, nice level. Finally, it finds the main function in the
+The invoker tells to booster process to load an application binary. Before loading, 
+booster process changes its security credentials so that the code in the application 
+binary will be executed with the correct credentials. Loading the binary is done with 
+dlopen(), and therefore the application needs to be compiled and linked as a shared 
+library or a position independent executable. The booster process also sets the
+environment variables. Finally, it finds the main function in the
 application binary with dlsym() and calls the main() with the command line
 arguments given by the invoker.
 
-The original application binary is replaced by a script that executes the
-invoker with correct application type and the name of the application binary
-as parameters.
 
-Launcher speeds up the launch of DUI applications. However, launching
-of Qt applications, other native applications and web applications can be
-boosted with a special per-process boosters that initialize components fitting
-their purposes (such as QApplication and QWebView for web applications).
+Using of applauncherd
+==============================
+1. Binaries intended to be run with applauncherd must be linked as library,
+with -shared or -rdynamic flags.
 
+2. Rename appication binary to <application_name>.launch and 
+replace original binary by a script that executes invoker with correct 
+application type and the name of application binary as a parameter.
+Use --type=dui parameter for DUI applications and --type=qt for plain
+Qt applications. Launch script example for typical application:
 
+#!/bin/sh
+echo "/usr/bin/invoker --type=dui" $0.launch $@
+exec /usr/bin/invoker --type=dui $0.launch $@
 
+3. Applauncherd is started by upstart during the boot time, but it
+can be also started manually in scratchbox or on the device by 
+/usr/bin/applauncherd script
 
-
-The applauncherd is based on the maemo launcher, but there are is one radical 
-structural modification: per-process initializations have been added. The
-launcher now forks the will-be-application process before knowing which application 
-is going to be launched next. The will-be-application process does
-some initializations that cannot be shared among other processes and there-
-fore have to be done after the fork. This allows, for instance instantiating
-DUI application before knowing the name of the application. Then will-be-
-application process waits for which application should be launched. There-
-fore, there can be n + 1 launcher processes running if launching of n appli-
-cation types is supported.
-
-Per-process initialization changes also the invoker structure. In Fremantle, 
-invoker connected always the same launcher process to tell it which application 
-to launch. In Harmattan, the launcher process the invoker connects
-to is one of the will-be-application processes and thus depends on the type of
-the application. The invoker is given a commandline argument that specifies
-which will-be-application launcher it must connect to.
-
+4. Add dependancy to applauncherd package to "Depends" section of applications
+debian/control file.
 
 
 Current known issues
-====================
-
-If maemo-invoker has been told not to wait for the application to exit and
-use a delay instead and that application takes too much time to register the
-DBUS service the maemo-invoker may have exited already, so dbus will not
-allow the application to register it after the process it has started has
-finished already.
-
-Binaries intended to be run by maemo-launcher must be linked with the
-"-pie -rdynamic" linker flags if they should transparently work as
-executables and dlopen()-able objects. If running them as executable is not
-a requirement, "-rdynamic" or "-shared" is good enough.
-
-gnome_vfs_init() cannot be called by the daemon because it opens a pipe to
-the vfs daemon.
-
-Children using GThread should use
-
-  if (!g_thread_supported())
-    g_thread_init(NULL);
-
-to be safe against possible future changes in maemo-launcher.
-
-The children are dlopen()ed using RTLD_LAZY, so symbol relocation errors are
-not caught at the time we call dlopen(). Instead, the child will crash
-randomly at any later point if the libraries it depends on are somehow messed
-up.
+==============================
+TBD
 
 
-Integrating the maemo-launcher painlessly
-=========================================
-
-These are the detailed changes needed to add support for the new
-maemo-launcher.
-
-The changes are meant for normal Maemo packages using automake (there's now
-some notes for make based build systems, but those might need more changes
-not documented here, as Makefiles can vary from writer to writer). If yours
-differ feel free to contact me (Guillem Jover <guillem.jover@nokia.com>)
-and I can help you on the process.
-
-
-Upstream Changes (automake based build system)
-----------------
-
-On configure.ac (or the deprecated configure.in) add something like:
-
-,----X<----
-|AC_ARG_ENABLE([maemo-launcher],
-|              [AS_HELP_STRING([--enable-maemo-launcher],
-|                              [build with maemo-launcher support])],
-|                              [case "${enableval}" in
-|                               yes) maemo_launcher=true ;;
-|                               no)  maemo_launcher=false ;;
-|                               *) AC_MSG_ERROR([bad value ${enableval} for --enable-maemo-launcher]) ;;
-|                               esac], [maemo_launcher=false])
-|
-|if test x$maemo_launcher = xtrue
-|then
-|	PKG_CHECK_MODULES(MAEMO_LAUNCHER, [maemo-launcher-app])
-|	AC_SUBST(MAEMO_LAUNCHER_CFLAGS)
-|	AC_SUBST(MAEMO_LAUNCHER_LIBS)
-|fi
-`----X<----
-
-On the Makefile.am that is creating the final application binary, add to
-the application_CFLAGS variable:
-
-	$(MAEMO_LAUNCHER_CFLAGS)
-
-And to the the application_LIBS variable:
-
-	$(MAEMO_LAUNCHER_LIBS)
-
-
-Upstream Changes (make based build system)
-----------------
-
-On the Makefile(s) responsible of compiling the object files and linking the
-application to be launcherized, the following can be used to obtain the
-proper flags:
-
-,----X<----
-|ifeq ($(USE_LAUNCHER),yes)
-|  application_CFLAGS := $(shell pkg-config --cflags maemo-launcher-app)
-|  application_LDFLAGS := $(shell pkg-config --libs maemo-launcher-app)
-|endif
-`----X<----
-
-Those new variables can then be added on the respective linking and compiling
-rules for the desired application in the Makefile.
-
-
-Debian Changes
---------------
-
-* debian/control:
-
-  - Add 'maemo-launcher-dev (>= 0.23-1)' to Build-Depends.
-
-  - Add a "${launcher:Depends} to the "Depends:" line of the package
-    containing the application to be launched.
-
-* debian/rules (debhelper):
-
-  - At the top of the file around other code processing DEB_BUILD_OPTIONS,
-    for automake base build systems add:
-
-,----X<----
-|ifeq (,$(findstring nolauncher,$(DEB_BUILD_OPTIONS)))
-|       conf_opt := --enable-maemo-launcher
-|endif
-`----X<----
-
-    For make based ones:
-
-,----X<----
-|ifeq (,$(findstring nolauncher,$(DEB_BUILD_OPTIONS)))
-|       USE_LAUNCHER := yes
-|endif
-`----X<----
-
-  - To notify the upstream build system that we might want to enable the
-    launcher support, for automake based build systems on the configure
-    call, add $(conf_opt), so that it becomes something like:
-
-,----X<----
-|	./configure --enable-foo --enable-bar $(conf_opt)
-`----X<----
-
-    For make based ones:
-
-,----X<----
-|	$(MAKE) $(ARG_FOO) USE_LAUNCHER=$(USE_LAUNCHER)
-`----X<----
-
-  - On the binary target producing the package with launcherized files,
-    add a call to dh_maemolauncher.
-
-* debian/package.launcher or debian/launcher
-
-  - Create either, depending if there's multiple binary packages being
-    build from the same source or only one.
-
-  - Add to it the list of programs that are being built with maemo-launcher
-    support. Some example content:
-
-,----X<----
-|/usr/bin/application-foo
-|/usr/bin/application-bar
-`----X<----
-
-
-Using a linker script
-=====================
-
-When an application is built as a library as required by maemo-launcher,
-symbols for all of its non-static functions will be exported, which can be
-a memory usage and startup performance issue if there are lots of them. In
-addition to marking functions static where possible the amount of symbols
-exported can be reduced by means of a version script. Please check the ld
-info page («info ld Scripts VERSION») for its syntax. There's an example
-on the client/ directory in this source tree.
-
-
-Development and testing
-=======================
-
-
-Testing w/o launcher support
-----------------------------
-
-Sometimes during development, or in some cases when bugs appear, and one
-wants to discard the launcher from the diagnosis, it's useful to be able
-to disable it. This can be done by building with the following command
-line:
-
-	DEB_BUILD_OPTIONS=nolauncher dpkg-buildpackage -us -uc -b
-
+Questions and Bug Reports
+==============================
+TBD
