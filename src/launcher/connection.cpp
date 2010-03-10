@@ -80,6 +80,11 @@ int* Connection::ioDescriptors()
     return m_io;
 }
 
+int Connection::prio()
+{
+    return m_prio;
+}
+
 int Connection::getSocket(const string socketId)
 {
     poolType::iterator it;
@@ -252,6 +257,14 @@ bool Connection::getExec()
     return true;
 }
 
+bool Connection::getPrio()
+{
+    recvMsg(&m_prio);
+    sendMsg(INVOKER_MSG_ACK);
+
+    return true;
+}
+
 bool Connection::getArgs()
 {
     uint i;
@@ -393,6 +406,7 @@ bool Connection::receiveActions()
             getEnv();
             break;
         case INVOKER_MSG_PRIO:
+            getPrio();
             break;
         case INVOKER_MSG_IO:
             getIo();

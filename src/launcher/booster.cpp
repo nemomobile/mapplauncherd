@@ -21,6 +21,7 @@
 #include <cstdlib>
 #include <dlfcn.h>
 #include <sys/prctl.h>
+#include <sys/resource.h>
 #include <errno.h>
 #include <unistd.h>
 #include <sys/user.h>
@@ -63,6 +64,7 @@ bool Booster::readCommand()
         m_app.fileName = conn.fileName();
         m_app.argc     = conn.argc();
         m_app.argv     = conn.argv();
+        m_app.prio     = conn.prio();
 
         for(int i = 0; i < 3; i++)
             m_app.ioDescriptors[i] = conn.ioDescriptors()[i];
@@ -154,6 +156,13 @@ void Booster::renameProcess(int parentArgc, char** parentArgv)
 
 void Booster::launchProcess()
 {
+    // Possibly restore process priority
+    errno = 0;
+    int cur_prio = getpriority(PRIO_PROCESS, 0);
+    if (!errno && cur_prio < m_app.prio)
+      setpriority(PRIO_PROCESS, 0, m_app.prio);
+
+
     // Load the application and find out the address of main()
     loadMain();
 

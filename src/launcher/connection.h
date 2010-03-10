@@ -95,6 +95,13 @@ public:
      */
     int* ioDescriptors();
 
+    /*! \brief Return process priority.
+     * Return the process priority received from the invoker.
+     * \return application process priority.
+     */
+    int prio();
+
+
     /*! \brief Initialize a file socket.
      * \param socketId Path to the socket file
      */
@@ -117,6 +124,7 @@ private:
     bool getArgs();
     bool getEnv();
     bool getIo();
+    bool getPrio();
 
     static const unsigned int INVOKER_MSG_MASK               = 0xffff0000;
     static const unsigned int INVOKER_MSG_MAGIC              = 0xb0070000;
@@ -149,6 +157,7 @@ private:
     uint32_t m_argc;
     char   **m_argv;
     int      m_io[3];
+    uint32_t m_prio;
 
 #ifdef UNIT_TEST
     friend class Ut_Connection;

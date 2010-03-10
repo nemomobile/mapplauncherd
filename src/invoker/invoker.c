@@ -128,6 +128,17 @@ static bool invoker_send_args(int fd, int argc, char **argv)
     return true;
 }
 
+static bool invoker_send_prio(int fd, int prio)
+{
+    /* Send action. */
+    invoke_send_msg(fd, INVOKER_MSG_PRIO);
+    invoke_send_msg(fd, prio);
+
+    invoke_recv_ack(fd);
+
+    return true;
+}
+
 static bool invoker_send_env(int fd)
 {
     int i, n_vars;
@@ -221,6 +232,7 @@ int main(int argc, char *argv[])
     int prog_argc = 0;
     char **prog_argv = NULL;
     char *prog_name = NULL;
+    int prog_prio = 0;
     char *delay_str = NULL;
     int magic_options = 0;
     enum APP_TYPE app_type = UNKNOWN_APP;
@@ -297,12 +309,19 @@ int main(int argc, char *argv[])
 
     info("invoking execution: '%s'\n", prog_name);
 
+    errno = 0;
+    prog_prio = getpriority(PRIO_PROCESS, 0);
+    if (errno && prog_prio < 0)
+      prog_prio = 0;
+
+
     fd = invoker_init(app_type);
 
     invoker_send_magic(fd, magic_options);
     invoker_send_name(fd, prog_argv[0]);
     invoker_send_exec(fd, prog_name);
     invoker_send_args(fd, prog_argc, prog_argv);
+    invoker_send_prio(fd, prog_prio);
     invoker_send_io(fd);
     invoker_send_env(fd);
     invoker_send_end(fd);
