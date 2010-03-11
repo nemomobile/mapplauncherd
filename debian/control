@@ -42,6 +42,5 @@ Description: applauncherd performance tests
 Package: applauncherd-doc
 Section: doc
 Architecture: all
-Description: instructions for developers
-
+Description: Instructions for application developers
 

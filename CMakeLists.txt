@@ -37,4 +37,7 @@ else (EXISTS ${Doxygen})
 	message(STATUS "Doxygen not found: you're not able to build documentation.")
 endif (EXISTS ${Doxygen})
 
+# Install README
+install(FILES README DESTINATION /usr/share/doc/applauncherd)
+
 
