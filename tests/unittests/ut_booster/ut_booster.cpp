@@ -73,6 +73,37 @@ char ** Ut_Booster::packTwoArgs(const char * arg0, const char * arg1)
     return argv;
 }
 
+void Ut_Booster::testRenameBoosterProcess()
+{
+    m_subject.reset(new MyBooster);
+
+    // if m_app.appName isn't initialized, new process name is booster_x
+    // 20 chars dummy buffer used to fool ps to show correct process name with args
+    const int INIT_ARGS = 2;
+    char ** initialArgv = packTwoArgs("oldName", "                    ");
+    m_subject->renameProcess(INIT_ARGS, const_cast<char **>(initialArgv));
+
+    // New name and arguments fit and are correct
+    QVERIFY2(strcmp(initialArgv[0], "booster-m") == 0, "Failure");
+
+    // Define and copy args because it's assumed that they are allocated in the heap
+    // (AppData deletes the argv on exit)
+    const int ARGS = 3;
+    m_subject->m_app.argc    = ARGS;
+    m_subject->m_app.argv    = new char * [ARGS];
+    m_subject->m_app.argv[0] = strdup("newName");
+    m_subject->m_app.argv[1] = strdup("--foo");
+    m_subject->m_app.argv[2] = strdup("--bar");
+    m_subject->m_app.appName = "newName";
+    m_subject->renameProcess(INIT_ARGS, const_cast<char **>(initialArgv));
+
+    // New name and arguments fit and are correct
+    QVERIFY2(strcmp(initialArgv[0], "newName --foo --bar") == 0, initialArgv[0]);
+
+    delete initialArgv[0];
+    delete [] initialArgv;
+}
+
 void Ut_Booster::testRenameProcess()
 {
     m_subject.reset(new MyBooster);
