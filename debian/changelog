@@ -1,3 +1,13 @@
+applauncherd (0.2.0-3) stable; urgency=low
+
+  * Instructions for developers added
+  * Process nice parameter passed from invoker to launcher
+  * Unit tests are updated	
+  * Naming changes: launcher => applauncherd, applaucherd => applauncherd.bin
+  * Implemented: SWP#DUI-2127, SWP#DUI-2152
+	
+ -- Alexey Shilov <alexey.shilov@nokia.com>  Fri, 11 Mar 2010 13:13:02 +0200
+
 applauncherd (0.2.0-2) stable; urgency=low
 
   * Naming changes: launcher => applauncherd, applaucherd => applauncherd.bin
