@@ -1,6 +1,6 @@
 09.03.2010
 
-What is the applauncherd?
+What is applauncherd?
 ==============================
 
 Applauncherd is a daemon and it helps to launch applications faster by 
@@ -8,17 +8,17 @@ preloading DUI and Qt dynamically linked libraries and making some
 initializations before loading the application binary and executing the 
 main function.
 
-The applauncherd daemon is started by the upstart as part of XSession, that is,
-at the same level as the desktop (DUI homescreen). The applauncherd forks the 
+The applauncherd daemon is started by UpStart as part of XSession, that is,
+at the same level as the desktop (DUI homescreen). Applauncherd forks the 
 will-be-application process a.k.a booster before knowing which application 
 is going to be launched next. The booster process does some initializations 
 that cannot be shared among other processes and therefore have to be done after 
-the fork. This allows, for instance instantiating DUI application before knowing 
-the name of the application. Then booster process waits for connection from the
-invoker with the information which application should be launched. Each application 
+the fork. This allows, for instance, instantiating a DUI application before knowing 
+the name of the application. Then the booster process waits for a connection from the
+invoker with the information about which application should be launched. Each application 
 type (e.g. Qt and DUI) has its own booster process. When booster launches the 
 application by calling the "main" function, applauncherd will create new booster 
-process.
+process of that type.
 
 The invoker tells to booster process to load an application binary. Before loading, 
 booster process changes its security credentials so that the code in the application 
@@ -30,22 +30,41 @@ application binary with dlsym() and calls the main() with the command line
 arguments given by the invoker.
 
 
-Using of applauncherd
+Using applauncherd
 ==============================
-1. Binaries intended to be run with applauncherd must be linked as library,
-with -shared or -rdynamic flags.
+
+1. Binaries intended to be run with applauncherd must be linked as a shared library,
+with -shared (and -rdynamic) and compiled to position independent code with -fPIC.
+This is the "standard" way to compile shared libraries using gcc/g++.
+
+  Tips for QMake
+  --------------
+
+  Tips for CMake
+  --------------
+
+  With CMake, you can compile and install your program like this:
+
+  -- clip --
+
+  add_library(helloworld.launch MODULE ${...YOUR SOURCE...})
+  install(PROGRAMS libhelloworld.launch.so DESTINATION /usr/bin RENAME helloworld.launch)
+  
+  -- clip --
+
+  CMake takes care of the correct flags when MODULE is defined.  
 
 2. Rename appication binary to <application_name>.launch and 
 replace original binary by a script that executes invoker with correct 
 application type and the name of application binary as a parameter.
 Use --type=dui parameter for DUI applications and --type=qt for plain
-Qt applications. Launch script example for typical application:
+Qt applications and everything else. Launch script example for typical application:
 
 #!/bin/sh
 echo "/usr/bin/invoker --type=dui" $0.launch $@
 exec /usr/bin/invoker --type=dui $0.launch $@
 
-3. Applauncherd is started by upstart during the boot time, but it
+3. Applauncherd is started by UpStart during the boot time, but it
 can be also started manually in scratchbox or on the device by 
 /usr/bin/applauncherd script
 
