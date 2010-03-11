@@ -18,7 +18,7 @@ if (${QTVERSION} VERSION_LESS 4.6.0)
     message(FATAL_ERROR "You need Qt4.6, found ${QTVERSION}.")
 endif (${QTVERSION} VERSION_LESS 4.6.0)
 
-# Sub build: applifed
+# Sub build: applauncherd
 add_subdirectory(src)
 
 # Build tests if BUILD_TESTS environment variable is set

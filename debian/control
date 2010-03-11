@@ -39,3 +39,9 @@ XB-Maemo-CI-Stage: fast, acceptance, validation
 Description: applauncherd performance tests
  Performance testing binaries and shellscripts for testing applauncherd. 
 
+Package: applauncherd-doc
+Section: doc
+Architecture: all
+Description: instructions for developers
+
+
