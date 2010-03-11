@@ -47,8 +47,8 @@ This is the "standard" way to compile shared libraries using gcc/g++.
 
   -- clip --
 
-  add_library(helloworld.launch MODULE ${...YOUR SOURCE...})
-  install(PROGRAMS libhelloworld.launch.so DESTINATION /usr/bin RENAME helloworld.launch)
+  add_library(helloworld MODULE ${...YOUR SOURCE...})
+  install(PROGRAMS libhelloworld.so DESTINATION /usr/bin RENAME helloworld.launch)
   
   -- clip --
 
