@@ -39,6 +39,13 @@ This is the "standard" way to compile shared libraries using gcc/g++.
 
   Tips for QMake
   --------------
+  
+  If you are using QMake, you can define following variables in .pro file:
+
+  TEMPLATE = lib
+  CONFIG += plugin
+
+  and QMake will use corect options for compiler and linker.
 
   Tips for CMake
   --------------
