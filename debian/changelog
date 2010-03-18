@@ -5,7 +5,8 @@ applauncherd (0.2.0-3) stable; urgency=low
   * Unit tests are updated	
   * Naming changes: launcher => applauncherd, applaucherd => applauncherd.bin
   * Implemented: SWP#DUI-2127, SWP#DUI-2152
-	
+  * Fixes: NB#161251, applifed-performance-tests is trying to overwrite the file ./usr/bin/waitforwindow, which was provided by applauncherd-performance-tests 
+
  -- Alexey Shilov <alexey.shilov@nokia.com>  Fri, 11 Mar 2010 13:13:02 +0200
 
 applauncherd (0.2.0-2) stable; urgency=low
