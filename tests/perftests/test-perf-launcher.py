@@ -45,7 +45,7 @@ import time
 import sys
 
 LAUNCHER_BINARY='/usr/bin/applauncherd'
-WAIT_FOR_WINDOW_BINARY   = '/usr/bin/waitforwindow'
+WAIT_FOR_WINDOW_BINARY   = '/usr/bin/wait_window'
 DEV_NULL = file("/dev/null","w")
 
 _timer_pipe = None

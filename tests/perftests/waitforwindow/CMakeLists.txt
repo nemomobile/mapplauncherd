@@ -10,9 +10,9 @@ endif(NOT X11_LIBRARY)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR} /usr/include/X11)
 
 link_libraries(${X11_LIBRARY})
-add_executable (waitforwindow ${WaitForWindowSRC})
+add_executable (wait_window ${WaitForWindowSRC})
 
 # Install
-install(PROGRAMS waitforwindow DESTINATION /usr/bin)
+install(PROGRAMS wait_window DESTINATION /usr/bin)
 
 
