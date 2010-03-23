@@ -46,6 +46,7 @@ import sys
 
 LAUNCHER_BINARY='/usr/bin/applauncherd'
 WAIT_FOR_WINDOW_BINARY   = '/usr/bin/wait_window'
+HELLO_NO_LAUNCHER   = '/usr/bin/hello_no_launcher'
 DEV_NULL = file("/dev/null","w")
 
 _timer_pipe = None
@@ -141,7 +142,7 @@ def kill_process(process_handle, appname):
     commands.getoutput("pkill %s" % (basename(appname),))
     os.wait()
 
-def perftest_with_and_without_launcher(appname):
+def perftest_with_and_without_launcher(appname, app_no_launcher):
     debug("run app with launcher")
     p = run_with_launcher(appname)
     time_with = measure_time()
@@ -150,7 +151,14 @@ def perftest_with_and_without_launcher(appname):
     debug("got time:", time_with)
     time.sleep(2)
 
-    return time_with
+    debug("run app without launcher")
+    p = run_without_launcher(appname)
+    time_without = measure_time()
+    time.sleep(2)
+    kill_process(p, appname)
+    debug("got time:", time_without)
+    time.sleep(2)
+    return time_with, time_without
 
 def perftest_without_launcher(appname):
     debug("run app without launcher")
@@ -181,11 +189,24 @@ def print_test_report(with_without_times, fileobj):
     writeline("")
     rowformat = "%12s %12s"
     writeline('Startup times [s]:')
+    writeline(rowformat % ('applaunched', 'normal'))
+    
+    w_times, wo_times = [], []
+    for w_time, wo_time in with_without_times:
+        w_times.append(w_time)
+        wo_times.append(wo_time)
+        writeline(rowformat % (fmtfloat(w_time),
+                               fmtfloat(wo_time)))
+
+    writeline('Average times:')
+    writeline(rowformat % (fmtfloat(sum(w_times)/len(w_times)),
+                           fmtfloat(sum(wo_times)/len(wo_times))))
+
 
 def run_perf_test(appname):
     times = []
     for i in xrange(3):
-        times.append(perftest_with_and_without_launcher(appname))
+        times.append(perftest_with_and_without_launcher(appname, HELLO_NO_LAUNCHER))
     print_test_report(times, sys.stdout)
     
 
