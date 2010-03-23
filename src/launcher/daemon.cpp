@@ -29,8 +29,7 @@
 #include "qtbooster.h"
 
 #include <cstdlib>
-#include <errno.h>
-#include <stdlib.h>
+#include <cerrno>
 
 #include <sys/socket.h>
 #include <sys/stat.h>

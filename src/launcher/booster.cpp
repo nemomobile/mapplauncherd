@@ -29,7 +29,7 @@
 #include <dlfcn.h>
 #include <sys/prctl.h>
 #include <sys/resource.h>
-#include <errno.h>
+#include <cerrno>
 #include <unistd.h>
 #include <sys/user.h>
 

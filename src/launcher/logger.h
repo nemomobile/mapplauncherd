@@ -26,7 +26,7 @@
 
 #include <QTextStream>
 #include <QFile>
-#include <stdarg.h>
+#include <cstdarg>
 
 /*!
  * \class Logger

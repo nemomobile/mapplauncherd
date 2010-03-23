@@ -22,8 +22,7 @@
  */
 
 #include "logger.h"
-#include <stdlib.h>
-
+#include <cstdlib>
 #include <syslog.h>
 #include <cstdarg>
 #include <QDateTime>

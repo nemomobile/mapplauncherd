@@ -27,7 +27,7 @@
 #include <sys/socket.h>
 #include <cstring>
 #include <cstdlib>
-#include <errno.h>
+#include <cerrno>
 
 const unsigned int  Connection::INVOKER_MSG_MASK;
 const unsigned int  Connection::INVOKER_MSG_MAGIC;
