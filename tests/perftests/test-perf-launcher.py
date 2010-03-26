@@ -152,24 +152,13 @@ def perftest_with_and_without_launcher(appname, app_no_launcher):
     time.sleep(2)
 
     debug("run app without launcher")
-    p = run_without_launcher(appname)
+    p = run_without_launcher(app_no_launcher)
     time_without = measure_time()
     time.sleep(2)
-    kill_process(p, appname)
+    kill_process(p, app_no_launcher)
     debug("got time:", time_without)
     time.sleep(2)
     return time_with, time_without
-
-def perftest_without_launcher(appname):
-    debug("run app without launcher")
-    p = run_without_launcher(appname)
-    time_without = measure_time()
-    time.sleep(2)
-    kill_process(p, appname)
-    debug("got time:", time_without)
-    time.sleep(2)
-    return time_without
-
 
 def print_test_report(with_without_times, fileobj):
     """
