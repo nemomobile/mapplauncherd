@@ -154,33 +154,48 @@ void Logger::writeLog(const int priority, const char * format, va_list ap)
 
 void Logger::logNotice(const char * format, ...)
 {
+#ifdef _DEBUG
+
     va_list(ap);
     va_start(ap, format);
     writeLog(LOG_NOTICE, format, ap);
     va_end(ap);
+#else
+    Q_UNUSED(format);
+#endif
+}
+
+void Logger::logWarning(const char * format, ...)
+{
+#ifdef _DEBUG
+
+    va_list(ap);
+    va_start(ap, format);
+    writeLog(LOG_WARNING, format, ap); 
+    va_end(ap);
+#else
+    Q_UNUSED(format);
+#endif
+}
+
+void Logger::logInfo(const char * format, ...)
+{
+#ifdef _DEBUG
+
+    va_list(ap);
+    va_start(ap, format);
+    writeLog(LOG_INFO, format, ap); 
+    va_end(ap);
+#else
+    Q_UNUSED(format);
+#endif
 }
 
 void Logger::logError(const char * format, ...)
 {
     va_list(ap);
     va_start(ap, format);
-    writeLog(LOG_ERR, format, ap); 
-    va_end(ap);
-}
-
-void Logger::logWarning(const char * format, ...)
-{
-    va_list(ap);
-    va_start(ap, format);
-    writeLog(LOG_WARNING, format, ap); 
-    va_end(ap);
-}
-
-void Logger::logInfo(const char * format, ...)
-{
-    va_list(ap);
-    va_start(ap, format);
-    writeLog(LOG_INFO, format, ap); 
+    writeLog(LOG_ERR, format, ap);
     va_end(ap);
 }
 

@@ -15,6 +15,9 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${DUISRCINCLUDE})
 # Set the program name define used in daemon.cpp
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DPROG_NAME=\\\"applauncherd\\\"")
 
+# Set debug logging
+#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_DEBUG")
+
 # Check if it's possible to compile DuiBooster
 if(EXISTS ${DUISRCINCLUDE}/duicomponentcache.h)
   if (EXISTS $ENV{DUI_LIBRARY_FILE})
@@ -32,7 +35,11 @@ else(EXISTS ${DUISRCINCLUDE}/duicomponentcache.h)
   message(STATUS "!! DUI Booster not available !!")
 endif(EXISTS ${DUISRCINCLUDE}/duicomponentcache.h)
 
-# Set libraries to be linked (dui_LIBRARY may be empty)
+# Set libraries to be linked (dui_LIBRARY may be empty, but let's find and link it also)
+if(NOT dui_LIBRARY)
+  message(STATUS "Linking DUI library if it's available")
+  find_library(dui_LIBRARY NAMES dui PATHS /usr/lib /usr/local/lib)
+endif(NOT dui_LIBRARY)
 link_libraries(${QT_QTCORE_LIBRARY} ${dui_LIBRARY})
 
 # Qt support
