@@ -139,7 +139,8 @@ def run_with_launcher(appname):
     return p
 
 def kill_process(process_handle, appname):
-    commands.getoutput("pkill %s" % (basename(appname),))
+    #pkill takes only up to 15 characters(?)
+    commands.getoutput("pkill %s" % (basename(appname)[:15],))
     os.wait()
 
 def perftest_with_and_without_launcher(appname, app_no_launcher):
