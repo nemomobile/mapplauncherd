@@ -8,7 +8,7 @@
     <set name="applauncherd-performance-tests" description="applauncherd performance tests" feature="DUI">   
 
       <case name="launcher1" type="Performance" description="Measure launcher performance" timeout="240" level="System">
-          <step expected_result="0">source /tmp/session_bus_address.user; DISPLAY=:0 `pyversions -d` /usr/share/applauncherd-performance-tests/test-perf-launcher.py /usr/bin/helloworld &gt; /tmp/launcher_perf.txt</step>
+	      <step expected_result="0">source /tmp/session_bus_address.user; DISPLAY=:0 `pyversions -d` /usr/share/applauncherd-performance-tests/test-perf-launcher.py /usr/bin/helloworld /usr/bin/hello_no_launcher &gt; /tmp/launcher_perf.txt</step>
       </case>
 
       <environments>

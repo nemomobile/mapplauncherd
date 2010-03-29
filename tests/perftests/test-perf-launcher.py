@@ -46,7 +46,6 @@ import sys
 
 LAUNCHER_BINARY='/usr/bin/applauncherd'
 WAIT_FOR_WINDOW_BINARY   = '/usr/bin/wait_window'
-HELLO_NO_LAUNCHER   = '/usr/bin/hello_no_launcher'
 DEV_NULL = file("/dev/null","w")
 
 _timer_pipe = None
@@ -68,7 +67,7 @@ def basename(filepath):
 def is_executable_file(filename):
     return os.path.isfile(filename) and os.access(filename, os.X_OK)
     
-def check_prerequisites(appname):
+def check_prerequisites(app_with_launcher, app_no_launcher):
     if os.getenv('DISPLAY') == None:
         error("DISPLAY is not set. Check the requirements.")
         
@@ -76,8 +75,12 @@ def check_prerequisites(appname):
         error("DBUS_SESSION_BUS_ADDRESS is not set.\n" +
               "You probably want to source /tmp/session_bus_address.user")
 
-    if not is_executable_file(appname):
-        error("'%s' is not an executable file\n" % (appname,) +
+    if not is_executable_file(app_with_launcher):
+        error("'%s' is not an executable file\n" % (app_with_launcher,) +
+              "(should be an application that supports launcher)")
+
+    if not is_executable_file(app_no_launcher):
+        error("'%s' is not an executable file\n" % (app_no_launcher,) +
               "(should be an application that supports launcher)")
 
     if not is_executable_file(WAIT_FOR_WINDOW_BINARY):
@@ -126,7 +129,7 @@ def run_without_launcher(appname):
     p = subprocess.Popen(appname,
                          shell=False,
                          stdout=DEV_NULL, stderr=DEV_NULL)
-    debug("app", appname, "started")
+    debug("app", appname, "started without launcher")
     return p
 
 def run_with_launcher(appname):
@@ -143,12 +146,12 @@ def kill_process(process_handle, appname):
     commands.getoutput("pkill %s" % (basename(appname)[:15],))
     os.wait()
 
-def perftest_with_and_without_launcher(appname, app_no_launcher):
+def perftest_with_and_without_launcher(app_with_launcher, app_no_launcher):
     debug("run app with launcher")
-    p = run_with_launcher(appname)
+    p = run_with_launcher(app_with_launcher)
     time_with = measure_time()
     time.sleep(2)
-    kill_process(p, appname)
+    kill_process(p, app_with_launcher)
     debug("got time:", time_with)
     time.sleep(2)
 
@@ -193,21 +196,22 @@ def print_test_report(with_without_times, fileobj):
                            fmtfloat(sum(wo_times)/len(wo_times))))
 
 
-def run_perf_test(appname):
+def run_perf_test(app_with_launcher, app_no_launcher):
     times = []
     for i in xrange(3):
-        times.append(perftest_with_and_without_launcher(appname, HELLO_NO_LAUNCHER))
+        times.append(perftest_with_and_without_launcher(app_with_launcher, app_no_launcher))
     print_test_report(times, sys.stdout)
     
 
 # main
 if __name__ == '__main__':
     try:
-        appname = sys.argv[1]
+        app_with_launcher = sys.argv[1]
+        app_no_launcher = sys.argv[2]
     except:
         print __doc__
         error("Invalid parameters.")
     start_launcher_daemon()
-    check_prerequisites(appname)
-    run_perf_test(appname)
+    check_prerequisites(app_with_launcher, app_no_launcher)
+    run_perf_test(app_with_launcher, app_no_launcher)
     
