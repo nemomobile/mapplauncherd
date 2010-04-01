@@ -47,10 +47,10 @@ void Ut_Daemon::cleanupTestCase()
 
 void Ut_Daemon::testInitialArguments()
 {
-    QVERIFY2(m_subject->initialArgc == 3, "Failure");
-    QCOMPARE(m_subject->initialArgv[0], "app");
-    QCOMPARE(m_subject->initialArgv[1], "--testParameter");
-    QCOMPARE(m_subject->initialArgv[2], "--123");
+    QVERIFY2(m_subject->m_initialArgc == 3, "Failure");
+    QCOMPARE(m_subject->m_initialArgv[0], "app");
+    QCOMPARE(m_subject->m_initialArgv[1], "--testParameter");
+    QCOMPARE(m_subject->m_initialArgv[2], "--123");
 }
 
 
@@ -64,15 +64,15 @@ void Ut_Daemon::testParseArgs()
     argv[2] = strdup("--quiet");
     argv[3] = strdup("--test");
 
-    QVERIFY2(m_subject->daemon == false, "Failure");
-    QVERIFY2(m_subject->quiet == false, "Failure");
-    QVERIFY2(m_subject->testMode == false, "Failure");
+    QVERIFY2(m_subject->m_daemon == false, "Failure");
+    QVERIFY2(m_subject->m_quiet == false, "Failure");
+    QVERIFY2(m_subject->m_testMode == false, "Failure");
 
     m_subject->parseArgs(vector<string>(argv, argv + argc));
 
-    QVERIFY2(m_subject->daemon == true, "Failure");
-    QVERIFY2(m_subject->quiet == true, "Failure");
-    QVERIFY2(m_subject->testMode == true, "Failure");
+    QVERIFY2(m_subject->m_daemon == true, "Failure");
+    QVERIFY2(m_subject->m_quiet == true, "Failure");
+    QVERIFY2(m_subject->m_testMode == true, "Failure");
 
     delete argv[0];
     delete argv[1];

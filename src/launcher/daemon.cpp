@@ -45,9 +45,9 @@
 Daemon * Daemon::m_instance = NULL;
 
 Daemon::Daemon(int & argc, char * argv[]) :
-    testMode(false),
-    daemon(false),
-    quiet(false)
+    m_testMode(false),
+    m_daemon(false),
+    m_quiet(false)
 {
     if (!Daemon::m_instance)
     {
@@ -63,15 +63,15 @@ Daemon::Daemon(int & argc, char * argv[]) :
     parseArgs(vector<string>(argv, argv + argc));
 
     // Disable console output
-    if (quiet)
+    if (m_quiet)
         consoleQuiet();
 
     // Store arguments list
-    initialArgv = argv;
-    initialArgc = argc;
+    m_initialArgv = argv;
+    m_initialArgc = argc;
 
     // Daemonize if desired
-    if (daemon)
+    if (m_daemon)
     {
         daemonize();
     }
@@ -180,7 +180,7 @@ bool Daemon::forkBooster(char type, int pipefd[2])
         clearenv();
 
         // Rename launcher process to booster
-        booster->renameProcess(initialArgc, initialArgv);
+        booster->renameProcess(m_initialArgc, m_initialArgv);
 
         Logger::logNotice("Wait for message from invoker");
 
@@ -188,7 +188,7 @@ bool Daemon::forkBooster(char type, int pipefd[2])
         booster->readCommand();
 
         // Give to the process an application specific name
-        booster->renameProcess(initialArgc, initialArgv);
+        booster->renameProcess(m_initialArgc, m_initialArgv);
 
         // Signal the parent process that it can create a new
         // waiting booster process and close write end
@@ -328,15 +328,15 @@ void Daemon::parseArgs(const vector<string> & args)
         }
         else if ((*i) == "--daemon")
         {
-            daemon = true;
+            m_daemon = true;
         }
         else if  ((*i) ==  "--quiet")
         {
-            quiet = true;
+            m_quiet = true;
         }
         else if ((*i) == "--test")
         {
-            testMode = true;
+            m_testMode = true;
         }
     }
 }

@@ -98,19 +98,19 @@ private:
     void consoleQuiet();
 
     //! Test mode flag
-    bool testMode;
+    bool m_testMode;
 
     //! Daemonize flag
-    bool daemon;
+    bool m_daemon;
 
     //! Debug print flag
-    bool quiet;
+    bool m_quiet;
 
     //! Vector of current child PID's
     vector<pid_t> m_children;
 
-    int    initialArgc;
-    char** initialArgv;
+    int    m_initialArgc;
+    char** m_initialArgv;
 
     static Daemon * m_instance;
 
