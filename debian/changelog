@@ -3,7 +3,6 @@ applauncherd (0.2.0-3) stable; urgency=low
   * Instructions for developers added
   * Process nice parameter passed from invoker to launcher
   * Unit tests are updated	
-  * Naming changes: launcher => applauncherd, applaucherd => applauncherd.bin
   * Implemented: SWP#DUI-2127, SWP#DUI-2152
   * Fixes: NB#161251 - applifed-performance-tests is trying to overwrite the file ./usr/bin/waitforwindow, which was provided by applauncherd-performance-tests 
 
