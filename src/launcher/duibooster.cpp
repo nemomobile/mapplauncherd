@@ -45,7 +45,7 @@ const string & DuiBooster::socketId() const
 bool DuiBooster::preload()
 {
 #ifdef HAVE_DUI
-    DuiComponentCache::populate();
+    DuiComponentCache::populateForDuiApplication();
 #endif
     return true;
 }
