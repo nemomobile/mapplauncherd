@@ -1,12 +1,9 @@
 project(Tests)
 
 # Find dui for the test programs
-find_library(dui_LIBRARY NAMES dui PATHS /usr/lib /usr/local/lib)
-include_directories(${CMAKE_CURRENT_SOURCE_DIR} /usr/include/dui)
-
-if(NOT dui_LIBRARY)
-	message(FATAL_ERROR "DUI library not found! Unable to compile functional tests.")
-endif(NOT dui_LIBRARY)
+include(FindPkgConfig) 
+pkg_check_modules(DUI Dui>=0.19 REQUIRED)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${DUI_INCLUDE_DIRS})
 
 # Sub build: helloworld
 add_subdirectory(helloworld)

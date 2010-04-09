@@ -31,9 +31,9 @@ int main(int argc, char** argv)
                                     */
     b.setText("Hello World!");
 
-    p.appearNow(); /* appearNow causes the page to be visible without
-                      a transition animation, which is recommended
-                      for the initial application page */
+    p.appear(); /* appearNow causes the page to be visible without
+                   a transition animation, which is recommended
+                   for the initial application page */
 
     return app.exec();
 }

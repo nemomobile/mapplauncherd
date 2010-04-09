@@ -1,10 +1,10 @@
 # Set sources
-set(HelloWorldSRC helloworld.cpp)
+set(SRC helloworld.cpp)
 
-link_libraries(${dui_LIBRARY})
+link_libraries(${DUI_LIBRARIES})
 
 include(${QT_USE_FILE})
-add_library(helloworld MODULE ${HelloWorldSRC})
+add_library(helloworld MODULE ${SRC})
 
 # Install
 install(PROGRAMS libhelloworld.so DESTINATION /usr/bin RENAME helloworld.launch)

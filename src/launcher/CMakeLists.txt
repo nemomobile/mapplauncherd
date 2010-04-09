@@ -1,16 +1,15 @@
+# Find Dui libraries using pkg-config. 
+include(FindPkgConfig) 
+pkg_check_modules(DUI Dui>=0.19 REQUIRED)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${DUI_INCLUDE_DIRS})
+
+# Check for DuiComponentCache header
+include(CheckIncludeFile)
+set(CMAKE_REQUIRED_INCLUDES ${DUI_INCLUDE_DIRS})
+check_include_file(duicomponentcache.h DUI_COMPONENT_CACHE)
+
 # Set sources
-set(LauncherSRC booster.cpp connection.cpp daemon.cpp duibooster.cpp logger.cpp main.cpp qtbooster.cpp)
-
-if (EXISTS $ENV{DUI_INCLUDE_DIR})
-  set(DUISRCINCLUDE $ENV{DUI_INCLUDE_DIR})
-  message(STATUS "DUI included from " ${DUISRCINCLUDE})
-else (EXISTS $ENV{DUI_INCLUDE_DIR})
-  set(DUISRCINCLUDE /usr/include/dui)
-  message(STATUS "DUI included from " ${DUISRCINCLUDE} ", use DUI_INCLUDE_DIR to override.")
-endif (EXISTS $ENV{DUI_INCLUDE_DIR})
-
-# Set include dirs
-include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${DUISRCINCLUDE})
+set(SRC booster.cpp connection.cpp daemon.cpp duibooster.cpp logger.cpp main.cpp qtbooster.cpp)
 
 # Set the program name define used in daemon.cpp
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DPROG_NAME=\\\"applauncherd\\\"")
@@ -18,35 +17,19 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DPROG_NAME=\\\"applauncherd\\\"")
 # Set debug logging
 #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_DEBUG")
 
-# Check if it's possible to compile DuiBooster
-if(EXISTS ${DUISRCINCLUDE}/duicomponentcache.h)
-  if (EXISTS $ENV{DUI_LIBRARY_FILE})
-    set(dui_LIBRARY $ENV{DUI_LIBRARY_FILE})
-  else (EXISTS $ENV{DUI_LIBRARY_FILE})
-    find_library(dui_LIBRARY NAMES dui PATHS /usr/lib /usr/local/lib)
-  endif (EXISTS $ENV{DUI_LIBRARY_FILE})
-  
-  if (EXISTS ${dui_LIBRARY})
-    message(STATUS "Linking to " ${dui_LIBRARY} ", use DUI_LIBRARY_FILE to override.")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DHAVE_DUI")
-    message(STATUS "Building with DUI Booster")
-  endif (EXISTS ${dui_LIBRARY})
-else(EXISTS ${DUISRCINCLUDE}/duicomponentcache.h)
-  message(STATUS "!! DUI Booster not available !!")
-endif(EXISTS ${DUISRCINCLUDE}/duicomponentcache.h)
+# Check if it's possible to compile DuiBooster with DuiComponentCache. If so,
+# HAVE_DUI is set.
+if (${DUI_COMPONENT_CACHE})
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DHAVE_DUI")
+endif(${DUI_COMPONENT_CACHE})
 
-# Set libraries to be linked (dui_LIBRARY may be empty, but let's find and link it also)
-if(NOT dui_LIBRARY)
-  message(STATUS "Linking DUI library if it's available")
-  find_library(dui_LIBRARY NAMES dui PATHS /usr/lib /usr/local/lib)
-endif(NOT dui_LIBRARY)
-link_libraries(${QT_QTCORE_LIBRARY} ${dui_LIBRARY})
+link_libraries(${QT_QTCORE_LIBRARY} ${DUI_LIBRARIES})
 
 # Qt support
 include(${QT_USE_FILE})
 
 # Set executable
-add_executable(applauncherd.bin ${LauncherSRC})
+add_executable(applauncherd.bin ${SRC})
 
 # Install rules
 install(PROGRAMS applauncherd.bin scripts/applauncherd DESTINATION /usr/bin/)

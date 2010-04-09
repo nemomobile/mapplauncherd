@@ -44,7 +44,7 @@ int main(int argc, char ** argv)
     window.show();
 
     mainPage.setTitle("Hello World! (Now supports Launcher)");
-    mainPage.appearNow();
+    mainPage.appear();
   
     return app->exec();
 }
