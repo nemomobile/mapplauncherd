@@ -16,10 +16,6 @@ if (${QTVERSION} VERSION_LESS 4.6.0)
     message(FATAL_ERROR "You need Qt4.6, found ${QTVERSION}.")
 endif (${QTVERSION} VERSION_LESS 4.6.0)
 
-# This uses the FindPkgConfig.cmake in this same dir
-set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR})
-find_package(PkgConfig REQUIRED)
-
 # Sub build: applauncherd
 add_subdirectory(src)
 
