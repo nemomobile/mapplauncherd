@@ -1,4 +1,3 @@
-
 set(SRC ${CMAKE_HOME_DIRECTORY}/src/launcher)
 
 # Set sources
@@ -8,7 +7,7 @@ ${SRC}/booster.cpp
 ${SRC}/daemon.cpp
 ${SRC}/connection.cpp
 ${SRC}/logger.cpp
-${SRC}/duibooster.cpp
+${SRC}/mbooster.cpp
 ${SRC}/qtbooster.cpp
 )
 

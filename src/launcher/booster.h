@@ -33,7 +33,7 @@ using std::string;
 
 /*!
  *  \class Booster
- *  \brief Abstract base class for all boosters (Qt-booster, DUI-booster and so on..)
+ *  \brief Abstract base class for all boosters (Qt-booster, M-booster and so on..)
  *
  *  Booster is a class that is used to initialize certain resources in libraries
  *  common to all applications of a type.

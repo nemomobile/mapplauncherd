@@ -1,5 +1,5 @@
 /*
- * duibooster.h
+ * mbooster.h
  *
  * This file is part of applauncherd
  *
@@ -21,34 +21,35 @@
  * 02110-1301 USA
  */
 
-#ifndef DUIBOOSTER_H
-#define DUIBOOSTER_H
+#ifndef MBOOSTER_H
+#define MBOOSTER_H
 
 #include "booster.h"
 
 /*!
-    \class DuiBooster
-    \brief Dui-specific version of the Booster
+    \class MBooster
+    \brief Meego Touch -specific version of the Booster.
 
-    DuiBooster effectively fills DuiComponentCache with fresh objects.
-    DUI applications can then try to use already initialized objects from DuiComponentCache.
-    This can significantly reduce the startup time of a DUI application.
+    MBooster effectively fills MComponentCache with fresh objects.
+    Meego Touch applications can then try to use already initialized objects 
+    from MComponentCache. This can significantly reduce the startup time of a 
+    Meego Touch application.
  */
-class DuiBooster : public Booster
+class MBooster : public Booster
 {
 public:
 
     //! \brief Constructor
-    DuiBooster();
+    MBooster();
 
     //! \brief Destructor
-    virtual ~DuiBooster();
+    virtual ~MBooster();
 
     //! \reimp
     virtual bool preload();
 
     /*!
-     * \brief Return the socket name common to all DuiBooster objects.
+     * \brief Return the socket name common to all MBooster objects.
      * \return Path to the socket file.
      */
     static const string & socketName();
@@ -57,7 +58,7 @@ public:
     virtual char boosterType() const { return type(); }
 
     /*!
-     * \brief Return a unique character ('d') represtenting the type of DuiBoosters.
+     * \brief Return a unique character ('d') represtenting the type of MBoosters.
      * \return Type character.
      */
     static char type();
@@ -70,16 +71,16 @@ protected:
 private:
 
     //! Disable copy-constructor
-    DuiBooster(const DuiBooster & r);
+    MBooster(const MBooster & r);
 
     //! Disable assignment operator
-    DuiBooster & operator= (const DuiBooster & r);
+    MBooster & operator= (const MBooster & r);
 
     static const string m_socketId;
 
 #ifdef UNIT_TEST
-    friend class Ut_DuiBooster;
+    friend class Ut_MBooster;
 #endif
 };
 
-#endif //DUIBOOSTER_H
+#endif // MBOOSTER_H

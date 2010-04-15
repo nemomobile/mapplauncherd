@@ -21,25 +21,25 @@
  * 02110-1301 USA
  */
 
-#include <DuiApplication>
-#include <DuiApplicationPage>
-#include <DuiApplicationWindow>
+#include <MApplication>
+#include <MApplicationPage>
+#include <MApplicationWindow>
 #include <QDebug>
 
-#ifdef HAVE_DUI
-#include <duicomponentcache.h>
+#ifdef HAVE_M
+#include <mcomponentcache.h>
 #endif
 
 
 int main(int argc, char ** argv)
 {
-    #ifdef HAVE_DUI
-    DuiApplication *app = DuiComponentCache::duiApplication(argc, argv);
+    #ifdef HAVE_M
+    MApplication *app = MComponentCache::mApplication(argc, argv);
     #else
-    DuiApplication *app = new DuiApplication(argc, argv);
+    MApplication *app = new MApplication(argc, argv);
     #endif
-    DuiApplicationPage mainPage;
-    DuiApplicationWindow window;
+    MApplicationPage mainPage;
+    MApplicationWindow window;
 
     window.show();
 

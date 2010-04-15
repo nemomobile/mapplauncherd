@@ -1,5 +1,5 @@
 /*
- * ut_duibooster.cpp
+ * ut_mbooster.cpp
  *
  * This file is part of applauncherd
  *
@@ -21,33 +21,33 @@
  * 02110-1301 USA
  */
 
-#include "ut_duibooster.h"
-#include "duibooster.h"
+#include "ut_mbooster.h"
+#include "mbooster.h"
 
-Ut_DuiBooster::Ut_DuiBooster() :
-    m_subject(new DuiBooster)
+Ut_MBooster::Ut_MBooster() :
+    m_subject(new MBooster)
 {}
 
-Ut_DuiBooster::~Ut_DuiBooster()
+Ut_MBooster::~Ut_MBooster()
 {}
 
-void Ut_DuiBooster::initTestCase()
+void Ut_MBooster::initTestCase()
 {}
 
-void Ut_DuiBooster::cleanupTestCase()
+void Ut_MBooster::cleanupTestCase()
 {}
 
-void Ut_DuiBooster::testSocketName()
+void Ut_MBooster::testSocketName()
 {
-    QVERIFY2(DuiBooster::socketName() == DuiBooster::m_socketId, "Failure");
-    QVERIFY2(m_subject->socketId() == DuiBooster::m_socketId, "Failure");
+    QVERIFY2(MBooster::socketName() == MBooster::m_socketId, "Failure");
+    QVERIFY2(m_subject->socketId() == MBooster::m_socketId, "Failure");
 }
 
-void Ut_DuiBooster::testType()
+void Ut_MBooster::testType()
 {
-    QVERIFY2(DuiBooster::type() == 'd', "Failure");
+    QVERIFY2(MBooster::type() == 'd', "Failure");
     QVERIFY2(m_subject->boosterType() == 'd', "Failure");
 }
 
-QTEST_APPLESS_MAIN(Ut_DuiBooster);
+QTEST_APPLESS_MAIN(Ut_MBooster);
 

@@ -1,7 +1,7 @@
 # Set sources
 set(SRC helloworld.cpp)
 
-link_libraries(${DUI_LIBRARIES})
+link_libraries(${MEEGOTOUCH_LIBRARIES})
 
 include(${QT_USE_FILE})
 add_library(helloworld MODULE ${SRC})

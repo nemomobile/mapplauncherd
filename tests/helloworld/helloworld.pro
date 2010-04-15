@@ -1,9 +1,9 @@
-DUISRCINCLUDE = /usr/include/dui
+MSRCINCLUDE = /usr/include/m
 
 INCLUDEPATH += . \
-    $$DUISRCINCLUDE \
+    $$MSRCINCLUDE \
 
-LIBS += -ldui
+LIBS += -lm
 
 scripts.path = /usr/bin
 scripts.files = scripts/*

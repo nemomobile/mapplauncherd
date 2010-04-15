@@ -1,5 +1,5 @@
 /*
- * ut_duibooster.h
+ * ut_mbooster.h
  *
  * This file is part of applauncherd
  *
@@ -21,8 +21,8 @@
  * 02110-1301 USA
  */
 
-#ifndef UT_DUIBOOSTER_H
-#define UT_DUIBOOSTER_H
+#ifndef UT_MBOOSTER_H
+#define UT_MBOOSTER_H
 
 #include<QtTest/QtTest>
 #include<QObject>
@@ -31,15 +31,15 @@
 
 #define UNIT_TEST
 
-class DuiBooster;
+class MBooster;
 
-class Ut_DuiBooster : public QObject
+class Ut_MBooster : public QObject
 {
     Q_OBJECT
 
 public:
-    Ut_DuiBooster();
-    virtual ~Ut_DuiBooster();
+    Ut_MBooster();
+    virtual ~Ut_MBooster();
 
 private Q_SLOTS:
     void initTestCase();
@@ -48,9 +48,9 @@ private Q_SLOTS:
     void testType();
 
 private:
-    std::tr1::shared_ptr<DuiBooster> m_subject;
+    std::tr1::shared_ptr<MBooster> m_subject;
 };
 
-#endif // UT_DUIBOOSTER_H
+#endif // UT_MBOOSTER_H
 
 

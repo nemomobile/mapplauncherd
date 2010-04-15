@@ -1,5 +1,5 @@
 /*
- * duibooster.cpp
+ * mbooster.cpp
  *
  * This file is part of applauncherd
  *
@@ -21,41 +21,41 @@
  * 02110-1301 USA
  */
 
-#include "duibooster.h"
+#include "mbooster.h"
 
-#ifdef HAVE_DUI
-#include <duicomponentcache.h>
+#ifdef HAVE_MCOMPONENTCACHE
+#include <mcomponentcache.h>
 #endif
 
-const string DuiBooster::m_socketId  = "/tmp/duilnchr";
+const string MBooster::m_socketId  = "/tmp/mlnchr";
 
-DuiBooster::DuiBooster()
+MBooster::MBooster()
 {
 }
 
-DuiBooster::~DuiBooster()
+MBooster::~MBooster()
 {
 }
 
-const string & DuiBooster::socketId() const
+const string & MBooster::socketId() const
 {
     return m_socketId;
 }
 
-bool DuiBooster::preload()
+bool MBooster::preload()
 {
-#ifdef HAVE_DUI
-    DuiComponentCache::populateForDuiApplication();
+#ifdef HAVE_MCOMPONENTCACHE
+    MComponentCache::populateForMApplication();
 #endif
     return true;
 }
 
-const string & DuiBooster::socketName()
+const string & MBooster::socketName()
 {
     return m_socketId;
 }
 
-char DuiBooster::type()
+char MBooster::type()
 {
-    return 'd';
+    return 'm';
 }

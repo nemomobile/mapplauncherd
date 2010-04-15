@@ -45,7 +45,7 @@
 
 static const int DEFAULT_DELAY = 0;
 
-enum APP_TYPE { DUI_APP, QT_APP, UNKNOWN_APP };
+enum APP_TYPE { M_APP, QT_APP, UNKNOWN_APP };
 
 extern char ** environ;
 
@@ -76,8 +76,8 @@ static int invoker_init(enum APP_TYPE app_type)
 
     sun.sun_family = AF_UNIX;  //AF_FILE;
 
-    if(app_type ==  DUI_APP)
-        strcpy(sun.sun_path, INVOKER_DUI_SOCK);
+    if(app_type ==  M_APP)
+        strcpy(sun.sun_path, INVOKER_M_SOCK);
     else if (app_type ==  QT_APP)
         strcpy(sun.sun_path, INVOKER_QT_SOCK);
     else
@@ -217,17 +217,18 @@ static void version(void)
 
 static void usage(int status)
 {
-    printf("\nUsage: %s TYPE [options] file [file-options]\n"
-           "Launch dui or qt application. \n"
-           "Example %s --type=dui /usr/bin/helloworld \n"
-           "TYPE: \n"
-           "  dui               Launch DUI application. \n"
-           "  qt                Launch Qt application.  \n"
+    printf("\nUsage: %s --type=TYPE [options] [file] [args]\n"
+           "Launch m or qt application.\n\n"
+           "TYPE chooses the type of booster used. Qt-booster may be used to launch anything.\n"
+           "Possible values for TYPE: \n"
+           "  m                   Launch a Meego Touch application.\n"
+           "  qt                  Launch a Qt application.\n\n"
            "Options:\n"
            "  --delay SECS        After invoking sleep for SECS seconds (default %d).\n"
            "  --version           Print program version.\n"
-           "  --help              Print this help message.\n",
-           PROG_NAME, PROG_NAME, DEFAULT_DELAY);
+           "  --help              Print this help message.\n\n"
+           "Example: %s --type=m /usr/bin/helloworld \n",
+           PROG_NAME, DEFAULT_DELAY, PROG_NAME);
 
     exit(status);
 }
@@ -252,8 +253,8 @@ int main(int argc, char *argv[])
             report(report_error, "application type is missing \n");
             usage(1);
         }
-        else if (strcmp(argv[1], "--type=dui") == 0)
-            app_type = DUI_APP;
+        else if (strcmp(argv[1], "--type=m") == 0)
+            app_type = M_APP;
         else if (strcmp(argv[1], "--type=qt") == 0)
             app_type = QT_APP;
         else if (strcmp(argv[1], "--version") == 0)

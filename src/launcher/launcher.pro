@@ -9,19 +9,19 @@ CONFIG     -= app_bundle
 TEMPLATE    = app
 DEFINES    += PROG_NAME=\\\"launcher\\\"
 
-# Check if needed dui headers exist
-DUISRCINCLUDE = /usr/include/dui
+# Check if needed m headers exist
+MSRCINCLUDE = /usr/include/m
 
-exists($$DUISRCINCLUDE/duicomponentcache.h) {
-    message(Building with DUI Booster)
-    DEFINES += HAVE_DUI
+exists($$MSRCINCLUDE/mcomponentcache.h) {
+    message(Building with M Booster)
+    DEFINES += HAVE_MCOMPONENTCACHE
 } else {
-    message(!! DUI Booster not available !!)
+    message(!! Meego Touch Booster not available !!)
 }
 
-contains(DEFINES, HAVE_DUI) {
-    INCLUDEPATH += $$DUISRCINCLUDE 
-    LIBS        += -ldui
+contains(DEFINES, HAVE_MCOMPONENTCACHE) {
+    INCLUDEPATH += $$MSRCINCLUDE 
+    LIBS        += -lm
 }
 
 SOURCES += logger.cpp \
@@ -30,14 +30,14 @@ SOURCES += logger.cpp \
     connection.cpp \
     booster.cpp \
     qtbooster.cpp \
-    duibooster.cpp
+    mbooster.cpp
 
 HEADERS += logger.h \
     daemon.h \
     connection.h \
     booster.h \
     qtbooster.h \
-    duibooster.h \
+    mbooster.h \
     appdata.h
 
 INSTALLS += target 

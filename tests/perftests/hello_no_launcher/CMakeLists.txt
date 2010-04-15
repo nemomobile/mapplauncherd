@@ -1,7 +1,6 @@
 # Set sources
 set(SRC main.cpp)
-
-link_libraries (${DUI_LIBRARIES} ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${QT_QTDBUS_LIBRARY})
+link_libraries (${MEEGOTOUCH_LIBRARIES} ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${QT_QTDBUS_LIBRARY})
 
 # Enable Qt-support
 include(${QT_USE_FILE})

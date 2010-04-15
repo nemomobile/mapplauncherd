@@ -5,7 +5,7 @@
   <!-- Schema: https://projects.maemo.org/docs/testing/xml-definition.html -->
   <suite name="applauncherd-functional-tests" domain="Application framework"> 
 
-    <set name="applauncherd-functional-tests" description="Launcher functional tests" feature="DUI">   
+    <set name="applauncherd-functional-tests" description="Launcher functional tests" feature="MeeGo Touch">   
       <pre_steps>
         <step>export DISPLAY=:0</step>
         <step>source /tmp/session_bus_address.user</step>

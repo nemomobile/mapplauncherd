@@ -35,7 +35,7 @@ char *invoke_recv_str(int fd);
 
 /* FIXME: Should be '/var/run/'. */
 //#define INVOKER_SOCK	"/tmp/."PACKAGE
-#define INVOKER_DUI_SOCK    "/tmp/duilnchr"
+#define INVOKER_M_SOCK    "/tmp/mlnchr"
 #define INVOKER_QT_SOCK	    "/tmp/qtlnchr"
 
 /* Protocol messages and masks. */

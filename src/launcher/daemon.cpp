@@ -25,7 +25,7 @@
 #include "logger.h"
 #include "connection.h"
 #include "booster.h"
-#include "duibooster.h"
+#include "mbooster.h"
 #include "qtbooster.h"
 
 #include <cstdlib>
@@ -102,7 +102,7 @@ Daemon::~Daemon()
 void Daemon::run()
 {
     // create sockets for each of the boosters
-    Connection::initSocket(DuiBooster::socketName());
+    Connection::initSocket(MBooster::socketName());
     Connection::initSocket(QtBooster::socketName());
 
     // Pipe used to tell the parent that a new
@@ -113,7 +113,7 @@ void Daemon::run()
         Logger::logErrorAndDie(EXIT_FAILURE, "Creating a pipe failed!!!\n");
     }
 
-    forkBooster(DuiBooster::type(), pipefd);
+    forkBooster(MBooster::type(), pipefd);
     forkBooster(QtBooster::type(),  pipefd);
 
     while (true)
@@ -160,9 +160,9 @@ bool Daemon::forkBooster(char type, int pipefd[2])
 
         // Create a new booster and initialize it
         Booster* booster;
-        if (DuiBooster::type() == type)
+        if (MBooster::type() == type)
         {
-            booster = new DuiBooster();
+            booster = new MBooster();
         }
         else if (QtBooster::type() == type)
         {
