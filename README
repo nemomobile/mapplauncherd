@@ -1,22 +1,20 @@
-09.03.2010
-
 What is applauncherd?
 ==============================
 
 Applauncherd is a daemon and it helps to launch applications faster by 
-preloading DUI and Qt dynamically linked libraries and making some 
+preloading Meego Touch and Qt dynamically linked libraries and making some 
 initializations before loading the application binary and executing the 
 main function.
 
 The applauncherd daemon is started by UpStart as part of XSession, that is,
-at the same level as the desktop (DUI homescreen). Applauncherd forks the 
+at the same level as the desktop (Meego Touch homescreen). Applauncherd forks the 
 will-be-application process a.k.a booster before knowing which application 
 is going to be launched next. The booster process does some initializations 
 that cannot be shared among other processes and therefore have to be done after 
-the fork. This allows, for instance, instantiating a DUI application before knowing 
+the fork. This allows, for instance, instantiating a Meego Touch application before knowing 
 the name of the application. Then the booster process waits for a connection from the
 invoker with the information about which application should be launched. Each application 
-type (e.g. Qt and DUI) has its own booster process. When booster launches the 
+type (e.g. Qt and Meego Touch) has its own booster process. When booster launches the 
 application by calling the "main" function, applauncherd will create new booster 
 process of that type.
 
@@ -64,12 +62,12 @@ This is the "standard" way to compile shared libraries using gcc/g++.
 2. Rename appication binary to <application_name>.launch and 
 replace original binary by a script that executes invoker with correct 
 application type and the name of application binary as a parameter.
-Use --type=dui parameter for DUI applications and --type=qt for plain
+Use --type=m parameter for Meego Touch applications and --type=qt for plain
 Qt applications and everything else. Launch script example for typical application:
 
 #!/bin/sh
-echo "/usr/bin/invoker --type=dui" $0.launch $@
-exec /usr/bin/invoker --type=dui $0.launch $@
+echo "/usr/bin/invoker --type=m" $0.launch $@
+exec /usr/bin/invoker --type=m $0.launch $@
 
 3. Applauncherd is started by UpStart during the boot time, but it
 can be also started manually in scratchbox or on the device by 
@@ -87,3 +85,5 @@ TBD
 Questions and Bug Reports
 ==============================
 TBD
+
+

@@ -4,7 +4,7 @@ pkg_check_modules(MEEGOTOUCH meegotouch>=0.20 REQUIRED)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${MEEGOTOUCH_INCLUDE_DIRS})
 
 # Check if it's possible to compile MBooster with MComponentCache. If so,
-# HAVE_MEEGOTOUCH is set.
+# HAVE_MCOMPONENTCACHE is set.
 message(STATUS "checking for mcomponentcache.h")
 find_file(M_COMPONENT_CACHE NAMES mcomponentcache.h PATHS ${MEEGOTOUCH_INCLUDE_DIRS})
 if (EXISTS ${M_COMPONENT_CACHE})
