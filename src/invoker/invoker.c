@@ -221,7 +221,7 @@ static void usage(int status)
            "Launch m or qt application.\n\n"
            "TYPE chooses the type of booster used. Qt-booster may be used to launch anything.\n"
            "Possible values for TYPE: \n"
-           "  m                   Launch a Meego Touch application.\n"
+           "  m                   Launch a MeeGo Touch application.\n"
            "  qt                  Launch a Qt application.\n\n"
            "Options:\n"
            "  --delay SECS        After invoking sleep for SECS seconds (default %d).\n"

@@ -28,12 +28,12 @@
 
 /*!
     \class MBooster
-    \brief Meego Touch -specific version of the Booster.
+    \brief MeeGo Touch -specific version of the Booster.
 
     MBooster effectively fills MComponentCache with fresh objects.
-    Meego Touch applications can then try to use already initialized objects 
+    MeeGo Touch applications can then try to use already initialized objects 
     from MComponentCache. This can significantly reduce the startup time of a 
-    Meego Touch application.
+    MeeGo Touch application.
  */
 class MBooster : public Booster
 {
