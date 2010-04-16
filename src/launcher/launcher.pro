@@ -16,7 +16,7 @@ exists($$MSRCINCLUDE/mcomponentcache.h) {
     message(Building with M Booster)
     DEFINES += HAVE_MCOMPONENTCACHE
 } else {
-    message(!! Meego Touch Booster not available !!)
+    message(!! MeeGo Touch Booster not available !!)
 }
 
 contains(DEFINES, HAVE_MCOMPONENTCACHE) {

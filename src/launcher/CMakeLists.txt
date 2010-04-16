@@ -1,4 +1,4 @@
-# Find Meego Touch libraries using pkg-config. 
+# Find MeeGo Touch libraries using pkg-config. 
 include(FindPkgConfig) 
 pkg_check_modules(MEEGOTOUCH meegotouch>=0.20 REQUIRED)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${MEEGOTOUCH_INCLUDE_DIRS})
