@@ -26,14 +26,14 @@
 #include <MApplicationWindow>
 #include <QDebug>
 
-#ifdef HAVE_M
+#ifdef HAVE_MCOMPONENTCACHE
 #include <mcomponentcache.h>
 #endif
 
 
 int main(int argc, char ** argv)
 {
-    #ifdef HAVE_M
+    #ifdef HAVE_MCOMPONENTCACHE
     MApplication *app = MComponentCache::mApplication(argc, argv);
     #else
     MApplication *app = new MApplication(argc, argv);
