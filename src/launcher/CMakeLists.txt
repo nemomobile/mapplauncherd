@@ -1,4 +1,7 @@
-# Find MeeGo Touch libraries using pkg-config. 
+# Qt support
+include(${QT_USE_FILE})
+
+# Find Meego Touch libraries using pkg-config. 
 include(FindPkgConfig) 
 pkg_check_modules(MEEGOTOUCH meegotouch>=0.20 REQUIRED)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${MEEGOTOUCH_INCLUDE_DIRS})
@@ -23,10 +26,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DPROG_NAME=\\\"applauncherd\\\"")
 # Set debug logging
 #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_DEBUG")
 
-link_libraries(${QT_QTCORE_LIBRARY} ${MEEGOTOUCH_LIBRARIES})
-
-# Qt support
-include(${QT_USE_FILE})
+link_libraries(${QT_LIBRARIES} ${MEEGOTOUCH_LIBRARIES})
 
 # Set executable
 add_executable(applauncherd.bin ${SRC})
