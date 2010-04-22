@@ -17,6 +17,9 @@ endif (EXISTS ${M_COMPONENT_CACHE})
 # Sub build: helloworld
 add_subdirectory(helloworld)
 
+# Sub build: prestartapp
+add_subdirectory(prestartapp)
+
 # Sub build: unit tests
 add_subdirectory(unittests)
 
