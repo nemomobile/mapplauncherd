@@ -28,6 +28,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${LAUNCHER})
 link_libraries(
    ${QT_QTCORE_LIBRARY}
    ${QT_QTTEST_LIBRARY}
+   ${MEEGOTOUCH_LIBRARIES}
 )
 
 # Enable Qt (may not be needed, because already defined on higher level)
