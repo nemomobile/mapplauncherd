@@ -35,16 +35,17 @@ int main(int argc, char ** argv)
 {
     #ifdef HAVE_MCOMPONENTCACHE
     MApplication *app = MComponentCache::mApplication(argc, argv);
+    MApplicationWindow *window = MComponentCache::mApplicationWindow();
     #else
     MApplication *app = new MApplication(argc, argv);
+    MApplicationWindow *window = new MApplicationWindow();
     #endif
     
     MApplicationPage mainPage;
-    MApplicationWindow window;
 
     MApplication::setPrestartMode(M::LazyShutdown);
     
-    window.show();
+    window->show();
 
     mainPage.setTitle("Prestartapp");
     mainPage.appear();
