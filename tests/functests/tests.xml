@@ -50,6 +50,19 @@
       </get-->
     </set>
 
+    <set name="Prestart-launched" description="To test that prestarted application is launched" feature="MeeGo Touch">   
+      <case name="Prestart-launched" type="Functional" description="To test that prestarted application is launched" timeout="120" level="System">
+          <step expected_result="0">source /tmp/session_bus_address.user; DISPLAY=:0 /usr/share/applauncherd-functional-tests/ts_prestartapp.rb </step>
+      </case>
+
+      <environments>
+          <scratchbox>false</scratchbox>
+          <hardware>true</hardware>    
+      </environments>
+
+      <!--get>
+      </get-->
+    </set>
   </suite>
 </testdefinition>
 
