@@ -1,5 +1,6 @@
 usr/share/applauncherd-functional-tests/tests.xml
 usr/share/applauncherd-functional-tests/test-func-launcher.py
+usr/share/applauncherd-functional-tests/ts_prestartapp.rb
 usr/share/applauncherd-functional-tests/check_pipes.py
 /usr/share/dbus-1/services/com.nokia.prestartapp.service
 usr/bin/helloworld
