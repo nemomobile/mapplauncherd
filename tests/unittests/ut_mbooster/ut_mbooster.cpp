@@ -45,8 +45,8 @@ void Ut_MBooster::testSocketName()
 
 void Ut_MBooster::testType()
 {
-    QVERIFY2(MBooster::type() == 'd', "Failure");
-    QVERIFY2(m_subject->boosterType() == 'd', "Failure");
+    QVERIFY2(MBooster::type() == 'm', "Failure");
+    QVERIFY2(m_subject->boosterType() == 'm', "Failure");
 }
 
 QTEST_APPLESS_MAIN(Ut_MBooster);
