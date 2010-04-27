@@ -1,3 +1,11 @@
+applauncherd (0.2.0-5) stable; urgency=low
+
+  * Naming changes: libdiu => libmeegotouch
+  * Unit tests are updated
+  * Implemented: SWP#DUI-2483
+
+ -- Alexey Shilov <alexey.shilov@nokia.com>  Tue, 27 Apr 2010 16:16:40 +0300
+
 applauncherd (0.2.0-4) stable; urgency=low
 
   * applifed-performance-tests is trying to overwrite the file ./usr/bin/waitforwindow, which was provided by applauncherd-performance-tests 
@@ -9,7 +17,7 @@ applauncherd (0.2.0-3) stable; urgency=low
 
   * Instructions for developers added
   * Process nice parameter passed from invoker to launcher
-  * Unit tests are updated	
+  * Unit tests are updated
   * Implemented: SWP#DUI-2127, SWP#DUI-2152
 
  -- Alexey Shilov <alexey.shilov@nokia.com>  Fri, 11 Mar 2010 13:13:02 +0200
