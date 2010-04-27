@@ -1,24 +1,8 @@
-MSRCINCLUDE = /usr/include/m
-
-INCLUDEPATH += . \
-    $$MSRCINCLUDE \
-
-LIBS += -lm
-
-scripts.path = /usr/bin
-scripts.files = scripts/*
-
-INSTALLS += scripts
-
-QMAKE_CXXFLAGS += -shared -fPIC
-QMAKE_LFLAGS += -shared -fPIC -export-dynamic
-
-target.path = /usr/bin/
-qINSTALLS += target
-
 TEMPLATE = app
-TARGET = helloworld.launch
-DEPENDPATH += $$INCLUDEPATH
+TARGET = helloworld
+CONFIG = qt meegotouch
 
-SOURCES += \
-    helloworld.cpp 
+QMAKE_CXXFLAGS += -fPIC -fvisibility=hidden -fvisibility-inlines-hidden
+QMAKE_LFLAGS += -pie -rdynamic
+
+SOURCES += helloworld.cpp

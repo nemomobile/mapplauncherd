@@ -30,6 +30,7 @@
 #include <mcomponentcache.h>
 #endif
 
+extern "C" __attribute__((visibility("default"))) int main(int, char**);
 
 int main(int argc, char ** argv)
 {
