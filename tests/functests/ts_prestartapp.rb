@@ -48,9 +48,15 @@ class TC_PRESTARTLAUNCHTESTS < Test::Unit::TestCase
 
         verify_equal(true,2,"Application is not Prestarted"){
                 system "pidof prestartapp"}
+        pid = string = `pidof prestartapp`
         sleep 1
 
         string = `export DISPLAY=:0; source /tmp/session_bus_address.user;dbus-send --dest=com.nokia.prestartapp --type="method_call" /org/maemo/m com.nokia.MApplicationIf.launch`
+        @app = @sut.application( :name => 'applauncherd.bin' ) 
+        @app.MButton( :name => 'CloseButton' ).tap
+        newid = string = `pidof prestartapp`
+        verify_true(30,"The application is not prestarted"){pid == newid}
+        sleep 1
         system "kill -9 `pidof prestartapp`"
     end
 
