@@ -33,8 +33,6 @@
 #include <unistd.h>
 #include <sys/user.h>
 
-extern char **environ;
-
 Booster::Booster() : m_argvArraySize(0)
 {}
 
