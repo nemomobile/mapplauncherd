@@ -15,7 +15,7 @@ Description: Launcher daemon and invoker to speed up launches
 Package: applauncherd-tests
 Section: extra
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, libmeegotouchcore0, libmeegotouchviews0, libmeegotouchextensions0, libmeegotouchsettings0, testrunner, applauncherd, ci-testing 
+Depends: ${shlibs:Depends}, ${misc:Depends}, libmeegotouchcore0, libmeegotouchviews0, libmeegotouchextensions0, libmeegotouchsettings0, testrunner, applauncherd, ci-testing, libcreds2 
 XB-Maemo-CI-Packages: applauncherd
 XB-Maemo-CI-Stage: fast, staging, acceptance, validation
 Description: applauncherd unit tests
