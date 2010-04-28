@@ -177,6 +177,7 @@ class launcher_tests (unittest.TestCase):
         process_handle = self.run_app_with_launcher(PREFERED_APP)
         process_id = self.get_pid(PREFERED_APP)
         self.kill_process(PREFERED_APP)
+        time.sleep(2)
         process_id = self.get_pid(PREFERED_APP)
         self.assert_(process_id == None  , "Process still running")
     
