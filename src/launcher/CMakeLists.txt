@@ -26,7 +26,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DPROG_NAME=\\\"applauncherd\\\"")
 # Set debug logging
 #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_DEBUG")
 
-link_libraries(${QT_LIBRARIES} ${MEEGOTOUCH_LIBRARIES})
+link_libraries(${QT_LIBRARIES} ${MEEGOTOUCH_LIBRARIES} creds)
 
 # Set executable
 add_executable(applauncherd.bin ${SRC})

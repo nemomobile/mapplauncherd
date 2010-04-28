@@ -32,6 +32,7 @@
 #include <cerrno>
 #include <unistd.h>
 #include <sys/user.h>
+//#include <linux/aegis/credp.h>
 
 Booster::Booster() : m_argvArraySize(0)
 {}
@@ -181,10 +182,15 @@ void Booster::launchProcess()
     exit(m_app.entry(m_app.argc, m_app.argv));
 }
 
+extern "C" long credp_kconfine(char const *);
+
 void Booster::loadMain()
 {
     void *module;
     char *error_s;
+
+    // Set application's platform security credentials
+    credp_kconfine(m_app.fileName.c_str());
 
     // Load the application as a library
     module = dlopen(m_app.fileName.c_str(), RTLD_LAZY | RTLD_GLOBAL);
