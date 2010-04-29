@@ -53,7 +53,11 @@ PoolType Connection::socketPool;
 
 Connection::Connection(const string socketId) :
     m_fd(-1),
-    m_curSocket(findSocket(socketId))
+    m_curSocket(findSocket(socketId)),
+    m_fileName(""),
+    m_argc(0),
+    m_argv(NULL),
+    m_priority(0)
 {
     m_io[0] = -1;
     m_io[1] = -1;
@@ -68,31 +72,6 @@ Connection::Connection(const string socketId) :
 Connection::~Connection()
 {
     closeConn();
-}
-
-string Connection::fileName() const
-{
-    return m_fileName;
-}
-
-int Connection::argc() const
-{
-    return static_cast<int>(m_argc);
-}
-
-char** Connection::argv() const
-{
-    return m_argv;
-}
-
-vector<int> Connection::ioDescriptors() const
-{
-    return vector<int>(m_io, m_io + sizeof(m_io));
-}
-
-int Connection::priority() const
-{
-    return m_prio;
 }
 
 int Connection::findSocket(const string socketId)
@@ -269,7 +248,7 @@ bool Connection::receiveExec()
 
 bool Connection::receivePriority()
 {
-    recvMsg(&m_prio);
+    recvMsg(&m_priority);
     sendMsg(INVOKER_MSG_ACK);
 
     return true;
@@ -445,11 +424,11 @@ bool Connection::receiveApplicationData(AppData & rApp)
     // Read application parameters
     if (receiveActions())
     {
-        rApp.setFileName(fileName());
-        rApp.setPriority(priority());
-        rApp.setArgc(argc());
-        rApp.setArgv(argv());
-        rApp.setIODescriptors(ioDescriptors());
+        rApp.setFileName(m_fileName);
+        rApp.setPriority(m_priority);
+        rApp.setArgc(m_argc);
+        rApp.setArgv(m_argv);
+        rApp.setIODescriptors(vector<int>(m_io, m_io + sizeof(m_io)));
     }
     else
     {

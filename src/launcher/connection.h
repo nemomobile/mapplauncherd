@@ -95,36 +95,6 @@ private:
      */
     string receiveAppName();
 
-    /*! \brief Return the file name.
-     * Return the executable file name received from the invoker.
-     * \return Name string
-     */
-    string fileName() const;
-
-    /*! \brief Return the argument count.
-     * Return the CLI argument count received from the invoker.
-     * \return Argument count
-     */
-    int argc() const;
-
-    /*! \brief Return the argument list.
-     * Return the CLI argument list received from the invoker.
-     * \return Pointer to the argument list
-     */
-    char** argv() const;
-
-    /*! \brief Return I/O file descriptors.
-     * Return the I/O file descriptors received from the invoker.
-     * \return fd vector.
-     */
-    vector<int> ioDescriptors() const;
-
-    /*! \brief Return process priority.
-     * Return the process priority received from the invoker.
-     * \return application process priority.
-     */
-    int priority() const;
-
     /*! \brief Return initialized socket.
      * \param socketId Path to the socket file
      */
@@ -166,14 +136,14 @@ private:
     //! Pool of sockets mapped to id's
     static PoolType socketPool;
 
-    //! socket
-    int         m_fd;
-    int         m_curSocket;
-    string      m_fileName;
-    uint32_t    m_argc;
-    char **     m_argv;
-    int         m_io[3];
-    uint32_t    m_prio;
+    //! Socket fd
+    int      m_fd;
+    int      m_curSocket;
+    string   m_fileName;
+    uint32_t m_argc;
+    char **  m_argv;
+    int      m_io[3];
+    uint32_t m_priority;
 
 #ifdef UNIT_TEST
     friend class Ut_Connection;
