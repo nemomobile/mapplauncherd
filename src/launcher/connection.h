@@ -38,7 +38,7 @@ using std::map;
 
 using std::vector;
 
-typedef map<string, int> poolType;
+typedef map<string, int> PoolType;
 
 /*!
  * \class Connection.
@@ -133,35 +133,17 @@ private:
     //! Disable assignment operator
     Connection & operator= (const Connection & r);
 
-    bool receiveExec();
-    bool receiveArgs();
-    bool receiveEnv();
-    bool receiveIO();
-    bool receivePriority();
+    bool  receiveExec();
+    bool  receiveArgs();
+    bool  receiveEnv();
+    bool  receiveIO();
+    bool  receivePriority();
+    bool  sendMsg(uint32_t msg);
+    bool  recvMsg(uint32_t *msg);
+    bool  sendStr(char *str);
+    char* recvStr();
 
-    static const unsigned int INVOKER_MSG_MASK               = 0xffff0000;
-    static const unsigned int INVOKER_MSG_MAGIC              = 0xb0070000;
-    static const unsigned int INVOKER_MSG_MAGIC_VERSION_MASK = 0x0000ff00;
-    static const unsigned int INVOKER_MSG_MAGIC_VERSION      = 0x00000300;
-    static const unsigned int INVOKER_MSG_MAGIC_OPTION_MASK  = 0x000000ff;
-    static const unsigned int INVOKER_MSG_MAGIC_OPTION_WAIT  = 0x00000001;
-    static const unsigned int INVOKER_MSG_NAME               = 0x5a5e0000;
-    static const unsigned int INVOKER_MSG_EXEC               = 0xe8ec0000;
-    static const unsigned int INVOKER_MSG_ARGS               = 0xa4650000;
-    static const unsigned int INVOKER_MSG_ENV                = 0xe5710000;
-    static const unsigned int INVOKER_MSG_PRIO               = 0xa1ce0000;
-    static const unsigned int INVOKER_MSG_IO                 = 0x10fd0000;
-    static const unsigned int INVOKER_MSG_END                = 0xdead0000;
-    static const unsigned int INVOKER_MSG_PID                = 0x1d1d0000;
-    static const unsigned int INVOKER_MSG_EXIT               = 0xe4170000;
-    static const unsigned int INVOKER_MSG_ACK                = 0x600d0000;
-
-    virtual bool  sendMsg(uint32_t msg);
-    virtual bool  recvMsg(uint32_t *msg);
-    virtual bool  sendStr(char *str);
-    virtual char* recvStr();
-
-    static poolType socketPool;
+    static PoolType socketPool;
 
     //! socket
     int         m_fd;

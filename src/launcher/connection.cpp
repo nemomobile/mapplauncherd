@@ -29,24 +29,27 @@
 #include <cstdlib>
 #include <cerrno>
 
-const unsigned int  Connection::INVOKER_MSG_MASK;
-const unsigned int  Connection::INVOKER_MSG_MAGIC;
-const unsigned int  Connection::INVOKER_MSG_MAGIC_VERSION_MASK;
-const unsigned int  Connection::INVOKER_MSG_MAGIC_VERSION;
-const unsigned int  Connection::INVOKER_MSG_MAGIC_OPTION_MASK;
-const unsigned int  Connection::INVOKER_MSG_MAGIC_OPTION_WAIT;
-const unsigned int  Connection::INVOKER_MSG_NAME;
-const unsigned int  Connection::INVOKER_MSG_EXEC;
-const unsigned int  Connection::INVOKER_MSG_ARGS;
-const unsigned int  Connection::INVOKER_MSG_ENV;
-const unsigned int  Connection::INVOKER_MSG_PRIO;
-const unsigned int  Connection::INVOKER_MSG_IO;
-const unsigned int  Connection::INVOKER_MSG_END;
-const unsigned int  Connection::INVOKER_MSG_PID;
-const unsigned int  Connection::INVOKER_MSG_EXIT;
-const unsigned int  Connection::INVOKER_MSG_ACK;
+namespace
+{
+    const unsigned int INVOKER_MSG_MASK               = 0xffff0000;
+    const unsigned int INVOKER_MSG_MAGIC              = 0xb0070000;
+    const unsigned int INVOKER_MSG_MAGIC_VERSION_MASK = 0x0000ff00;
+    const unsigned int INVOKER_MSG_MAGIC_VERSION      = 0x00000300;
+    const unsigned int INVOKER_MSG_MAGIC_OPTION_MASK  = 0x000000ff;
+    const unsigned int INVOKER_MSG_MAGIC_OPTION_WAIT  = 0x00000001;
+    const unsigned int INVOKER_MSG_NAME               = 0x5a5e0000;
+    const unsigned int INVOKER_MSG_EXEC               = 0xe8ec0000;
+    const unsigned int INVOKER_MSG_ARGS               = 0xa4650000;
+    const unsigned int INVOKER_MSG_ENV                = 0xe5710000;
+    const unsigned int INVOKER_MSG_PRIO               = 0xa1ce0000;
+    const unsigned int INVOKER_MSG_IO                 = 0x10fd0000;
+    const unsigned int INVOKER_MSG_END                = 0xdead0000;
+    const unsigned int INVOKER_MSG_PID                = 0x1d1d0000;
+    const unsigned int INVOKER_MSG_EXIT               = 0xe4170000;
+    const unsigned int INVOKER_MSG_ACK                = 0x600d0000;
+}
 
-poolType Connection::socketPool;
+PoolType Connection::socketPool;
 
 Connection::Connection(const string socketId) :
     m_fd(-1),
@@ -94,14 +97,14 @@ int Connection::priority() const
 
 int Connection::findSocket(const string socketId)
 {
-    poolType::iterator it;
+    PoolType::iterator it;
     it = socketPool.find(socketId);
     return it == socketPool.end() ? -1 : it->second;
 }
 
 void Connection::initSocket(const string socketId)
 {
-    poolType::iterator it;
+    PoolType::iterator it;
     it = socketPool.find(socketId);
     if (it == socketPool.end())
     {
