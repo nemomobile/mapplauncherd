@@ -8,7 +8,8 @@ AppData::AppData() :
     m_appName(""),
     m_fileName(""),
     m_prio(0),
-    m_entry(NULL)
+    m_entry(NULL),
+    m_ioDescriptors()
 {}
 
 void AppData::setOptions(int newOptions)
@@ -79,6 +80,16 @@ void AppData::setEntry(entry_t newEntry)
 entry_t AppData::entry() const
 {
     return m_entry;
+}
+
+const vector<int> & AppData::ioDescriptors() const
+{
+    return m_ioDescriptors;
+}
+
+void AppData::setIODescriptors(const vector<int> & newIODescriptors)
+{
+    m_ioDescriptors = newIODescriptors;
 }
 
 AppData::~AppData()

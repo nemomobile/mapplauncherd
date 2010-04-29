@@ -28,6 +28,10 @@
 
 using std::string;
 
+#include <vector>
+
+using std::vector;
+
 typedef int (*entry_t)(int, char **);
 
 //! Structure for application data read from the invoker
@@ -83,22 +87,25 @@ public:
     //! Get the entry point
     entry_t entry() const;
 
+    //! Get I/O descriptors
+    const vector<int> & ioDescriptors() const;
+
+    //! Set I/O descriptors
+    void setIODescriptors(const vector<int> & ioDescriptors);
+
 private:
 
     AppData(const AppData & r);
     AppData & operator= (const AppData & r);
 
-    int     m_options;
-    int     m_argc;
-    char ** m_argv;
-    string  m_appName;
-    string  m_fileName;
-    int     m_prio;
-    entry_t m_entry;
-
-public:
-
-    int     ioDescriptors[3];
+    int         m_options;
+    int         m_argc;
+    char **     m_argv;
+    string      m_appName;
+    string      m_fileName;
+    int         m_prio;
+    entry_t     m_entry;
+    vector<int> m_ioDescriptors;
 };
 
 #endif // APPDATA_H

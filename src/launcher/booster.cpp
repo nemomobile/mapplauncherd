@@ -54,12 +54,12 @@ bool Booster::readCommand()
         return false;
 
     // Read magic number
-    m_app.setOptions(conn.getMagic());
+    m_app.setOptions(conn.receiveMagic());
     if (m_app.options() == -1)
         return false;
 
     // Read application name
-    m_app.setAppName(conn.getAppName());
+    m_app.setAppName(conn.receiveAppName());
     if (m_app.appName().empty())
         return false;
 
@@ -67,12 +67,10 @@ bool Booster::readCommand()
     if (conn.receiveActions())
     {
         m_app.setFileName(conn.fileName());
-        m_app.setPriority(conn.prio());
+        m_app.setPriority(conn.priority());
         m_app.setArgc(conn.argc());
         m_app.setArgv(conn.argv());
-
-        for(int i = 0; i < 3; i++)
-            m_app.ioDescriptors[i] = conn.ioDescriptors()[i];
+        m_app.setIODescriptors(conn.ioDescriptors());
     }
     else
     {
@@ -170,9 +168,9 @@ void Booster::launchProcess()
     // Load the application and find out the address of main()
     loadMain();
 
-    for (int i = 0; i < 3; i++)
-      if (m_app.ioDescriptors[i] > 0)
-        dup2(m_app.ioDescriptors[i], i);
+    for (unsigned int i = 0; i < m_app.ioDescriptors().size(); i++)
+      if (m_app.ioDescriptors()[i] > 0)
+        dup2(m_app.ioDescriptors()[i], i);
 
     Logger::logNotice("launching process: '%s' ", m_app.fileName().c_str());
 

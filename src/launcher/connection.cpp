@@ -50,7 +50,7 @@ poolType Connection::socketPool;
 
 Connection::Connection(const string socketId) :
     m_fd(-1),
-    m_curSocket(getSocket(socketId))
+    m_curSocket(findSocket(socketId))
 {
     m_io[0] = -1;
     m_io[1] = -1;
@@ -82,17 +82,17 @@ char** Connection::argv() const
     return m_argv;
 }
 
-int* Connection::ioDescriptors()
+vector<int> Connection::ioDescriptors() const
 {
-    return m_io;
+    return vector<int>(m_io, m_io + sizeof(m_io));
 }
 
-int Connection::prio()
+int Connection::priority() const
 {
     return m_prio;
 }
 
-int Connection::getSocket(const string socketId)
+int Connection::findSocket(const string socketId)
 {
     poolType::iterator it;
     it = socketPool.find(socketId);
@@ -204,7 +204,7 @@ char* Connection::recvStr()
 }
 
 
-int Connection::getMagic()
+int Connection::receiveMagic()
 {
     uint32_t magic;
 
@@ -224,7 +224,7 @@ int Connection::getMagic()
     return magic & INVOKER_MSG_MAGIC_OPTION_MASK;
 }
 
-string Connection::getAppName()
+string Connection::receiveAppName()
 {
     uint32_t msg;
 
@@ -250,7 +250,7 @@ string Connection::getAppName()
     return appName;
 }
 
-bool Connection::getExec()
+bool Connection::receiveExec()
 {
     char* filename = recvStr();
     if (!filename)
@@ -264,7 +264,7 @@ bool Connection::getExec()
     return true;
 }
 
-bool Connection::getPrio()
+bool Connection::receivePriority()
 {
     recvMsg(&m_prio);
     sendMsg(INVOKER_MSG_ACK);
@@ -272,7 +272,7 @@ bool Connection::getPrio()
     return true;
 }
 
-bool Connection::getArgs()
+bool Connection::receiveArgs()
 {
     uint i;
     size_t size;
@@ -308,7 +308,7 @@ bool Connection::getArgs()
     return true;
 }
 
-bool Connection::getEnv()
+bool Connection::receiveEnv()
 {
     uint i;
     uint32_t n_vars;
@@ -341,26 +341,26 @@ bool Connection::getEnv()
     return true;
 }
 
-bool Connection::getIo()
+bool Connection::receiveIO()
 {
     struct msghdr msg;
     struct cmsghdr *cmsg;
-    char buf[CMSG_SPACE(sizeof(m_io))];
+    char   buf[CMSG_SPACE(sizeof(m_io))];
     struct iovec iov;
-    int dummy;
+    int    dummy;
 
-    iov.iov_base = &dummy;
-    iov.iov_len = 1;
+    iov.iov_base       = &dummy;
+    iov.iov_len        = 1;
 
-    msg.msg_iov = &iov;
-    msg.msg_iovlen = 1;
-    msg.msg_control = buf;
+    msg.msg_iov        = &iov;
+    msg.msg_iovlen     = 1;
+    msg.msg_control    = buf;
     msg.msg_controllen = sizeof(buf);
 
-    cmsg = CMSG_FIRSTHDR(&msg);
-    cmsg->cmsg_len = CMSG_LEN(sizeof(m_io));
-    cmsg->cmsg_level = SOL_SOCKET;
-    cmsg->cmsg_type = SCM_RIGHTS;
+    cmsg               = CMSG_FIRSTHDR(&msg);
+    cmsg->cmsg_len     = CMSG_LEN(sizeof(m_io));
+    cmsg->cmsg_level   = SOL_SOCKET;
+    cmsg->cmsg_type    = SCM_RIGHTS;
 
     memcpy(CMSG_DATA(cmsg), m_io, sizeof(m_io));
 
@@ -404,19 +404,19 @@ bool Connection::receiveActions()
         switch (action)
         {
         case INVOKER_MSG_EXEC:
-            getExec();
+            receiveExec();
             break;
         case INVOKER_MSG_ARGS:
-            getArgs();
+            receiveArgs();
             break;
         case INVOKER_MSG_ENV:
-            getEnv();
+            receiveEnv();
             break;
         case INVOKER_MSG_PRIO:
-            getPrio();
+            receivePriority();
             break;
         case INVOKER_MSG_IO:
-            getIo();
+            receiveIO();
             break;
         case INVOKER_MSG_END:
             sendMsg(INVOKER_MSG_ACK);
@@ -427,5 +427,4 @@ bool Connection::receiveActions()
         }
     }
 }
-
 

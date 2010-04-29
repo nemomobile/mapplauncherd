@@ -24,12 +24,19 @@
 #ifndef CONNECTION_H
 #define CONNECTION_H
 
-#include <string>
-#include <map>
 #include <stdint.h>
 
+#include <string>
+
 using std::string;
+
+#include <map>
+
 using std::map;
+
+#include <vector>
+
+using std::vector;
 
 typedef map<string, int> poolType;
 
@@ -61,15 +68,15 @@ public:
     //! \brief Close the socket connection
     void closeConn();
 
-    /*! \brief Return the magic number.
+    /*! \brief Receive and return the magic number.
      * \return The magic number received from the invoker.
      */
-    int getMagic();
+    int receiveMagic();
 
-    /*! \brief Return the application name.
+    /*! \brief Receive and return the application name.
      * \return Name string
      */
-    string getAppName();
+    string receiveAppName();
 
     /*! \brief Receive actions.
      * This method executes the actual data-receiving loop and terminates
@@ -98,16 +105,15 @@ public:
 
     /*! \brief Return I/O file descriptors.
      * Return the I/O file descriptors received from the invoker.
-     * \return Pointer to the three-element list of fd's.
+     * \return fd vector.
      */
-    int* ioDescriptors();
+    vector<int> ioDescriptors() const;
 
     /*! \brief Return process priority.
      * Return the process priority received from the invoker.
      * \return application process priority.
      */
-    int prio();
-
+    int priority() const;
 
     /*! \brief Initialize a file socket.
      * \param socketId Path to the socket file
@@ -117,7 +123,7 @@ public:
     /*! \brief Return initialized socket.
      * \param socketId Path to the socket file
      */
-    static int getSocket(const string socketId);
+    static int findSocket(const string socketId);
 
 private:
 
@@ -127,11 +133,11 @@ private:
     //! Disable assignment operator
     Connection & operator= (const Connection & r);
 
-    bool getExec();
-    bool getArgs();
-    bool getEnv();
-    bool getIo();
-    bool getPrio();
+    bool receiveExec();
+    bool receiveArgs();
+    bool receiveEnv();
+    bool receiveIO();
+    bool receivePriority();
 
     static const unsigned int INVOKER_MSG_MASK               = 0xffff0000;
     static const unsigned int INVOKER_MSG_MAGIC              = 0xb0070000;
@@ -158,13 +164,13 @@ private:
     static poolType socketPool;
 
     //! socket
-    int      m_fd;
-    int      m_curSocket;
-    string   m_fileName;
-    uint32_t m_argc;
-    char   **m_argv;
-    int      m_io[3];
-    uint32_t m_prio;
+    int         m_fd;
+    int         m_curSocket;
+    string      m_fileName;
+    uint32_t    m_argc;
+    char **     m_argv;
+    int         m_io[3];
+    uint32_t    m_prio;
 
 #ifdef UNIT_TEST
     friend class Ut_Connection;
