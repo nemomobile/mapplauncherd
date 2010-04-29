@@ -18,7 +18,7 @@ else (EXISTS ${M_COMPONENT_CACHE})
 endif (EXISTS ${M_COMPONENT_CACHE})
 
 # Set sources
-set(SRC booster.cpp connection.cpp daemon.cpp mbooster.cpp logger.cpp main.cpp qtbooster.cpp)
+set(SRC appdata.cpp booster.cpp connection.cpp daemon.cpp mbooster.cpp logger.cpp main.cpp qtbooster.cpp)
 
 # Set the program name define used in daemon.cpp
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DPROG_NAME=\\\"applauncherd\\\"")
