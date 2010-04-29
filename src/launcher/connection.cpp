@@ -392,7 +392,6 @@ bool Connection::receiveIO()
     return true;
 }
 
-
 bool Connection::receiveActions()
 {
     Logger::logInfo("enter: %s", __FUNCTION__);
@@ -429,5 +428,34 @@ bool Connection::receiveActions()
             return false;
         }
     }
+}
+
+bool Connection::receiveApplicationData(AppData & rApp)
+{
+    // Read magic number
+    rApp.setOptions(receiveMagic());
+    if (rApp.options() == -1)
+        return false;
+
+    // Read application name
+    rApp.setAppName(receiveAppName());
+    if (rApp.appName().empty())
+        return false;
+
+    // Read application parameters
+    if (receiveActions())
+    {
+        rApp.setFileName(fileName());
+        rApp.setPriority(priority());
+        rApp.setArgc(argc());
+        rApp.setArgv(argv());
+        rApp.setIODescriptors(ioDescriptors());
+    }
+    else
+    {
+        return false;
+    }
+
+    return true;
 }
 

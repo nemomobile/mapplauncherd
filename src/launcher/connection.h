@@ -24,8 +24,8 @@
 #ifndef CONNECTION_H
 #define CONNECTION_H
 
+#include "appdata.h"
 #include <stdint.h>
-
 #include <string>
 
 using std::string;
@@ -65,8 +65,25 @@ public:
      */
     bool acceptConn();
 
-    //! \brief Close the socket connection
+    //! \brief Close the socket connection.
     void closeConn();
+
+    //! \brief Receive application data to rApp.
+    bool receiveApplicationData(AppData & rApp);
+
+    /*! \brief Initialize a file socket.
+     * \param socketId Path to the socket file
+     */
+    static void initSocket(const string socketId);
+
+private:
+
+    /*! \brief Receive actions.
+     * This method executes the actual data-receiving loop and terminates
+     * after INVOKER_MSG_END is received.
+     * \return True on success
+     */
+    bool receiveActions();
 
     /*! \brief Receive and return the magic number.
      * \return The magic number received from the invoker.
@@ -77,13 +94,6 @@ public:
      * \return Name string
      */
     string receiveAppName();
-
-    /*! \brief Receive actions.
-     * This method executes the actual data-receiving loop and terminates
-     * after INVOKER_MSG_END is received.
-     * \return True on success
-     */
-    bool receiveActions();
 
     /*! \brief Return the file name.
      * Return the executable file name received from the invoker.
@@ -115,17 +125,10 @@ public:
      */
     int priority() const;
 
-    /*! \brief Initialize a file socket.
-     * \param socketId Path to the socket file
-     */
-    static void initSocket(const string socketId);
-
     /*! \brief Return initialized socket.
      * \param socketId Path to the socket file
      */
     static int findSocket(const string socketId);
-
-private:
 
     //! Disable copy-constructor
     Connection(const Connection & r);
@@ -133,16 +136,34 @@ private:
     //! Disable assignment operator
     Connection & operator= (const Connection & r);
 
-    bool  receiveExec();
-    bool  receiveArgs();
-    bool  receiveEnv();
-    bool  receiveIO();
-    bool  receivePriority();
-    bool  sendMsg(uint32_t msg);
-    bool  recvMsg(uint32_t *msg);
-    bool  sendStr(char *str);
-    char* recvStr();
+    //! Receive executable name
+    bool receiveExec();
 
+    //! Receive arguments
+    bool receiveArgs();
+
+    //! Receive environment
+    bool receiveEnv();
+
+    //! Receive I/O descriptors
+    bool receiveIO();
+
+    //! Receive priority
+    bool receivePriority();
+
+    //! Send message to a socket
+    bool sendMsg(uint32_t msg);
+
+    //! Receive a message from a socket
+    bool recvMsg(uint32_t *msg);
+
+    //! Send a string
+    bool sendStr(char *str);
+
+    //! Receive a string
+    char * recvStr();
+
+    //! Pool of sockets mapped to id's
     static PoolType socketPool;
 
     //! socket

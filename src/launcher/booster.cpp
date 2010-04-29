@@ -50,37 +50,18 @@ bool Booster::readCommand()
     Connection conn(socketId());
 
     // Accept a new invocation.
-    if (!conn.acceptConn())
-        return false;
-
-    // Read magic number
-    m_app.setOptions(conn.receiveMagic());
-    if (m_app.options() == -1)
-        return false;
-
-    // Read application name
-    m_app.setAppName(conn.receiveAppName());
-    if (m_app.appName().empty())
-        return false;
-
-    // Read application parameters
-    if (conn.receiveActions())
+    if (conn.acceptConn())
     {
-        m_app.setFileName(conn.fileName());
-        m_app.setPriority(conn.priority());
-        m_app.setArgc(conn.argc());
-        m_app.setArgv(conn.argv());
-        m_app.setIODescriptors(conn.ioDescriptors());
-    }
-    else
-    {
-        return false;
+        if (conn.receiveApplicationData(m_app))
+        {
+            return true;
+        }
+
+        // Close connection
+        conn.closeConn();
     }
 
-    // Close connection
-    conn.closeConn();
-
-    return true;
+    return false;
 }
 
 void Booster::run()
