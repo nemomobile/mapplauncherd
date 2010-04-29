@@ -92,7 +92,7 @@ void AppData::setIODescriptors(const vector<int> & newIODescriptors)
     m_ioDescriptors = newIODescriptors;
 }
 
-AppData::~AppData()
+void AppData::deleteArgv()
 {
     if (m_argv)
     {
@@ -103,4 +103,9 @@ AppData::~AppData()
 
         m_argv = NULL;
     }
+}
+
+AppData::~AppData()
+{
+    deleteArgv();
 }

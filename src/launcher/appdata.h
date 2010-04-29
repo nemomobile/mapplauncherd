@@ -93,6 +93,9 @@ public:
     //! Set I/O descriptors
     void setIODescriptors(const vector<int> & ioDescriptors);
 
+    //! Frees the memory reserved for argv
+    void deleteArgv();
+
 private:
 
     AppData(const AppData & r);

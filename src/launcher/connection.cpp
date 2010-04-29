@@ -292,7 +292,7 @@ bool Connection::receiveArgs()
     m_argv = static_cast<char**>(malloc(size));
     if (!m_argv)
     {
-        Logger::logError("mallocing\n");
+        Logger::logError("mallocing argv\n");
         return false;
     }
 
