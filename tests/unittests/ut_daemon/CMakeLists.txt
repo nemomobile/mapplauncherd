@@ -1,44 +1,26 @@
-set(SRC ${CMAKE_HOME_DIRECTORY}/src/launcher)
-
 # Set sources
-set(ut_daemonSRC
-ut_daemon.cpp
-${SRC}/booster.cpp
-${SRC}/daemon.cpp
-${SRC}/connection.cpp
-${SRC}/logger.cpp
-${SRC}/mbooster.cpp
-${SRC}/qtbooster.cpp
-)
+set(LAUNCHER ${CMAKE_HOME_DIRECTORY}/src/launcher)
+set(SRC ut_daemon.cpp ${LAUNCHER}/appdata.cpp ${LAUNCHER}/booster.cpp ${LAUNCHER}/daemon.cpp ${LAUNCHER}/connection.cpp ${LAUNCHER}/logger.cpp ${LAUNCHER}/mbooster.cpp ${LAUNCHER}/qtbooster.cpp)
 
 # Set moc headers
-set(ut_daemon_MOC_HDRS
-ut_daemon.h
-#${SRC}/daemon.h
-)
+set(MOC_HDRS ut_daemon.h)
 
 # Set the program name define used in daemon.cpp
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DPROG_NAME=\\\"applauncherd\\\"")
 
 # Run moc
-qt4_wrap_cpp( ut_daemon_MOC_SRC ${ut_daemon_MOC_HDRS} )
+qt4_wrap_cpp(MOC_SRC ${MOC_HDRS} )
 
 # Enable test library
 set(QT_USE_QTTEST TRUE)
 
 # Set include paths
-include_directories ( ${CMAKE_CURRENT_SOURCE_DIR} ${SRC} )
-
-link_libraries (
-   ${QT_QTCORE_LIBRARY}
-   ${QT_QTTEST_LIBRARY}
-   ${MEEGOTOUCH_LIBRARIES}
-)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_HOME_DIRECTORY}/src/common ${LAUNCHER})
+link_libraries(${QT_QTCORE_LIBRARY} ${QT_QTTEST_LIBRARY} ${MEEGOTOUCH_LIBRARIES})
 
 # Enable Qt (may not be needed, because already defined on higher level)
-include( ${QT_USE_FILE} )
-
-add_executable ( ut_daemon ${ut_daemonSRC} ${ut_daemon_MOC_SRC} )
+include(${QT_USE_FILE})
+add_executable(ut_daemon ${SRC} ${MOC_SRC})
 
 # Install
 install(PROGRAMS ut_daemon DESTINATION /usr/share/applauncherd-tests/)

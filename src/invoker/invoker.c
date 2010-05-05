@@ -40,6 +40,7 @@
 #include <sys/wait.h>
 
 #include "report.h"
+#include "protocol.h"
 #include "invokelib.h"
 #include "search.h"
 

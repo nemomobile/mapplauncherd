@@ -25,6 +25,8 @@
 #define CONNECTION_H
 
 #include "appdata.h"
+#include "protocol.h"
+
 #include <stdint.h>
 #include <string>
 
