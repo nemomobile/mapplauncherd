@@ -1,6 +1,12 @@
+applauncherd (0.3.0~1) unstable; urgency=low
+
+  * Added the feature and requirements fields inside tests.xml files
+
+ -- Olli Leppanen <olli.leppanen@nokia.com>  Tue, 05 May 2010 12:16:40 +0300
+
 applauncherd (0.2.0-5) stable; urgency=low
 
-  * Naming changes: libdiu => libmeegotouch
+  * Naming changes: libdui => libmeegotouch
   * Unit tests are updated
   * Implemented: SWP#DUI-2483
 
