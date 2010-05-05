@@ -1,7 +1,12 @@
 #include <MApplication>
 #include <MApplicationWindow>
 #include <MApplicationPage>
-#include <MComponentCache>
+
+#ifdef HAVE_MCOMPONENTCACHE   
+    #include <MComponentCache>
+#endif
+
+#include <MExport>
 #include <QFile>
 #include <sys/time.h>
 
@@ -34,14 +39,22 @@ public:
     }
 };
 
-extern "C" __attribute__((visibility("default"))) int main(int, char**);
+M_EXPORT int main(int, char**);
 
 int main(int argc, char **argv) {
     timestamp("application main");
+    
+#ifdef HAVE_MCOMPONENTCACHE   
     MApplication* app = MComponentCache::mApplication(argc, argv);
     MApplicationWindow* w = MComponentCache::mApplicationWindow();
+#else
+    MApplication* app = new MApplication(argc, argv);
+    MApplicationWindow* w = new MApplicationWindow;
+#endif
+    
     MyApplicationPage p;
     w->show();
     p.appear();
     return app->exec();
 }
+
