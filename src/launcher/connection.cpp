@@ -281,9 +281,7 @@ bool Connection::receiveEnv()
     // Get environment variables
     for (i = 0; i < n_vars; i++)
     {
-        char *var;
-
-        var = recvStr();
+        char * var = recvStr();
         if (var == NULL)
         {
             Logger::logError("receiving environ[%i]", i);

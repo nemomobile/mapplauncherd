@@ -123,17 +123,16 @@ private:
     //! Receive priority
     bool receivePriority();
 
-    //! Send message to a socket
-    bool sendMsg(uint32_t msg);
+    //! Send message to a socket. This is a virtual to help unit testing.
+    virtual bool sendMsg(uint32_t msg);
 
-    //! Receive a message from a socket
-    bool recvMsg(uint32_t *msg);
+    //! Receive a message from a socket. This is a virtual to help unit testing.
+    virtual bool recvMsg(uint32_t *msg);
 
-    //! Send a string
-    bool sendStr(char *str);
-
-    //! Receive a string
-    char * recvStr();
+    //! Send a string. This is a virtual to help unit testing.
+    virtual bool sendStr(char *str);
+    //! Receive a string. This is a virtual to help unit testing.
+    virtual char * recvStr();
 
     //! Pool of sockets mapped to id's
     static PoolType socketPool;

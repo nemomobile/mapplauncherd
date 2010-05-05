@@ -248,7 +248,7 @@ void Ut_Booster::testRenameProcessNoArgs()
     const int ARGS = 2;
     m_subject->m_app.setArgc(ARGS);
     char ** argv = new char * [ARGS]; 
-    argv[0] = strdup("newNameLongLong");
+    argv[0] = strdup("newName");
     argv[1] = strdup("--foo");
     m_subject->m_app.setArgv(argv);
     m_subject->m_app.setAppName(m_subject->m_app.argv()[0]);
@@ -259,7 +259,7 @@ void Ut_Booster::testRenameProcessNoArgs()
     m_subject->renameProcess(INIT_ARGS, initialArgv);
 
     // No dummy space argument at all, only name fits
-    QVERIFY(strcmp(initialArgv[0], "newName") == 0);
+    QVERIFY(strcmp(initialArgv[0], m_subject->m_app.argv()[0]) == 0);
 
     delete initialArgv[0];
     delete [] initialArgv;

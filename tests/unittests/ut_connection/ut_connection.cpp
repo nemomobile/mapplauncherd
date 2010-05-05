@@ -38,34 +38,40 @@ public:
     bool acceptConn();
 
 private:
-    virtual bool  recvMsg(uint32_t *msg);
-    virtual char* recvStr();
-
-    virtual bool  sendMsg(uint32_t msg);
-    virtual bool  sendStr(char *str);
+    bool  recvMsg(uint32_t *msg);
+    char* recvStr();
+    bool  sendMsg(uint32_t msg);
+    bool  sendStr(char *str);
 };
-bool  MyConnection::acceptConn() { return true; }
+
+bool MyConnection::acceptConn() { return true; }
 
 MyConnection::MyConnection(const string socketId) : 
-    Connection(socketId) { }
+    Connection(socketId), 
+	nextMsg(0),
+	nextStr(NULL)
+{}
 
 bool MyConnection::recvMsg(uint32_t *msg)
 {
     *msg = nextMsg;
     return true;
 }
+
 bool MyConnection::sendMsg(uint32_t)
-{ return true; }
+{ 
+	return true; 
+}
 
 bool MyConnection::sendStr(char*)
-{ return true; }
-
+{ 
+	return true; 
+}
 
 char* MyConnection::recvStr()
 {
     return nextStr;
 }
-
 
 Ut_Connection::Ut_Connection()
 {
@@ -86,7 +92,7 @@ void Ut_Connection::cleanupTestCase()
 /*
  * Check that socket initialized for provided socket id
  */
-void  Ut_Connection::testInitConnection()
+void Ut_Connection::testInitConnection()
 {
     unsigned int prevNum = Connection::socketPool.size();
     Connection::initSocket("aaa");
@@ -106,7 +112,7 @@ void  Ut_Connection::testInitConnection()
 /* 
  * Check that closeConn() reset socket connection
  */
-void  Ut_Connection::testAcceptConnection()
+void Ut_Connection::testAcceptConnection()
 {
     char* socketName = (char*) "testAccept";
 
@@ -127,16 +133,16 @@ void  Ut_Connection::testAcceptConnection()
  * Check that env variable passed from invoker will 
  * be set in launcher process
  */
-void  Ut_Connection::testGetEnv()
+void Ut_Connection::testGetEnv()
 {
     QVERIFY(getenv("MY_TEST_ENV_VAR") == NULL);
     QVERIFY(getenv("PATH") != NULL);
 
-    char* socketName = (char*) "testGetEnv";
+    const char* socketName = "testGetEnv";
     Connection::initSocket(socketName);
     MyConnection* conn = new MyConnection(socketName);
 
-    char* envVar = (char*) "MY_TEST_ENV_VAR=3";
+    char* envVar = strdup("MY_TEST_ENV_VAR=3");
 
     conn->nextMsg = 1;
     conn->nextStr = envVar; 
@@ -146,6 +152,7 @@ void  Ut_Connection::testGetEnv()
     QVERIFY(getenv("PATH") != NULL);
 
     unlink(socketName);
+    delete envVar;
 }
 
 /*
@@ -153,8 +160,10 @@ void  Ut_Connection::testGetEnv()
  */
 void Ut_Connection::testGetAppName()
 {
-    char* socketName = (char*) "testGetAppName";
+    const char* socketName = "testGetAppName";
+
     Connection::initSocket(socketName);
+
     MyConnection* conn = new MyConnection(socketName);
 
     // wrong type of message
