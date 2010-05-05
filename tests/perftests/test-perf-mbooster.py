@@ -43,9 +43,9 @@ import subprocess
 import commands
 import time
 import sys
+import unittest
 
 TESTAPP = '/usr/bin/testapp'
-GET_TIME_OF_DAY = '/usr/bin/gettimeofday'
 LOG_FILE = '/tmp/testapp.log'
 DEV_NULL = file("/dev/null","w")
 
@@ -67,7 +67,7 @@ def basename(filepath):
 def is_executable_file(filename):
     return os.path.isfile(filename) and os.access(filename, os.X_OK)
     
-def check_prerequisites(app_with_launcher, app_no_launcher):
+def check_prerequisites():
     if os.getenv('DISPLAY') == None:
         error("DISPLAY is not set. Check the requirements.")
         
@@ -79,154 +79,173 @@ def check_prerequisites(app_with_launcher, app_no_launcher):
         error("'%s' is not an executable file\n" % (TESTAPP,) +
               "(should be an application that supports launcher)")
 
-    if not is_executable_file(GET_TIME_OF_DAY):
-        error("'%s' is not an executable file\n" % (GET_TIME_OF_DAY,) +
-              "(should be an application that gets time of the day)")
 
-def start_timer():
-    global _start_time 
-    #get_time = commands.getoutput(GET_TIME_OF_DAY)
-    #tp = get_time.split()
-    _start_time = time.time()
-
-def run_without_launcher(TESTAPP):                                                       
-    """returns process handle with pid attribute and terminate function"""               
-    if os.path.exists(LOG_FILE) and os.path.isfile(LOG_FILE):               
-        os.system('rm %s' %LOG_FILE)                                                        
-    start_timer()
-    p = subprocess.Popen(TESTAPP,
-                         shell=False,
-                         stdout=DEV_NULL, stderr=DEV_NULL)
-    debug("app", TESTAPP, "started without launcher")                                   
-    time.sleep(2)
-    read_log()
-    app_time = app_start_time()
-    kill_process(TESTAPP)
-    return app_time
-
-def run_without_launcher_without_duihome(TESTAPP):                                                       
-    """returns process handle with pid attribute and terminate function"""               
-    if os.path.exists(LOG_FILE) and os.path.isfile(LOG_FILE):               
-        os.system('rm %s' %LOG_FILE)                                                        
-    os.system('pkill -STOP duihome')
-    start_timer()
-    p = subprocess.Popen(TESTAPP,
-                         shell=False,
-                         stdout=DEV_NULL, stderr=DEV_NULL)
-    debug("app", TESTAPP, "started without launcher")                                   
-    time.sleep(2)
-    os.system('pkill -CONT duihome')
-    read_log()
-    app_time = app_start_time()
-    kill_process(TESTAPP)
-    return app_time
-
-def run_with_launcher(TESTAPP):                                                       
-    """returns process handle with pid attribute and terminate function"""               
-    if os.path.exists(LOG_FILE) and os.path.isfile(LOG_FILE):               
-        os.system('rm %s' %LOG_FILE)                                                        
-
-    start_timer()
-    os.system('invoker --type=m %s' %TESTAPP)
-    debug("app", TESTAPP, "started with launcher")                                   
-    time.sleep(2)
-    read_log()
-    app_time = app_start_time()
-    kill_process(TESTAPP)
-    return app_time
-
-def run_with_launcher_without_duihome(TESTAPP):                                                       
-    """returns process handle with pid attribute and terminate function"""               
-    if os.path.exists(LOG_FILE) and os.path.isfile(LOG_FILE):               
-        os.system('rm %s' %LOG_FILE)                                                        
-    os.system('pkill -STOP duihome')
-    start_timer()
-    os.system('invoker --type=m %s' %TESTAPP)
-    debug("app", TESTAPP, "started with launcher")                                   
-    time.sleep(2)
-    os.system('pkill -CONT duihome')
-    read_log()
-    app_time = app_start_time()
-    kill_process(TESTAPP)
-    return app_time
-
-def read_log():
-    global _end_time
-    fh = open(LOG_FILE, "r")
-    lines = fh.readlines()
-    lastline = lines[len(lines)-2]
-    _end_time = lastline.split()[0]
-    return _end_time
-
-def app_start_time():
-    global _app_start_time
-    _app_start_time = float(_end_time) - float(_start_time)
-    return _app_start_time
-
-def kill_process(appname):
-    #pkill takes only up to 15 characters(?)
-    commands.getoutput("pkill %s" % (basename(appname)[:15],))
-
-def perftest_with_and_without_launcher(TESTAPP):
-    debug("run app without launcher with duihome")
-    tnlwd = run_without_launcher(TESTAPP)
-    time.sleep(2)
-
-    debug("run app without launcher without duihome")
-    tnlnd = run_without_launcher_without_duihome(TESTAPP)
-    time.sleep(2)
-
-    debug("run app with launcher with duihome")
-    twlwd = run_with_launcher(TESTAPP)
-    time.sleep(2)
-
-    debug("run app without launcher without duihome")
-    twlnd = run_with_launcher_without_duihome(TESTAPP)
-    time.sleep(2)
-
-    return tnlwd, tnlnd, twlwd, twlnd
-
-def print_test_report(with_without_times, fileobj):
-    """
-    with_without_times is a list of pairs:
-       (with_launcher_startup_time,
-        without_launcher_startup_time)
-    """
-    def writeline(*msg):
-        fileobj.write("%s\n" % ' '.join([str(s) for s in msg]))
-    def fmtfloat(f):
-        return "%.2f" % (f,)
-    def filterstats(data, field):
-        return tuple([d[field] for d in data])
-
-    if with_without_times == []: return
-
-    writeline("")
-    rowformat = "%12s %12s %12s %12s"
-    writeline('Startup times [s]:')
-    writeline(rowformat % ('launcher-No', 'launcher-No', 'launcher-Yes', 'launcher-Yes'))
-    writeline(rowformat % ('duihome-Yes', 'duihome-No', 'duihome-Yes', 'duihome-No'))
+class launcher_perf_tests (unittest.TestCase):
     
-    t1,t2,t3,t4 = [], [], [], []
-    for tnlwd,tnlnd,twlwd,twlnd in with_without_times:
-        t1.append(tnlwd)
-        t2.append(tnlnd)
-        t3.append(twlwd)
-        t4.append(twlnd)
-        writeline(rowformat % (fmtfloat(tnlwd),fmtfloat(tnlnd),
-                               fmtfloat(twlwd),fmtfloat(twlnd)))
+    def setUp(self):
+        print "Setup Executed"
 
-    writeline('Average times:')
-    writeline(rowformat % (fmtfloat(sum(t1)/len(t1)),fmtfloat(sum(t2)/len(t2)),
-                           fmtfloat(sum(t3)/len(t3)),fmtfloat(sum(t4)/len(t4))))
+    def tearDown(self):
+        print "Teardown Executed"
 
+    #Other functions
+    def start_timer(self):
+        global _start_time 
+        _start_time = time.time()
 
-def run_perf_test(TESTAPP):
-    times = []
-    for i in xrange(3):
-        times.append(perftest_with_and_without_launcher(TESTAPP))
-    print_test_report(times, sys.stdout)
+    def run_without_launcher(self, appname):                                                       
+        """starts the testapp without the launcher"""               
+        if os.path.exists(LOG_FILE) and os.path.isfile(LOG_FILE):               
+            os.system('rm %s' %LOG_FILE)                                                        
+        self.start_timer()
+        p = subprocess.Popen(appname,
+                             shell=False,
+                             stdout=DEV_NULL, stderr=DEV_NULL)
+        debug("app", TESTAPP, "started without launcher")                                   
+        time.sleep(2)
+        self.read_log()
+        app_time = self.app_start_time()
+        self.kill_process(appname)
+        return app_time
+
+    def run_without_launcher_without_duihome(self, appname):                                                       
+        """starts the testapp without launcher and without duihome"""               
+        if os.path.exists(LOG_FILE) and os.path.isfile(LOG_FILE):               
+            os.system('rm %s' %LOG_FILE)                                                        
+        os.system('pkill -STOP duihome')
+        self.start_timer()
+        p = subprocess.Popen(TESTAPP,
+                             shell=False,
+                             stdout=DEV_NULL, stderr=DEV_NULL)
+        debug("app", TESTAPP, "started without launcher")                                   
+        time.sleep(2)
+        os.system('pkill -CONT duihome')
+        self.read_log()
+        app_time = self.app_start_time()
+        self.kill_process(appname)
+        return app_time
+
+    def run_with_launcher(self, appname):                                                       
+        """starts the testapp with launcher and with duihome"""               
+        if os.path.exists(LOG_FILE) and os.path.isfile(LOG_FILE):               
+            os.system('rm %s' %LOG_FILE)                                                        
+
+        self.start_timer()
+        os.system('invoker --type=m %s' %TESTAPP)
+        debug("app", TESTAPP, "started with launcher")                                   
+        time.sleep(2)
+        self.read_log()
+        app_time = self.app_start_time()
+        self.kill_process(appname)
+        return app_time
+
+    def run_with_launcher_without_duihome(self, appname):                                                       
+        """starts the testapp with launcher but without duihome"""               
+        if os.path.exists(LOG_FILE) and os.path.isfile(LOG_FILE):               
+            os.system('rm %s' %LOG_FILE)                                                        
+        os.system('pkill -STOP duihome')
+        self.start_timer()
+        os.system('invoker --type=m %s' %TESTAPP)
+        debug("app", TESTAPP, "started with launcher")                                   
+        time.sleep(2)
+        os.system('pkill -CONT duihome')
+        self.read_log()
+        app_time = self.app_start_time()
+        self.kill_process(appname)
+        return app_time
+
+    def read_log(self):
+        """Reads the log file to get the startup time"""
+        global _end_time
+        fh = open(LOG_FILE, "r")
+        lines = fh.readlines()
+        lastline = lines[len(lines)-2]
+        _end_time = lastline.split()[0]
+        return _end_time
+
+    def app_start_time(self):
+        """Calculates the startup time for the testapp"""
+        global _app_start_time
+        _app_start_time = float(_end_time) - float(_start_time)
+        return _app_start_time
+
+    def kill_process(self, appname):
+        """Kills the testapp"""
+        commands.getoutput("pkill %s" % (basename(appname)[:15],))
+
+    def perftest_with_and_without_launcher(self, appname):
+        """Runs all the 4 scenarios with and without launcher"""
+        debug("run app without launcher with duihome")
+        tnlwd = self.run_without_launcher(appname)
+        time.sleep(2)
+
+        debug("run app without launcher without duihome")
+        tnlnd = self.run_without_launcher_without_duihome(appname)
+        time.sleep(2)
+
+        debug("run app with launcher with duihome")
+        twlwd = self.run_with_launcher(appname)
+        time.sleep(2)
+
+        debug("run app without launcher without duihome")
+        twlnd = self.run_with_launcher_without_duihome(appname)
+        time.sleep(2)
+
+        return tnlwd, tnlnd, twlwd, twlnd
+
+    def print_test_report(self, with_without_times, fileobj):
+        """
+        with_without_times is a list of pairs:
+           (with_launcher_startup_time,
+            without_launcher_startup_time)
+        """
+        def writeline(*msg):
+            fileobj.write("%s\n" % ' '.join([str(s) for s in msg]))
+        def fmtfloat(f):
+            return "%.2f" % (f,)
+        def filterstats(data, field):
+            return tuple([d[field] for d in data])
+
+        if with_without_times == []: return
+
+        writeline("")
+        rowformat = "%12s %12s %12s %12s"
+        writeline('Startup times [s]:')
+        writeline(rowformat % ('launcher-No', 'launcher-No', 'launcher-Yes', 'launcher-Yes'))
+        writeline(rowformat % ('duihome-Yes', 'duihome-No', 'duihome-Yes', 'duihome-No'))
+        
+        t1,t2,t3,t4 = [], [], [], []
+        for tnlwd,tnlnd,twlwd,twlnd in with_without_times:
+            t1.append(tnlwd)
+            t2.append(tnlnd)
+            t3.append(twlwd)
+            t4.append(twlnd)
+            writeline(rowformat % (fmtfloat(tnlwd),fmtfloat(tnlnd),
+                                   fmtfloat(twlwd),fmtfloat(twlnd)))
+
+        writeline('Average times:')
+        writeline(rowformat % (fmtfloat(sum(t1)/len(t1)),fmtfloat(sum(t2)/len(t2)),
+                               fmtfloat(sum(t3)/len(t3)),fmtfloat(sum(t4)/len(t4))))
+        return fmtfloat(sum(t3)/len(t3))
+
+    def test_001(self):
+        """Performance test to measure the startup time for application
+        launched using launcher and comparing the results with application launched
+        without launcher"""
+
+        times = []
+        for i in xrange(3):
+            times.append(self.perftest_with_and_without_launcher(TESTAPP))
+        avg_with_launcher = self.print_test_report(times, sys.stdout)
+        self.assert_(float(avg_with_launcher) < float(0.75), "application launched with launcher takes more than 0.75 sec")
+
 
 # main
 if __name__ == '__main__':
-    run_perf_test(TESTAPP)
+    check_prerequisites()
+    tests = sys.argv[1:]
+    mysuite = unittest.TestSuite(map(launcher_perf_tests, tests))
+    result = unittest.TextTestRunner(verbosity=2).run(mysuite)
+    if not result.wasSuccessful():
+        sys.exit(1)
+    sys.exit(0)
