@@ -63,8 +63,7 @@ int Connection::findSocket(const string socketId)
 
 void Connection::initSocket(const string socketId)
 {
-    PoolType::iterator it;
-    it = socketPool.find(socketId);
+    PoolType::iterator it(socketPool.find(socketId));
     if (it == socketPool.end())
     {
         Logger::logInfo("%s: init socket '%s'", __FUNCTION__, socketId.c_str());
@@ -77,7 +76,7 @@ void Connection::initSocket(const string socketId)
 
         struct sockaddr sun;
         sun.sa_family = AF_UNIX;
-        strcpy(sun.sa_data, socketId.c_str());
+        strncpy(sun.sa_data, socketId.c_str(), sizeof(sun.sa_data));
 
         if (bind(sockfd, &sun, sizeof(sun)) < 0)
             Logger::logErrorAndDie(EXIT_FAILURE, "binding to invoker socket\n");
