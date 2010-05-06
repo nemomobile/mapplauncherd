@@ -1,6 +1,9 @@
-applauncherd (0.3.0~1) unstable; urgency=low
+applauncherd (0.3.0-1) stable; urgency=low
 
   * Added the feature and requirements fields inside tests.xml files
+  * Updated functional and unit tests according the MBooster change
+  * Code refactoring 
+  * Implemented: SWP#DUI-2964
 
  -- Olli Leppanen <olli.leppanen@nokia.com>  Tue, 05 May 2010 12:16:40 +0300
 
