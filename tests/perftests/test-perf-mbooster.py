@@ -102,7 +102,7 @@ class launcher_perf_tests (unittest.TestCase):
                              shell=False,
                              stdout=DEV_NULL, stderr=DEV_NULL)
         debug("app", TESTAPP, "started without launcher")                                   
-        time.sleep(2)
+        time.sleep(5)
         self.read_log()
         app_time = self.app_start_time()
         self.kill_process(appname)
@@ -118,7 +118,7 @@ class launcher_perf_tests (unittest.TestCase):
                              shell=False,
                              stdout=DEV_NULL, stderr=DEV_NULL)
         debug("app", TESTAPP, "started without launcher")                                   
-        time.sleep(2)
+        time.sleep(5)
         os.system('pkill -CONT duihome')
         self.read_log()
         app_time = self.app_start_time()
@@ -133,7 +133,7 @@ class launcher_perf_tests (unittest.TestCase):
         self.start_timer()
         os.system('invoker --type=m %s' %TESTAPP)
         debug("app", TESTAPP, "started with launcher")                                   
-        time.sleep(2)
+        time.sleep(5)
         self.read_log()
         app_time = self.app_start_time()
         self.kill_process(appname)
@@ -147,7 +147,7 @@ class launcher_perf_tests (unittest.TestCase):
         self.start_timer()
         os.system('invoker --type=m %s' %TESTAPP)
         debug("app", TESTAPP, "started with launcher")                                   
-        time.sleep(2)
+        time.sleep(5)
         os.system('pkill -CONT duihome')
         self.read_log()
         app_time = self.app_start_time()
@@ -177,19 +177,19 @@ class launcher_perf_tests (unittest.TestCase):
         """Runs all the 4 scenarios with and without launcher"""
         debug("run app without launcher with duihome")
         tnlwd = self.run_without_launcher(appname)
-        time.sleep(2)
+        time.sleep(5)
 
         debug("run app without launcher without duihome")
         tnlnd = self.run_without_launcher_without_duihome(appname)
-        time.sleep(2)
+        time.sleep(5)
 
         debug("run app with launcher with duihome")
         twlwd = self.run_with_launcher(appname)
-        time.sleep(2)
+        time.sleep(5)
 
         debug("run app without launcher without duihome")
         twlnd = self.run_with_launcher_without_duihome(appname)
-        time.sleep(2)
+        time.sleep(5)
 
         return tnlwd, tnlnd, twlwd, twlnd
 
