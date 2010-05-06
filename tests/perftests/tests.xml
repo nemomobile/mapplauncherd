@@ -18,6 +18,7 @@
 
       <get>
           <file>/tmp/launcher_perf.txt</file>
+	  <file>/tmp/testapp.log</file>
       </get>
     </set>
 
