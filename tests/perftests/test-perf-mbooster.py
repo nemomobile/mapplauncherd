@@ -113,7 +113,7 @@ class launcher_perf_tests (unittest.TestCase):
         if os.path.exists(LOG_FILE) and os.path.isfile(LOG_FILE):               
             os.system('rm %s' %LOG_FILE)                                                        
         os.system('pkill -STOP duihome')
-        self.start_timer()
+q        self.start_timer()
         p = subprocess.Popen(TESTAPP,
                              shell=False,
                              stdout=DEV_NULL, stderr=DEV_NULL)
@@ -171,7 +171,7 @@ class launcher_perf_tests (unittest.TestCase):
 
     def kill_process(self, appname):
         """Kills the testapp"""
-        commands.getoutput("pkill %s" % (basename(appname)[:15],))
+        commands.getoutput("pkill %s" % (basename(appname)[:9],))
 
     def perftest_with_and_without_launcher(self, appname):
         """Runs all the 4 scenarios with and without launcher"""
