@@ -191,7 +191,7 @@ class launcher_tests (unittest.TestCase):
             #check if p.pid is same as pidof appname
             #in a global dictionary, append the pid
             process_handle = self.run_app_with_launcher(app)
-            time.sleep(2)
+            time.sleep(5)
             process_id = self.get_pid(app)
             self.assert_(not (process_id == None), "process id is None")
             self.globalpidlist.append(process_id)
