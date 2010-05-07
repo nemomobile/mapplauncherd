@@ -233,7 +233,7 @@ class launcher_perf_tests (unittest.TestCase):
         writeline('Average times:')
         writeline(rowformat % (fmtfloat(sum(t1)/len(t1)),fmtfloat(sum(t2)/len(t2)),
                                fmtfloat(sum(t3)/len(t3)),fmtfloat(sum(t4)/len(t4))))
-        return fmtfloat(sum(t3)/len(t3))
+        return fmtfloat(sum(t1)/len(t1))
 
     def test_001(self):
         """Performance test to measure the startup time for application
