@@ -173,7 +173,20 @@ class launcher_perf_tests (unittest.TestCase):
         """Kills the testapp"""
         commands.getoutput("pkill -9 %s" % (basename(appname)[:15],))
 
-    def perftest_with_and_without_launcher(self, appname):
+
+    def perftest_with_launcher(self, appname):
+        debug("run app without launcher without duihome")
+        twlnd = self.run_with_launcher_without_duihome(appname)
+        time.sleep(5)
+
+        debug("run app with launcher with duihome")
+        twlwd = self.run_with_launcher(appname)
+        time.sleep(5)
+
+        return twlwd, twlnd
+
+
+    def perftest_without_launcher(self, appname):
         """Runs all the 4 scenarios with and without launcher"""
         debug("run app without launcher with duihome")
         tnlwd = self.run_without_launcher(appname)
@@ -183,15 +196,8 @@ class launcher_perf_tests (unittest.TestCase):
         tnlnd = self.run_without_launcher_without_duihome(appname)
         time.sleep(5)
 
-        debug("run app with launcher with duihome")
-        twlwd = self.run_with_launcher(appname)
-        time.sleep(5)
+        return tnlwd, tnlnd
 
-        debug("run app without launcher without duihome")
-        twlnd = self.run_with_launcher_without_duihome(appname)
-        time.sleep(5)
-
-        return tnlwd, tnlnd, twlwd, twlnd
 
     def print_test_report(self, with_without_times, fileobj):
         """
@@ -211,9 +217,10 @@ class launcher_perf_tests (unittest.TestCase):
         writeline("")
         rowformat = "%12s %12s %12s %12s"
         writeline('Startup times [s]:')
-        writeline(rowformat % ('launcher-No', 'launcher-No', 'launcher-Yes', 'launcher-Yes'))
+
+        writeline(rowformat % ('launcher-Yes', 'launcher-Yes', 'launcher-No', 'launcher-No'))
         writeline(rowformat % ('duihome-Yes', 'duihome-No', 'duihome-Yes', 'duihome-No'))
-        
+
         t1,t2,t3,t4 = [], [], [], []
         for tnlwd,tnlnd,twlwd,twlnd in with_without_times:
             t1.append(tnlwd)
@@ -234,8 +241,16 @@ class launcher_perf_tests (unittest.TestCase):
         without launcher"""
 
         times = []
+
+        times1, times2 = [], []
+
         for i in xrange(3):
-            times.append(self.perftest_with_and_without_launcher(TESTAPP))
+            times1.append(self.perftest_with_launcher(TESTAPP))
+
+        for i in xrange(3):
+            times2.append(self.perftest_without_launcher(TESTAPP))
+
+        times = [[t1[0], t1[1], times2[i][0], times2[i][1]] for i, t1 in enumerate(times1)]
         avg_with_launcher = self.print_test_report(times, sys.stdout)
         self.assert_(float(avg_with_launcher) < float(0.75), "application launched with launcher takes more than 0.75 sec")
 
