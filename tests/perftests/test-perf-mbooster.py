@@ -171,7 +171,7 @@ class launcher_perf_tests (unittest.TestCase):
 
     def kill_process(self, appname):
         """Kills the testapp"""
-        commands.getoutput("pkill %s" % (basename(appname)[:9],))
+        commands.getoutput("pkill -9 %s" % (basename(appname)[:15],))
 
     def perftest_with_and_without_launcher(self, appname):
         """Runs all the 4 scenarios with and without launcher"""
