@@ -113,7 +113,7 @@ class launcher_perf_tests (unittest.TestCase):
         if os.path.exists(LOG_FILE) and os.path.isfile(LOG_FILE):               
             os.system('rm %s' %LOG_FILE)                                                        
         os.system('pkill -STOP duihome')
-q        self.start_timer()
+        self.start_timer()
         p = subprocess.Popen(TESTAPP,
                              shell=False,
                              stdout=DEV_NULL, stderr=DEV_NULL)
