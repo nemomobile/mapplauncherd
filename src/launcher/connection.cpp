@@ -123,8 +123,15 @@ bool Connection::sendMsg(uint32_t msg)
 
 bool Connection::recvMsg(uint32_t *msg)
 {
-    ssize_t ret = read(m_fd, msg, sizeof(*msg));
-    Logger::logInfo("%s: %08x", __FUNCTION__, *msg);
+    uint32_t buf;
+    ssize_t ret = read(m_fd, &buf, sizeof(buf));
+    if (ret == -1) {
+        Logger::logError("can't read data from connecton in %s", __FUNCTION__);
+        *msg = 0;
+    } else {
+        Logger::logInfo("%s: %08x", __FUNCTION__, *msg);
+        *msg = buf;
+    }
     return ret != -1;
 }
 
