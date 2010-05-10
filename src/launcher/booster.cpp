@@ -120,8 +120,8 @@ void Booster::renameProcess(int parentArgc, char** parentArgv)
         {
             if (spaceAvailable > static_cast<int>(strlen(m_app.argv()[i])) + 1)
             {
-                strcat(parentArgv[0], " ");
-                strcat(parentArgv[0], m_app.argv()[i]);
+                strncat(parentArgv[0], " ", 1);
+                strncat(parentArgv[0], m_app.argv()[i], spaceAvailable);
                 spaceAvailable -= strlen(m_app.argv()[i] + 1);
             }
             else
@@ -147,7 +147,7 @@ void Booster::launchProcess()
       setpriority(PRIO_PROCESS, 0, m_app.priority());
 
     // Load the application and find out the address of main()
-    loadMain();
+    void* handle = loadMain();
 
     for (unsigned int i = 0; i < m_app.ioDescriptors().size(); i++)
       if (m_app.ioDescriptors()[i] > 0)
@@ -158,10 +158,11 @@ void Booster::launchProcess()
     // Jump to main()
     const int retVal = m_app.entry()(m_app.argc(), m_app.argv());
     m_app.deleteArgv();
+    dlclose(handle);
     exit(retVal);
 }
 
-void Booster::loadMain()
+void* Booster::loadMain()
 {
     // Load the application as a library
     void * module = dlopen(m_app.fileName().c_str(), RTLD_LAZY | RTLD_GLOBAL);
@@ -176,4 +177,6 @@ void Booster::loadMain()
     const char * error_s = dlerror();
     if (error_s != NULL)
         Logger::logErrorAndDie(EXIT_FAILURE, "loading symbol 'main': '%s'\n", error_s);
+
+    return module;
 }

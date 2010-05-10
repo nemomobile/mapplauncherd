@@ -76,7 +76,9 @@ void Connection::initSocket(const string socketId)
 
         struct sockaddr sun;
         sun.sa_family = AF_UNIX;
-        strncpy(sun.sa_data, socketId.c_str(), sizeof(sun.sa_data));
+        int maxLen = sizeof(sun.sa_data) - 1;
+        strncpy(sun.sa_data, socketId.c_str(), maxLen);
+        sun.sa_data[maxLen] = '\0';
 
         if (bind(sockfd, &sun, sizeof(sun)) < 0)
             Logger::logErrorAndDie(EXIT_FAILURE, "binding to invoker socket\n");
@@ -141,7 +143,7 @@ bool Connection::sendStr(char *str)
 char* Connection::recvStr()
 {
     // Get the size.
-    uint32_t size;
+    uint32_t size = 0;
     recvMsg(&size);
 
     char *str = (char*)malloc(size);
@@ -235,8 +237,7 @@ bool Connection::receivePriority()
 
 bool Connection::receiveArgs()
 {
-    uint i;
-    size_t size;
+    size_t size = 0;
 
     // Get argc
     recvMsg(&m_argc);
@@ -255,7 +256,7 @@ bool Connection::receiveArgs()
     }
 
     // Get argv
-    for (i = 0; i < m_argc; i++)
+    for (uint i = 0; i < m_argc; i++)
     {
         m_argv[i] = recvStr();
         if (!m_argv[i])
@@ -271,16 +272,15 @@ bool Connection::receiveArgs()
 
 bool Connection::receiveEnv()
 {
-    uint i;
-    uint32_t n_vars;
-
     // Get number of environment variables.
+    uint32_t n_vars = 0;
     recvMsg(&n_vars);
 
     // Get environment variables
-    for (i = 0; i < n_vars; i++)
+    for (uint i = 0; i < n_vars; i++)
     {
-        char * var = recvStr();
+        char* var = NULL;
+        var = recvStr();
         if (var == NULL)
         {
             Logger::logError("receiving environ[%i]", i);
@@ -302,20 +302,20 @@ bool Connection::receiveEnv()
 
 bool Connection::receiveIO()
 {
-    struct msghdr msg;
-    struct cmsghdr *cmsg;
-    char   buf[CMSG_SPACE(sizeof(m_io))];
-    struct iovec iov;
     int    dummy;
+    struct iovec iov;
+    iov.iov_base = &dummy;
+    iov.iov_len = 1;
 
-    iov.iov_base       = &dummy;
-    iov.iov_len        = 1;
-
+    char   buf[CMSG_SPACE(sizeof(m_io))];
+    struct msghdr msg;
+    memset(&msg, 0, sizeof(msg));
     msg.msg_iov        = &iov;
     msg.msg_iovlen     = 1;
     msg.msg_control    = buf;
     msg.msg_controllen = sizeof(buf);
 
+    struct cmsghdr *cmsg;
     cmsg               = CMSG_FIRSTHDR(&msg);
     cmsg->cmsg_len     = CMSG_LEN(sizeof(m_io));
     cmsg->cmsg_level   = SOL_SOCKET;

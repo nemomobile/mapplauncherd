@@ -120,9 +120,9 @@ private:
     Booster & operator= (const Booster & r);
 
 
-    void complainAndExit();
-    void launchProcess();
-    void loadMain();
+    void  complainAndExit();
+    void  launchProcess();
+    void* loadMain();
     AppData m_app;
 
     int  m_argvArraySize;
