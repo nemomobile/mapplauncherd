@@ -121,8 +121,9 @@ bool Connection::sendMsg(uint32_t msg)
 bool Connection::recvMsg(uint32_t *msg)
 {
     uint32_t buf = 0;
-    ssize_t  ret = read(m_fd, &buf, sizeof(buf));
-    if (ret == -1) {
+    int len = sizeof(buf);
+    ssize_t  ret = read(m_fd, &buf, len);
+    if (ret < len) {
         Logger::logError("can't read data from connecton in %s", __FUNCTION__);
         *msg = 0;
     } else {
