@@ -56,8 +56,7 @@ Connection::~Connection()
 
 int Connection::findSocket(const string socketId)
 {
-    PoolType::iterator it;
-    it = socketPool.find(socketId);
+    PoolType::iterator it(socketPool.find(socketId));
     return it == socketPool.end() ? -1 : it->second;
 }
 
@@ -93,8 +92,6 @@ void Connection::initSocket(const string socketId)
 bool Connection::acceptConn()
 {
     m_fd = accept(m_curSocket, NULL, NULL);
-
-    // Minimal error handling.
     if (m_fd < 0)
     {
         if (errno != EINTR)
@@ -279,8 +276,7 @@ bool Connection::receiveEnv()
     // Get environment variables
     for (uint i = 0; i < n_vars; i++)
     {
-        char* var = NULL;
-        var = recvStr();
+        char * var = recvStr();
         if (var == NULL)
         {
             Logger::logError("receiving environ[%i]", i);
