@@ -1,5 +1,4 @@
 #include "appdata.h"
-#include <malloc.h>
 
 AppData::AppData() :
     m_options(0),

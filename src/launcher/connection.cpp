@@ -148,9 +148,9 @@ char* Connection::recvStr()
 {
     // Get the size.
     uint32_t size = 0;
+    
     recvMsg(&size);
-
-    char *str = (char*)malloc(size);
+    char * str = new char[size];
     if (!str)
     {
         Logger::logError("mallocing in %s", __FUNCTION__);
@@ -162,7 +162,7 @@ char* Connection::recvStr()
     if (ret < size)
     {
         Logger::logError("getting string, got %u of %u bytes", ret, size);
-        free(str);
+		delete [] str;
         return NULL;
     }
     str[size - 1] = '\0';
@@ -211,9 +211,8 @@ string Connection::receiveAppName()
     }
     sendMsg(INVOKER_MSG_ACK);
 
-    string appName(name);
-    free(name);
-
+	string appName(name);
+    delete [] name;
     return appName;
 }
 
@@ -226,8 +225,7 @@ bool Connection::receiveExec()
     sendMsg(INVOKER_MSG_ACK);
 
     m_fileName = filename;
-    free(filename);
-
+    delete [] filename;
     return true;
 }
 
@@ -243,6 +241,11 @@ bool Connection::receiveArgs()
 {
     // Get argc
     recvMsg(&m_argc);
+	if (m_argc < 0)
+	{
+        Logger::logError("argc < 0: malicious invoker?");
+		return false;	
+	}
 
 	// Reserve memory for argv
 	m_argv = new char * [m_argc];
@@ -262,6 +265,7 @@ bool Connection::receiveArgs()
             return false;
         }
     }
+    
     sendMsg(INVOKER_MSG_ACK);
 
     return true;
@@ -314,10 +318,10 @@ bool Connection::receiveIO()
     msg.msg_controllen = sizeof(buf);
 
     struct cmsghdr *cmsg;
-    cmsg               = CMSG_FIRSTHDR(&msg);
-    cmsg->cmsg_len     = CMSG_LEN(sizeof(m_io));
-    cmsg->cmsg_level   = SOL_SOCKET;
-    cmsg->cmsg_type    = SCM_RIGHTS;
+    cmsg             = CMSG_FIRSTHDR(&msg);
+    cmsg->cmsg_len   = CMSG_LEN(sizeof(m_io));
+    cmsg->cmsg_level = SOL_SOCKET;
+    cmsg->cmsg_type  = SCM_RIGHTS;
 
     memcpy(CMSG_DATA(cmsg), m_io, sizeof(m_io));
 
