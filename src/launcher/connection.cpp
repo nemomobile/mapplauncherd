@@ -251,7 +251,7 @@ bool Connection::receiveArgs()
 	m_argv = new char * [m_argc];
     if (!m_argv)
     {
-        Logger::logError("mallocing argv\n");
+        Logger::logError("reserving memory for argv");
         return false;
     }
 
@@ -261,7 +261,7 @@ bool Connection::receiveArgs()
         m_argv[i] = recvStr();
         if (!m_argv[i])
         {
-            Logger::logError("receiving argv[%i]\n", i);
+            Logger::logError("receiving argv[%i]", i);
             return false;
         }
     }
