@@ -98,9 +98,11 @@ void AppData::deleteArgv()
     {
         for (int i = 0; i < m_argc; i++)
         {
-            free(m_argv[i]);
+            delete m_argv[i];
+            m_argv[i] = NULL;
         }
 
+		delete [] m_argv;
         m_argv = NULL;
     }
 }

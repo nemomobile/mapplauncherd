@@ -244,18 +244,11 @@ bool Connection::receivePriority()
 
 bool Connection::receiveArgs()
 {
-    size_t size = 0;
-
     // Get argc
     recvMsg(&m_argc);
-    size = m_argc * sizeof(char *);
-    if (size < m_argc)
-    {
-        Logger::logError("on buggy or malicious invoker code, heap overflow avoided\n");
-        return false;
-    }
 
-    m_argv = static_cast<char**>(malloc(size));
+	// Reserve memory for argv
+	m_argv = new char * [m_argc];
     if (!m_argv)
     {
         Logger::logError("mallocing argv\n");
