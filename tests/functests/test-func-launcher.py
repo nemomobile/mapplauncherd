@@ -116,7 +116,7 @@ class launcher_tests (unittest.TestCase):
     
     def get_pid(self, appname):
         temp = basename(appname)[:14]
-        st, op = commands.getstatusoutput("pidof %s" % temp)
+        st, op = commands.getstatusoutput("pgrep %s" % temp)
         if st == 0:
             return op
         else:
