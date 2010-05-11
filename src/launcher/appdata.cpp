@@ -101,7 +101,7 @@ void AppData::deleteArgv()
             m_argv[i] = NULL;
         }
 
-		delete [] m_argv;
+        delete [] m_argv;
         m_argv = NULL;
     }
 }

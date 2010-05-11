@@ -32,12 +32,12 @@
 PoolType Connection::socketPool;
 
 Connection::Connection(const string socketId) :
-    m_fd(-1),
-    m_curSocket(findSocket(socketId)),
-    m_fileName(""),
-    m_argc(0),
-    m_argv(NULL),
-    m_priority(0)
+        m_fd(-1),
+        m_curSocket(findSocket(socketId)),
+        m_fileName(""),
+        m_argc(0),
+        m_argv(NULL),
+        m_priority(0)
 {
     m_io[0] = -1;
     m_io[1] = -1;
@@ -162,7 +162,7 @@ char* Connection::recvStr()
     if (ret < size)
     {
         Logger::logError("getting string, got %u of %u bytes", ret, size);
-		delete [] str;
+        delete [] str;
         return NULL;
     }
     str[size - 1] = '\0';
@@ -211,7 +211,7 @@ string Connection::receiveAppName()
     }
     sendMsg(INVOKER_MSG_ACK);
 
-	string appName(name);
+    string appName(name);
     delete [] name;
     return appName;
 }
@@ -241,14 +241,9 @@ bool Connection::receiveArgs()
 {
     // Get argc
     recvMsg(&m_argc);
-	if (m_argc < 0)
-	{
-        Logger::logError("argc < 0: malicious invoker?");
-		return false;	
-	}
 
-	// Reserve memory for argv
-	m_argv = new char * [m_argc];
+    // Reserve memory for argv
+    m_argv = new char * [m_argc];
     if (!m_argv)
     {
         Logger::logError("reserving memory for argv");
