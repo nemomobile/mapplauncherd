@@ -123,8 +123,8 @@ bool Connection::sendMsg(uint32_t msg)
 
 bool Connection::recvMsg(uint32_t *msg)
 {
-    uint32_t buf;
-    ssize_t ret = read(m_fd, &buf, sizeof(buf));
+    uint32_t buf = 0;
+    ssize_t  ret = read(m_fd, &buf, sizeof(buf));
     if (ret == -1) {
         Logger::logError("can't read data from connecton in %s", __FUNCTION__);
         *msg = 0;
@@ -176,7 +176,7 @@ char* Connection::recvStr()
 
 int Connection::receiveMagic()
 {
-    uint32_t magic;
+    uint32_t magic = 0;
 
     // Receive the magic.
     recvMsg(&magic);
@@ -196,7 +196,7 @@ int Connection::receiveMagic()
 
 string Connection::receiveAppName()
 {
-    uint32_t msg;
+    uint32_t msg = 0;
 
     // Get the action.
     recvMsg(&msg);
@@ -309,12 +309,14 @@ bool Connection::receiveEnv()
 
 bool Connection::receiveIO()
 {
-    int    dummy;
+    int dummy = 0;
+
     struct iovec iov;
     iov.iov_base = &dummy;
     iov.iov_len = 1;
 
-    char   buf[CMSG_SPACE(sizeof(m_io))];
+    char buf[CMSG_SPACE(sizeof(m_io))];
+    
     struct msghdr msg;
     memset(&msg, 0, sizeof(msg));
     msg.msg_iov        = &iov;
@@ -361,7 +363,7 @@ bool Connection::receiveActions()
 
     while (1)
     {
-        uint32_t action;
+        uint32_t action = 0;
 
         // Get the action.
         recvMsg(&action);
