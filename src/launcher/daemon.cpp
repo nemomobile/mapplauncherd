@@ -102,6 +102,10 @@ Daemon::~Daemon()
 
 void Daemon::run()
 {
+    // Make sure that LD_BIND_NOW does not prevent dynamic linker to
+    // use lazy binding in later dlopen() calls.
+    unsetenv("LD_BIND_NOW");
+
     // create sockets for each of the boosters
     Connection::initSocket(MBooster::socketName());
     Connection::initSocket(QtBooster::socketName());
