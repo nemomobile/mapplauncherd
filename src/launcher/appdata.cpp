@@ -31,12 +31,12 @@ int AppData::argc() const
     return m_argc;
 }
 
-void AppData::setArgv(char ** newArgv)
+void AppData::setArgv(const char ** newArgv)
 {
     m_argv = newArgv;
 }
 
-char ** AppData::argv() const
+const char ** AppData::argv() const
 {
     return m_argv;
 }

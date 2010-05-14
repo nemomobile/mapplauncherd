@@ -156,7 +156,7 @@ void Booster::launchProcess()
     Logger::logNotice("launching process: '%s' ", m_app.fileName().c_str());
 
     // Jump to main()
-    const int retVal = m_app.entry()(m_app.argc(), m_app.argv());
+    const int retVal = m_app.entry()(m_app.argc(), const_cast<char **>(m_app.argv()));
     m_app.deleteArgv();
     dlclose(handle);
     exit(retVal);

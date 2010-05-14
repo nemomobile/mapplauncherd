@@ -98,11 +98,11 @@ void Ut_Booster::testRenameBoosterProcess()
     const int ARGS = 3;
     m_subject->m_app.setArgc(ARGS);
 
-    char ** argv = new char * [ARGS]; 
+    char ** argv = new char * [ARGS];
     argv[0] = strdup("newName");
     argv[1] = strdup("--foo");
     argv[2] = strdup("--bar");
-    m_subject->m_app.setArgv(argv);
+    m_subject->m_app.setArgv(const_cast<const char **>(argv));
     m_subject->m_app.setAppName("newName");
     m_subject->renameProcess(INIT_ARGS, const_cast<char **>(initialArgv));
 
@@ -125,7 +125,7 @@ void Ut_Booster::testRenameProcess()
     argv[0] = strdup("newName");
     argv[1] = strdup("--foo");
     argv[2] = strdup("--bar");
-    m_subject->m_app.setArgv(argv);
+    m_subject->m_app.setArgv(const_cast<const char **>(argv));
     m_subject->m_app.setAppName(m_subject->m_app.argv()[0]);
 
     // 20 chars dummy buffer used to fool ps to show correct process name with args
@@ -150,7 +150,7 @@ void Ut_Booster::testRenameProcessNotEnoughSpace()
     argv[0] = strdup("newNameLong");
     argv[1] = strdup("--foo");
     argv[2] = strdup("--bar");
-    m_subject->m_app.setArgv(argv);
+    m_subject->m_app.setArgv(const_cast<const char **>(argv));
     m_subject->m_app.setAppName(m_subject->m_app.argv()[0]);
 
     const int INIT_ARGS = 2;
@@ -176,7 +176,7 @@ void Ut_Booster::testRenameProcessNotEnoughSpace2()
     argv[0] = strdup("newName");
     argv[1] = strdup("--foo");
     argv[2] = strdup("--bar");
-    m_subject->m_app.setArgv(argv);
+    m_subject->m_app.setArgv(const_cast<const char **>(argv));
     m_subject->m_app.setAppName(m_subject->m_app.argv()[0]);
 
     const int INIT_ARGS = 2;
@@ -201,7 +201,7 @@ void Ut_Booster::testRenameProcessNotEnoughSpace3()
     argv[0] = strdup("newName");
     argv[1] = strdup("--foo");
     argv[2] = strdup("--bar");
-    m_subject->m_app.setArgv(argv);
+    m_subject->m_app.setArgv(const_cast<const char **>(argv));
     m_subject->m_app.setAppName(m_subject->m_app.argv()[0]);
 
     const int INIT_ARGS = 2;
@@ -227,7 +227,7 @@ void Ut_Booster::testRenameProcessNotEnoughSpace4()
     argv[0] = strdup("newNameLongLong");
     argv[1] = strdup("--foo");
     argv[2] = strdup("--bar");
-    m_subject->m_app.setArgv(argv);
+    m_subject->m_app.setArgv(const_cast<const char **>(argv));
     m_subject->m_app.setAppName(m_subject->m_app.argv()[0]);
 
     const int INIT_ARGS = 2;
@@ -250,7 +250,7 @@ void Ut_Booster::testRenameProcessNoArgs()
     char ** argv = new char * [ARGS]; 
     argv[0] = strdup("newName");
     argv[1] = strdup("--foo");
-    m_subject->m_app.setArgv(argv);
+    m_subject->m_app.setArgv(const_cast<const char **>(argv));
     m_subject->m_app.setAppName(m_subject->m_app.argv()[0]);
 
     const int INIT_ARGS = 1;

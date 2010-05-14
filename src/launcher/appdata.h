@@ -58,10 +58,10 @@ public:
     int argc() const;
 
     //! Set address of the argument vector
-    void setArgv(char ** argv);
+    void setArgv(const char ** argv);
 
     //! Return address of the argument vector
-    char ** argv() const;
+    const char ** argv() const;
 
     //! Set application name
     void setAppName(const string & appName);
@@ -103,7 +103,7 @@ private:
 
     int         m_options;
     int         m_argc;
-    char **     m_argv;
+    const char ** m_argv;
     string      m_appName;
     string      m_fileName;
     int         m_prio;

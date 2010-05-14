@@ -125,15 +125,21 @@ void Daemon::run()
     {
         // Wait for something appearing in the pipe
         char msg;
-        read(pipefd[0], reinterpret_cast<void *>(&msg), 1);
+        ssize_t count = read(pipefd[0], reinterpret_cast<void *>(&msg), 1);
+        if (count)
+        {
+            // Guarantee some time for the just launched application to
+            // start up before forking new booster. Not doing this would
+            // slow down the start-up significantly on single core CPUs.
+            sleep(2);
 
-        // Guarantee some time for the just launched application to
-        // start up before forking new booster. Not doing this would
-        // slow down the start-up significantly on single core CPUs.
-        sleep(2);
-
-        // Fork a new booster of the given type
-        forkBooster(msg, pipefd);
+            // Fork a new booster of the given type
+            forkBooster(msg, pipefd);
+        }
+        else
+        {
+            Logger::logWarning("Nothing read from the pipe\n");
+        }
     }
 }
 
@@ -164,7 +170,7 @@ bool Daemon::forkBooster(char type, int pipefd[2])
         Logger::logNotice("Running a new Booster of %c type...", type);
 
         // Create a new booster and initialize it
-        Booster* booster;
+        Booster * booster = NULL;
         if (MBooster::type() == type)
         {
             booster = new MBooster();

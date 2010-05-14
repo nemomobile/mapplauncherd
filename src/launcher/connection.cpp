@@ -145,7 +145,7 @@ bool Connection::sendStr(char *str)
     return write(m_fd, str, size) != -1;
 }
 
-char* Connection::recvStr()
+const char * Connection::recvStr()
 {
     // Get the size.
     uint32_t size = 0;
@@ -204,7 +204,7 @@ string Connection::receiveAppName()
         return string();
     }
 
-    char* name = recvStr();
+    const char* name = recvStr();
     if (!name)
     {
         Logger::logError("receiving application name");
@@ -219,7 +219,7 @@ string Connection::receiveAppName()
 
 bool Connection::receiveExec()
 {
-    char* filename = recvStr();
+    const char* filename = recvStr();
     if (!filename)
         return false;
 
@@ -244,7 +244,7 @@ bool Connection::receiveArgs()
     recvMsg(&m_argc);
 
     // Reserve memory for argv
-    m_argv = new char * [m_argc];
+    m_argv = new const char * [m_argc];
     if (!m_argv)
     {
         Logger::logError("reserving memory for argv");
@@ -267,6 +267,12 @@ bool Connection::receiveArgs()
     return true;
 }
 
+// coverity[ +tainted_string_sanitize_content : arg-0 ]
+bool putenv_sanitize(const char * s)
+{
+    return static_cast<bool>(strchr(s, '='));
+}
+
 bool Connection::receiveEnv()
 {
     // Get number of environment variables.
@@ -276,21 +282,28 @@ bool Connection::receiveEnv()
     // Get environment variables
     for (uint i = 0; i < n_vars; i++)
     {
-        char * var = recvStr();
+        const char * var = recvStr();
         if (var == NULL)
         {
             Logger::logError("receiving environ[%i]", i);
             return false;
         }
 
-        //Logger::logNotice("setting environment variable '%s'", var);
-
         // In case of error, just warn and try to continue, as the other side is
         // going to keep sending the reset of the message.
         // String pointed to by var shall become part of the environment, so altering
         // the string shall change the environment, don't free it
-        if (putenv(var) != 0)
-            Logger::logWarning("allocating environment variable");
+        if (putenv_sanitize(var))
+        {
+            if (putenv(const_cast<char *>(var)) != 0)
+            {
+                Logger::logWarning("allocating environment variable");
+            }
+        }
+        else
+        {
+            Logger::logWarning("invalid environment data");
+        }
     }
 
     return true;

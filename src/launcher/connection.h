@@ -132,7 +132,7 @@ private:
     //! Send a string. This is a virtual to help unit testing.
     virtual bool sendStr(char *str);
     //! Receive a string. This is a virtual to help unit testing.
-    virtual char * recvStr();
+    virtual const char * recvStr();
 
     //! Pool of sockets mapped to id's
     static PoolType socketPool;
@@ -142,7 +142,7 @@ private:
     int      m_curSocket;
     string   m_fileName;
     uint32_t m_argc;
-    char **  m_argv;
+    const char **  m_argv;
     int      m_io[3];
     uint32_t m_priority;
 
