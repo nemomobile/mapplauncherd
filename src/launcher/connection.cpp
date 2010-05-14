@@ -28,6 +28,7 @@
 #include <cstring>
 #include <cstdlib>
 #include <cerrno>
+#include <unistd.h>
 
 PoolType Connection::socketPool;
 
@@ -242,7 +243,7 @@ bool Connection::receiveArgs()
 {
     // Get argc
     recvMsg(&m_argc);
-    if (m_argc > 0)
+    if (m_argc > 0 && m_argc < static_cast<uint32_t>(sysconf(_SC_ARG_MAX)))
     {
         // Reserve memory for argv
         m_argv = new const char * [m_argc];
