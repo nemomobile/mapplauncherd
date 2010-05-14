@@ -242,28 +242,29 @@ bool Connection::receiveArgs()
 {
     // Get argc
     recvMsg(&m_argc);
-
-    // Reserve memory for argv
-    m_argv = new const char * [m_argc];
-    if (!m_argv)
+    if (m_argc > 0)
     {
-        Logger::logError("reserving memory for argv");
-        return false;
-    }
-
-    // Get argv
-    for (uint i = 0; i < m_argc; i++)
-    {
-        m_argv[i] = recvStr();
-        if (!m_argv[i])
+        // Reserve memory for argv
+        m_argv = new const char * [m_argc];
+        if (!m_argv)
         {
-            Logger::logError("receiving argv[%i]", i);
+            Logger::logError("reserving memory for argv");
             return false;
+        }
+
+        // Get argv
+        for (uint i = 0; i < m_argc; i++)
+        {
+            m_argv[i] = recvStr();
+            if (!m_argv[i])
+            {
+                Logger::logError("receiving argv[%i]", i);
+                return false;
+            }
         }
     }
     
     sendMsg(INVOKER_MSG_ACK);
-
     return true;
 }
 
