@@ -279,31 +279,33 @@ bool Connection::receiveEnv()
     // Get number of environment variables.
     uint32_t n_vars = 0;
     recvMsg(&n_vars);
-
-    // Get environment variables
-    for (uint i = 0; i < n_vars; i++)
+    if (n_vars > 0)
     {
-        const char * var = recvStr();
-        if (var == NULL)
+        // Get environment variables
+        for (uint32_t i = 0; i < n_vars; i++)
         {
-            Logger::logError("receiving environ[%i]", i);
-            return false;
-        }
-
-        // In case of error, just warn and try to continue, as the other side is
-        // going to keep sending the reset of the message.
-        // String pointed to by var shall become part of the environment, so altering
-        // the string shall change the environment, don't free it
-        if (putenv_sanitize(var))
-        {
-            if (putenv(const_cast<char *>(var)) != 0)
+            const char * var = recvStr();
+            if (var == NULL)
             {
-                Logger::logWarning("allocating environment variable");
+                Logger::logError("receiving environ[%i]", i);
+                return false;
             }
-        }
-        else
-        {
-            Logger::logWarning("invalid environment data");
+
+            // In case of error, just warn and try to continue, as the other side is
+            // going to keep sending the reset of the message.
+            // String pointed to by var shall become part of the environment, so altering
+            // the string shall change the environment, don't free it
+            if (putenv_sanitize(var))
+            {
+                if (putenv(const_cast<char *>(var)) != 0)
+                {
+                    Logger::logWarning("allocating environment variable");
+                }
+            }
+            else
+            {
+                Logger::logWarning("invalid environment data");
+            }
         }
     }
 
