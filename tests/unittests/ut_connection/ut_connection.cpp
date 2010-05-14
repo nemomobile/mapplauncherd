@@ -39,17 +39,17 @@ public:
 
 private:
     bool  recvMsg(uint32_t *msg);
-    char* recvStr();
+    const char * recvStr();
     bool  sendMsg(uint32_t msg);
-    bool  sendStr(char *str);
+    bool  sendStr(const char * str);
 };
 
 bool MyConnection::acceptConn() { return true; }
 
 MyConnection::MyConnection(const string socketId) : 
     Connection(socketId), 
-	nextMsg(0),
-	nextStr(NULL)
+    nextMsg(0),
+    nextStr(NULL)
 {}
 
 bool MyConnection::recvMsg(uint32_t *msg)
@@ -60,15 +60,15 @@ bool MyConnection::recvMsg(uint32_t *msg)
 
 bool MyConnection::sendMsg(uint32_t)
 { 
-	return true; 
+    return true;
 }
 
-bool MyConnection::sendStr(char*)
+bool MyConnection::sendStr(const char *)
 { 
-	return true; 
+    return true;
 }
 
-char* MyConnection::recvStr()
+const char * MyConnection::recvStr()
 {
     return nextStr;
 }

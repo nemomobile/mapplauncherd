@@ -130,7 +130,7 @@ private:
     virtual bool recvMsg(uint32_t *msg);
 
     //! Send a string. This is a virtual to help unit testing.
-    virtual bool sendStr(char *str);
+    virtual bool sendStr(const char * str);
     //! Receive a string. This is a virtual to help unit testing.
     virtual const char * recvStr();
 

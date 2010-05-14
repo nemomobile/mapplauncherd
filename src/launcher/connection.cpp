@@ -133,7 +133,7 @@ bool Connection::recvMsg(uint32_t *msg)
     return ret != -1;
 }
 
-bool Connection::sendStr(char *str)
+bool Connection::sendStr(const char * str)
 {
     // Send size.
     uint32_t size = strlen(str) + 1;
