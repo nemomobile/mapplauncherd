@@ -1,3 +1,9 @@
+applauncherd (0.3.1-1) stable; urgency=low
+
+  * Workaround: NB#168188, populating cache disabled for not allocating graphics memory
+
+ -- Antti Kervinen <antti.kervinen@nokia.com>  Mon, 17 May 2010 14:51:25 +0300
+
 applauncherd (0.3.0-1) stable; urgency=low
 
   * Added the feature and requirements fields inside tests.xml files
