@@ -271,6 +271,12 @@ bool Connection::receiveArgs()
             }
         }
     }
+    else
+    {
+        Logger::logError("invalid number of parameters %d", m_argc);
+        return false;
+
+    }
     
     sendMsg(INVOKER_MSG_ACK);
     return true;
