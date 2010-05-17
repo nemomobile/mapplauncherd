@@ -249,7 +249,8 @@ bool Connection::receiveArgs()
 {
     // Get argc
     recvMsg(&m_argc);
-    if (m_argc > 0 && m_argc < static_cast<uint32_t>(sysconf(_SC_ARG_MAX)))
+    const uint32_t ARG_MAX = 1024;
+    if (m_argc > 0 && m_argc < ARG_MAX)
     {
         // Reserve memory for argv
         m_argv = new const char * [m_argc];
