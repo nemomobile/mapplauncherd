@@ -45,7 +45,7 @@ const string & MBooster::socketId() const
 bool MBooster::preload()
 {
 #ifdef HAVE_MCOMPONENTCACHE
-    MComponentCache::populateForMApplication();
+    // MComponentCache::populateForMApplication(); workaround for #168188, uncomment asap.
 #endif
     return true;
 }
