@@ -277,10 +277,14 @@ bool putenv_sanitize(const char * s)
 
 bool Connection::receiveEnv()
 {
+    // Have some "reasonable" limit for environment variables to protect from
+    // malicious data
+    const uint32_t MAX_VARS = 1024;
+
     // Get number of environment variables.
     uint32_t n_vars = 0;
     recvMsg(&n_vars);
-    if (n_vars > 0)
+    if (n_vars > 0 && n_vars < MAX_VARS)
     {
         // Get environment variables
         for (uint32_t i = 0; i < n_vars; i++)
@@ -308,6 +312,11 @@ bool Connection::receiveEnv()
                 Logger::logWarning("invalid environment data");
             }
         }
+    }
+    else
+    {
+        Logger::logError("invalid environment variable count %d", n_vars);
+        return false;
     }
 
     return true;
