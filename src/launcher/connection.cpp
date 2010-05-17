@@ -151,7 +151,13 @@ const char * Connection::recvStr()
     // Get the size.
     uint32_t size = 0;
     
-    recvMsg(&size);
+    bool res = recvMsg(&size);
+    if (!res || size == 0)
+    {
+        Logger::logError("string receiving failed in %s", __FUNCTION__);
+        return NULL;
+    }
+
     char * str = new char[size];
     if (!str)
     {
