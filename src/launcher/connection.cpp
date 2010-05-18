@@ -308,6 +308,7 @@ bool Connection::receiveEnv()
             // the string shall change the environment, don't free it
             if (putenv_sanitize(var))
             {
+                // coverity[+free : arg-0]
                 if (putenv(const_cast<char *>(var)) != 0)
                 {
                     Logger::logWarning("allocating environment variable");
