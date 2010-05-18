@@ -288,6 +288,12 @@ bool putenv_sanitize(const char * s)
     return static_cast<bool>(strchr(s, '='));
 }
 
+// coverity[+free : arg-0]
+int putenv_wrapper(char * var)
+{
+    return putenv(var);
+}
+
 bool Connection::receiveEnv()
 {
     // Have some "reasonable" limit for environment variables to protect from
@@ -315,8 +321,7 @@ bool Connection::receiveEnv()
             // the string shall change the environment, don't free it
             if (putenv_sanitize(var))
             {
-                // coverity[+free : arg-0]
-                if (putenv(const_cast<char *>(var)) != 0)
+                if (putenv_wrapper(const_cast<char *>(var)) != 0)
                 {
                     Logger::logWarning("allocating environment variable");
                 }
