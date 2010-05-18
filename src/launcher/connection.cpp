@@ -288,7 +288,7 @@ bool putenv_sanitize(const char * s)
     return static_cast<bool>(strchr(s, '='));
 }
 
-// coverity[+free : arg-0]
+// coverity[ +free : arg-0 ]
 int putenv_wrapper(char * var)
 {
     return putenv(var);
@@ -323,7 +323,7 @@ bool Connection::receiveEnv()
             {
                 if (putenv_wrapper(const_cast<char *>(var)) != 0)
                 {
-                    Logger::logWarning("allocating environment variable");
+                    Logger::logWarning("putenv failed");
                 }
             }
             else
