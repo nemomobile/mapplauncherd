@@ -151,10 +151,11 @@ const char * Connection::recvStr()
     // Get the size.
     uint32_t size = 0;
     
+    const uint32_t STR_LEN_MAX = 4096;
     bool res = recvMsg(&size);
-    if (!res || size == 0)
+    if (!res || size == 0 || size > STR_LEN_MAX)
     {
-        Logger::logError("string receiving failed in %s", __FUNCTION__);
+        Logger::logError("string receiving failed in %s, string length is %d", __FUNCTION__, size);
         return NULL;
     }
 
@@ -275,7 +276,6 @@ bool Connection::receiveArgs()
     {
         Logger::logError("invalid number of parameters %d", m_argc);
         return false;
-
     }
     
     sendMsg(INVOKER_MSG_ACK);
