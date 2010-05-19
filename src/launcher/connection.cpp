@@ -179,7 +179,6 @@ const char * Connection::recvStr()
     return str;
 }
 
-
 int Connection::receiveMagic()
 {
     uint32_t magic = 0;
@@ -328,6 +327,8 @@ bool Connection::receiveEnv()
             }
             else
             {
+                delete [] var;
+                var = NULL;
                 Logger::logWarning("invalid environment data");
             }
         }
