@@ -86,7 +86,8 @@ void Daemon::consoleQuiet()
     if (open("/dev/null", O_RDONLY) < 0)
         Logger::logErrorAndDie(EXIT_FAILURE, "opening /dev/null readonly");
 
-    if (dup(open("/dev/null", O_WRONLY)) < 0)
+    int fd = open("/dev/null", O_WRONLY);
+    if ((fd == -1) || (dup(fd) < 0))
         Logger::logErrorAndDie(EXIT_FAILURE, "opening /dev/null writeonly");
 }
 
@@ -101,6 +102,10 @@ Daemon::~Daemon()
 
 void Daemon::run()
 {
+    // Make sure that LD_BIND_NOW does not prevent dynamic linker to
+    // use lazy binding in later dlopen() calls.
+    unsetenv("LD_BIND_NOW");
+
     // create sockets for each of the boosters
     Connection::initSocket(MBooster::socketName());
     Connection::initSocket(QtBooster::socketName());
@@ -120,15 +125,21 @@ void Daemon::run()
     {
         // Wait for something appearing in the pipe
         char msg;
-        read(pipefd[0], reinterpret_cast<void *>(&msg), 1);
+        ssize_t count = read(pipefd[0], reinterpret_cast<void *>(&msg), 1);
+        if (count)
+        {
+            // Guarantee some time for the just launched application to
+            // start up before forking new booster. Not doing this would
+            // slow down the start-up significantly on single core CPUs.
+            sleep(2);
 
-        // Guarantee some time for the just launched application to
-        // start up before forking new booster. Not doing this would
-        // slow down the start-up significantly on single core CPUs.
-        sleep(2);
-
-        // Fork a new booster of the given type
-        forkBooster(msg, pipefd);
+            // Fork a new booster of the given type
+            forkBooster(msg, pipefd);
+        }
+        else
+        {
+            Logger::logWarning("Nothing read from the pipe\n");
+        }
     }
 }
 
@@ -159,7 +170,7 @@ bool Daemon::forkBooster(char type, int pipefd[2])
         Logger::logNotice("Running a new Booster of %c type...", type);
 
         // Create a new booster and initialize it
-        Booster* booster;
+        Booster * booster = NULL;
         if (MBooster::type() == type)
         {
             booster = new MBooster();
@@ -193,7 +204,11 @@ bool Daemon::forkBooster(char type, int pipefd[2])
         // Signal the parent process that it can create a new
         // waiting booster process and close write end
         const char msg = booster->boosterType();
-        write(pipefd[1], reinterpret_cast<const void *>(&msg), 1);
+        ssize_t ret = write(pipefd[1], reinterpret_cast<const void *>(&msg), 1);
+        if (ret == -1) {
+            Logger::logError("Can't send signal to launcher process' \n");
+        }
+
         close(pipefd[1]);
 
         // Don't care about fate of parent applauncherd process any more
@@ -285,19 +300,26 @@ void Daemon::daemonize()
     }
 
     // Open file descriptors pointing to /dev/null
-    const int new_stdin  = open("/dev/null", O_RDONLY);
-    const int new_stdout = open("/dev/null", O_WRONLY);
-    const int new_stderr = open("/dev/null", O_WRONLY);
-
     // Redirect standard file descriptors to /dev/null
-    dup2(new_stdin,  STDIN_FILENO);
-    dup2(new_stdout, STDOUT_FILENO);
-    dup2(new_stderr, STDERR_FILENO);
-
     // Close new file descriptors
-    close(new_stdin);
-    close(new_stdout);
-    close(new_stderr);
+
+    const int new_stdin  = open("/dev/null", O_RDONLY);
+    if (new_stdin != -1) {
+        dup2(new_stdin,  STDIN_FILENO);
+        close(new_stdin);
+    }
+
+    const int new_stdout = open("/dev/null", O_WRONLY);
+    if (new_stdout != -1) {
+        dup2(new_stdout, STDOUT_FILENO);
+        close(new_stdout);
+    }
+
+    const int new_stderr = open("/dev/null", O_WRONLY);
+    if (new_stderr != -1) {
+        dup2(new_stderr, STDERR_FILENO);
+        close(new_stderr);
+    }
 }
 
 void Daemon::usage() const

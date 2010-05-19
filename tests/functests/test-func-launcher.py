@@ -116,7 +116,7 @@ class launcher_tests (unittest.TestCase):
     
     def get_pid(self, appname):
         temp = basename(appname)[:14]
-        st, op = commands.getstatusoutput("pidof %s" % temp)
+        st, op = commands.getstatusoutput("pgrep %s" % temp)
         if st == 0:
             return op
         else:
@@ -177,7 +177,7 @@ class launcher_tests (unittest.TestCase):
         process_handle = self.run_app_with_launcher(PREFERED_APP)
         process_id = self.get_pid(PREFERED_APP)
         self.kill_process(PREFERED_APP)
-        time.sleep(2)
+        time.sleep(4)
         process_id = self.get_pid(PREFERED_APP)
         self.assert_(process_id == None  , "Process still running")
     
@@ -191,7 +191,7 @@ class launcher_tests (unittest.TestCase):
             #check if p.pid is same as pidof appname
             #in a global dictionary, append the pid
             process_handle = self.run_app_with_launcher(app)
-            time.sleep(2)
+            time.sleep(5)
             process_id = self.get_pid(app)
             self.assert_(not (process_id == None), "process id is None")
             self.globalpidlist.append(process_id)

@@ -40,6 +40,7 @@
 #include <sys/wait.h>
 
 #include "report.h"
+#include "protocol.h"
 #include "invokelib.h"
 #include "search.h"
 
@@ -76,12 +77,15 @@ static int invoker_init(enum APP_TYPE app_type)
 
     sun.sun_family = AF_UNIX;  //AF_FILE;
 
-    if(app_type ==  M_APP)
-        strcpy(sun.sun_path, INVOKER_M_SOCK);
-    else if (app_type ==  QT_APP)
-        strcpy(sun.sun_path, INVOKER_QT_SOCK);
+    int maxSize = sizeof(sun.sun_path) - 1;
+    if(app_type == M_APP)
+        strncpy(sun.sun_path, INVOKER_M_SOCK, maxSize);
+    else if (app_type == QT_APP)
+        strncpy(sun.sun_path, INVOKER_QT_SOCK, maxSize);
     else
         die(1, "unknown type of application: %d \n", app_type);
+
+    sun.sun_path[maxSize] = '\0';
 
     if (connect(fd, (struct sockaddr *)&sun, sizeof(sun)) < 0)
         die(1, "connecting to the launcher\n");
@@ -238,7 +242,7 @@ int main(int argc, char *argv[])
     int i;
     int fd;
     int prog_argc = 0;
-    char **prog_argv = NULL;
+    char **prog_argv;
     char *prog_name = NULL;
     int prog_prio = 0;
     char *delay_str = NULL;
@@ -313,6 +317,11 @@ int main(int argc, char *argv[])
     {
         /* Called with a different name, old way of using invoker */
         die(1, "wrong way of using, don't use symlinks");
+    }
+
+    if (!prog_name)
+    {
+        die(1, "application's name is unknown \n");
     }
 
     info("invoking execution: '%s'\n", prog_name);

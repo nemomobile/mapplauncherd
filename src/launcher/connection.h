@@ -24,14 +24,23 @@
 #ifndef CONNECTION_H
 #define CONNECTION_H
 
-#include <string>
-#include <map>
+#include "appdata.h"
+#include "protocol.h"
+
 #include <stdint.h>
+#include <string>
 
 using std::string;
+
+#include <map>
+
 using std::map;
 
-typedef map<string, int> poolType;
+#include <vector>
+
+using std::vector;
+
+typedef map<string, int> PoolType;
 
 /*!
  * \class Connection.
@@ -58,18 +67,18 @@ public:
      */
     bool acceptConn();
 
-    //! \brief Close the socket connection
+    //! \brief Close the socket connection.
     void closeConn();
 
-    /*! \brief Return the magic number.
-     * \return The magic number received from the invoker.
-     */
-    int getMagic();
+    //! \brief Receive application data to rApp.
+    bool receiveApplicationData(AppData & rApp);
 
-    /*! \brief Return the application name.
-     * \return Name string
+    /*! \brief Initialize a file socket.
+     * \param socketId Path to the socket file
      */
-    string getAppName();
+    static void initSocket(const string socketId);
+
+private:
 
     /*! \brief Receive actions.
      * This method executes the actual data-receiving loop and terminates
@@ -78,48 +87,20 @@ public:
      */
     bool receiveActions();
 
-    /*! \brief Return the file name.
-     * Return the executable file name received from the invoker.
+    /*! \brief Receive and return the magic number.
+     * \return The magic number received from the invoker.
+     */
+    int receiveMagic();
+
+    /*! \brief Receive and return the application name.
      * \return Name string
      */
-    string fileName() const;
-
-    /*! \brief Return the argument count.
-     * Return the CLI argument count received from the invoker.
-     * \return Argument count
-     */
-    int argc() const;
-
-    /*! \brief Return the argument list.
-     * Return the CLI argument list received from the invoker.
-     * \return Pointer to the argument list
-     */
-    char** argv() const;
-
-    /*! \brief Return I/O file descriptors.
-     * Return the I/O file descriptors received from the invoker.
-     * \return Pointer to the three-element list of fd's.
-     */
-    int* ioDescriptors();
-
-    /*! \brief Return process priority.
-     * Return the process priority received from the invoker.
-     * \return application process priority.
-     */
-    int prio();
-
-
-    /*! \brief Initialize a file socket.
-     * \param socketId Path to the socket file
-     */
-    static void initSocket(const string socketId);
+    string receiveAppName();
 
     /*! \brief Return initialized socket.
      * \param socketId Path to the socket file
      */
-    static int getSocket(const string socketId);
-
-private:
+    static int findSocket(const string socketId);
 
     //! Disable copy-constructor
     Connection(const Connection & r);
@@ -127,44 +108,43 @@ private:
     //! Disable assignment operator
     Connection & operator= (const Connection & r);
 
-    bool getExec();
-    bool getArgs();
-    bool getEnv();
-    bool getIo();
-    bool getPrio();
+    //! Receive executable name
+    bool receiveExec();
 
-    static const unsigned int INVOKER_MSG_MASK               = 0xffff0000;
-    static const unsigned int INVOKER_MSG_MAGIC              = 0xb0070000;
-    static const unsigned int INVOKER_MSG_MAGIC_VERSION_MASK = 0x0000ff00;
-    static const unsigned int INVOKER_MSG_MAGIC_VERSION      = 0x00000300;
-    static const unsigned int INVOKER_MSG_MAGIC_OPTION_MASK  = 0x000000ff;
-    static const unsigned int INVOKER_MSG_MAGIC_OPTION_WAIT  = 0x00000001;
-    static const unsigned int INVOKER_MSG_NAME               = 0x5a5e0000;
-    static const unsigned int INVOKER_MSG_EXEC               = 0xe8ec0000;
-    static const unsigned int INVOKER_MSG_ARGS               = 0xa4650000;
-    static const unsigned int INVOKER_MSG_ENV                = 0xe5710000;
-    static const unsigned int INVOKER_MSG_PRIO               = 0xa1ce0000;
-    static const unsigned int INVOKER_MSG_IO                 = 0x10fd0000;
-    static const unsigned int INVOKER_MSG_END                = 0xdead0000;
-    static const unsigned int INVOKER_MSG_PID                = 0x1d1d0000;
-    static const unsigned int INVOKER_MSG_EXIT               = 0xe4170000;
-    static const unsigned int INVOKER_MSG_ACK                = 0x600d0000;
+    //! Receive arguments
+    bool receiveArgs();
 
-    virtual bool  sendMsg(uint32_t msg);
-    virtual bool  recvMsg(uint32_t *msg);
-    virtual bool  sendStr(char *str);
-    virtual char* recvStr();
+    //! Receive environment
+    bool receiveEnv();
 
-    static poolType socketPool;
+    //! Receive I/O descriptors
+    bool receiveIO();
 
-    //! socket
+    //! Receive priority
+    bool receivePriority();
+
+    //! Send message to a socket. This is a virtual to help unit testing.
+    virtual bool sendMsg(uint32_t msg);
+
+    //! Receive a message from a socket. This is a virtual to help unit testing.
+    virtual bool recvMsg(uint32_t *msg);
+
+    //! Send a string. This is a virtual to help unit testing.
+    virtual bool sendStr(const char * str);
+    //! Receive a string. This is a virtual to help unit testing.
+    virtual const char * recvStr();
+
+    //! Pool of sockets mapped to id's
+    static PoolType socketPool;
+
+    //! Socket fd
     int      m_fd;
     int      m_curSocket;
     string   m_fileName;
     uint32_t m_argc;
-    char   **m_argv;
+    const char **  m_argv;
     int      m_io[3];
-    uint32_t m_prio;
+    uint32_t m_priority;
 
 #ifdef UNIT_TEST
     friend class Ut_Connection;

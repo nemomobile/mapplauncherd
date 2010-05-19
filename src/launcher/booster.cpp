@@ -51,46 +51,25 @@ bool Booster::readCommand()
     Connection conn(socketId());
 
     // Accept a new invocation.
-    if (!conn.acceptConn())
-        return false;
-
-    // Read magic number
-    m_app.options = conn.getMagic();
-    if (m_app.options == -1)
-        return false;
-
-    // Read application name
-    m_app.appName = conn.getAppName();
-    if (m_app.appName.empty())
-        return false;
-
-    // Read application parameters
-    if (conn.receiveActions())
+    if (conn.acceptConn())
     {
-        m_app.fileName = conn.fileName();
-        m_app.argc     = conn.argc();
-        m_app.argv     = conn.argv();
-        m_app.prio     = conn.prio();
+        if (conn.receiveApplicationData(m_app))
+        {
+            return true;
+        }
 
-        for(int i = 0; i < 3; i++)
-            m_app.ioDescriptors[i] = conn.ioDescriptors()[i];
-    }
-    else
-    {
-        return false;
+        // Close connection
+        conn.closeConn();
     }
 
-    // Close connection
-    conn.closeConn();
-
-    return true;
+    return false;
 }
 
 void Booster::run()
 {
-    if (!m_app.fileName.empty())
+    if (!m_app.fileName().empty())
     {
-        Logger::logInfo("invoking '%s' ", m_app.fileName.c_str());
+        Logger::logInfo("invoking '%s' ", m_app.fileName().c_str());
         launchProcess();
     }
     else
@@ -108,10 +87,11 @@ void Booster::renameProcess(int parentArgc, char** parentArgv)
 
         for (int i = 0; i < parentArgc; i++)
             m_argvArraySize += strlen(parentArgv[i]) + 1;
+
         m_argvArraySize--;
     }
 
-    if (m_app.appName.empty())
+    if (m_app.appName().empty())
     {
         // application name isn't known yet, let's give to the process
         // temporary booster name
@@ -119,10 +99,10 @@ void Booster::renameProcess(int parentArgc, char** parentArgv)
         string newProcessName("booster-");
         newProcessName.append(1, boosterType());
 
-        m_app.appName = newProcessName;
+        m_app.setAppName(newProcessName);
     }
 
-    const char* newProcessName = m_app.appName.c_str();
+    const char* newProcessName = m_app.appName().c_str();
     Logger::logNotice("set new name for process: %s", newProcessName);
     
     // This code copies all the new arguments to the space reserved
@@ -130,7 +110,6 @@ void Booster::renameProcess(int parentArgc, char** parentArgv)
     // leaves it fully out and terminates.
     
     int spaceAvailable = m_argvArraySize;
-    
     if (spaceAvailable > 0)
     {
         memset(parentArgv[0], '\0', spaceAvailable);
@@ -138,13 +117,13 @@ void Booster::renameProcess(int parentArgc, char** parentArgv)
         
         spaceAvailable -= strlen(parentArgv[0]);
         
-        for (int i = 1; i < m_app.argc; i++)
+        for (int i = 1; i < m_app.argc(); i++)
         {
-            if (spaceAvailable > static_cast<int>(strlen(m_app.argv[i])) + 1)
+            if (spaceAvailable > static_cast<int>(strlen(m_app.argv()[i])) + 1)
             {
-                strcat(parentArgv[0], " ");
-                strcat(parentArgv[0], m_app.argv[i]);
-                spaceAvailable -= strlen(m_app.argv[i] + 1);
+                strncat(parentArgv[0], " ", 1);
+                strncat(parentArgv[0], m_app.argv()[i], spaceAvailable);
+                spaceAvailable -= strlen(m_app.argv()[i] + 1);
             }
             else
             {
@@ -164,45 +143,45 @@ void Booster::launchProcess()
 {
     // Possibly restore process priority
     errno = 0;
-    int cur_prio = getpriority(PRIO_PROCESS, 0);
-    if (!errno && cur_prio < m_app.prio)
-      setpriority(PRIO_PROCESS, 0, m_app.prio);
-
+    const int cur_prio = getpriority(PRIO_PROCESS, 0);
+    if (!errno && cur_prio < m_app.priority())
+      setpriority(PRIO_PROCESS, 0, m_app.priority());
 
     // Load the application and find out the address of main()
-    loadMain();
+    void* handle = loadMain();
 
-    for (int i = 0; i < 3; i++)
-      if (m_app.ioDescriptors[i] > 0)
-        dup2(m_app.ioDescriptors[i], i);
+    for (unsigned int i = 0; i < m_app.ioDescriptors().size(); i++)
+      if (m_app.ioDescriptors()[i] > 0)
+        dup2(m_app.ioDescriptors()[i], i);
 
-    Logger::logNotice("launching process: '%s' ", m_app.fileName.c_str());
+    Logger::logNotice("launching process: '%s' ", m_app.fileName().c_str());
 
     // Jump to main()
-    exit(m_app.entry(m_app.argc, m_app.argv));
+    const int retVal = m_app.entry()(m_app.argc(), const_cast<char **>(m_app.argv()));
+    m_app.deleteArgv();
+    dlclose(handle);
+    exit(retVal);
 }
 
-extern "C" long credp_kconfine(char const *);
-
-void Booster::loadMain()
+void* Booster::loadMain()
 {
-    void *module;
-    char *error_s;
 
     // Set application's platform security credentials
     credp_kconfine(m_app.fileName.c_str());
 
-    // Load the application as a library
-    module = dlopen(m_app.fileName.c_str(), RTLD_LAZY | RTLD_GLOBAL);
+        // Load the application as a library
+    void * module = dlopen(m_app.fileName().c_str(), RTLD_LAZY | RTLD_GLOBAL);
 
     if (!module)
         Logger::logErrorAndDie(EXIT_FAILURE, "loading invoked application: '%s'\n", dlerror());
 
     // Find out the address for symbol "main".
     dlerror();
-    m_app.entry = (entry_t)dlsym(module, "main");
-    error_s = dlerror();
+    m_app.setEntry(reinterpret_cast<entry_t>(dlsym(module, "main")));
 
+    const char * error_s = dlerror();
     if (error_s != NULL)
         Logger::logErrorAndDie(EXIT_FAILURE, "loading symbol 'main': '%s'\n", error_s);
+
+    return module;
 }

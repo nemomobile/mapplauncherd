@@ -59,11 +59,11 @@ bool invoke_send_str(int fd, char *str)
 
 char* invoke_recv_str(int fd)
 {
-    uint32_t size, ret;
+    int size = 0;
     char *str;
 
     /* Get the size. */
-    invoke_recv_msg(fd, &size);
+    invoke_recv_msg(fd, (uint32_t*) &size);
     str = (char*)malloc(size);
     if (!str)
     {
@@ -72,7 +72,7 @@ char* invoke_recv_str(int fd)
     }
 
     /* Get the string. */
-    ret = read(fd, str, size);
+    int ret = read(fd, str, size);
     if (ret < size)
     {
         error("getting string, got %u of %u bytes\n", ret, size);

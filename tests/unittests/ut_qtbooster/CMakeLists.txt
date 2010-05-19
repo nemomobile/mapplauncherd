@@ -1,27 +1,25 @@
 set(LAUNCHER ${CMAKE_HOME_DIRECTORY}/src/launcher)
 
 # Set sources
-set(SRC ut_qtbooster.cpp ${LAUNCHER}/booster.cpp ${LAUNCHER}/connection.cpp
+set(SRC ut_qtbooster.cpp ${LAUNCHER}/appdata.cpp ${LAUNCHER}/booster.cpp ${LAUNCHER}/connection.cpp
    ${LAUNCHER}/logger.cpp ${LAUNCHER}/qtbooster.cpp)
 
 # Set moc headers
 set(MOC_HDRS ut_qtbooster.h)
 
 # Run moc
-qt4_wrap_cpp( MOC_SRC ${MOC_HDRS} )
+qt4_wrap_cpp(MOC_SRC ${MOC_HDRS})
 
 # Enable test library
 set(QT_USE_QTTEST TRUE)
 
 # Set include paths
-include_directories ( ${CMAKE_CURRENT_SOURCE_DIR} ${LAUNCHER} )
-
-link_libraries (${QT_QTCORE_LIBRARY} ${QT_QTTEST_LIBRARY} creds)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_HOME_DIRECTORY}/src/common ${LAUNCHER})
+link_libraries(${QT_QTCORE_LIBRARY} ${QT_QTTEST_LIBRARY} creds)
 
 # Enable Qt (may not be needed, because already defined on higher level)
-include( ${QT_USE_FILE} )
-
-add_executable ( ut_qtbooster ${SRC} ${MOC_SRC} )
+include(${QT_USE_FILE})
+add_executable(ut_qtbooster ${SRC} ${MOC_SRC})
 
 # Install
 install(PROGRAMS ut_qtbooster DESTINATION /usr/share/applauncherd-tests/)

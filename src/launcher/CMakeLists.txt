@@ -4,7 +4,7 @@ include(${QT_USE_FILE})
 # Find Meego Touch libraries using pkg-config. 
 include(FindPkgConfig) 
 pkg_check_modules(MEEGOTOUCH meegotouch>=0.20 REQUIRED)
-include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${MEEGOTOUCH_INCLUDE_DIRS})
+include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_HOME_DIRECTORY}/src/common ${MEEGOTOUCH_INCLUDE_DIRS})
 
 # Check if it's possible to compile MBooster with MComponentCache. If so,
 # HAVE_MCOMPONENTCACHE is set.
@@ -18,7 +18,7 @@ else (EXISTS ${M_COMPONENT_CACHE})
 endif (EXISTS ${M_COMPONENT_CACHE})
 
 # Set sources
-set(SRC booster.cpp connection.cpp daemon.cpp mbooster.cpp logger.cpp main.cpp qtbooster.cpp)
+set(SRC appdata.cpp booster.cpp connection.cpp daemon.cpp mbooster.cpp logger.cpp main.cpp qtbooster.cpp)
 
 # Set the program name define used in daemon.cpp
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DPROG_NAME=\\\"applauncherd\\\"")

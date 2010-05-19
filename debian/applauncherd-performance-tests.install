@@ -1,4 +1,7 @@
 usr/share/applauncherd-performance-tests/tests.xml
 usr/share/applauncherd-performance-tests/test-perf-launcher.py
+usr/share/applauncherd-performance-tests/test-perf-mbooster.py
 usr/bin/wait_window
 usr/bin/hello_no_launcher
+usr/bin/testapp
+
