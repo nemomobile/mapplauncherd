@@ -1,0 +1,18 @@
+<aegis>
+    <provide>
+        <credential name="applauncherd"/>
+        <for path="/usr/bin/applauncherd.bin"/>
+    </provide>
+    
+    <request>
+        <credential match="CAP::*"/>
+        <credential name="drm"/>
+        <credential name="Cellular"/>
+        <credential name="ReadUserData"/>
+        <credential name="ReadWriteUserData"/>
+        <credential name="telephony"/>
+        <credential name="netservice"/>
+        <for path="/usr/bin/applauncherd.bin"/>
+    </request>
+</aegis>
+
