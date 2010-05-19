@@ -27,13 +27,15 @@
 
 #include <cstdlib>
 #include <dlfcn.h>
-#include <sys/prctl.h>
-#include <sys/resource.h>
 #include <cerrno>
 #include <unistd.h>
 #include <sys/user.h>
-#include <sys/creds.h>
-//#include <linux/aegis/credp.h>
+#include <sys/prctl.h>
+#include <sys/resource.h>
+
+#ifdef HAVE_CREDS
+    #include <sys/creds.h>
+#endif
 
 Booster::Booster() : m_argvArraySize(0)
 {}
@@ -166,8 +168,10 @@ void Booster::launchProcess()
 
 void* Booster::loadMain()
 {
+#ifdef HAVE_CREDS
     // Set application's platform security credentials
     creds_confine(m_app.fileName().c_str());
+#endif
 
     // Load the application as a library
     void * module = dlopen(m_app.fileName().c_str(), RTLD_LAZY | RTLD_GLOBAL);
