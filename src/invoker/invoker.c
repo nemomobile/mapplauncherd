@@ -58,7 +58,6 @@ static bool invoke_recv_ack(int fd)
     /* Receive ACK. */
     invoke_recv_msg(fd, &action);
 
-
     if (action == INVOKER_MSG_BAD_CREDS)
     {
         die(1, "credentials check failed \n");

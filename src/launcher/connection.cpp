@@ -31,7 +31,7 @@
 #include <unistd.h>
 
 #if defined (HAVE_CREDS) && ! defined (DISABLE_VERIFICATION)
-    const char * Connection::m_credsStr = "applauncherd-token::access";
+    const char * Connection::m_credsStr = "applauncherd::access";
 #endif
 
 PoolType Connection::socketPool;

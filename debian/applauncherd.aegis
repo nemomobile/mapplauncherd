@@ -1,7 +1,6 @@
 <aegis>
     <provide>
-        <credential name="applauncherd"/>
-        <for path="/usr/bin/applauncherd.bin"/>
+        <credential name="access" />
     </provide>
     
     <request>
