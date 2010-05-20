@@ -6,13 +6,19 @@ Applauncherd uses the CMake build system.
 Configure
 ---------
 
-Applauncherd only:
+* Applauncherd only:
 
-./configure
+  ./configure
 
-Applauncherd + tests:
+* Applauncherd + tests:
 
-BUILD_TESTS=1 ./configure
+  BUILD_TESTS=1 ./configure
+
+* Applauncherd with security check for invoker disabled:
+
+  DISABLE_VERIFICATION=1 ./configure
+
+* If you are building the .deb package, check debian/rules for the configuration used
 
 Build
 -----
