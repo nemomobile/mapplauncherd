@@ -59,7 +59,7 @@ Connection::Connection(const string socketId) :
 
     if (m_credsType == CREDS_BAD)
     {
-        Logger::logErrorAndDie(EXIT_FAILURE, "credential conversion failed \n");
+        Logger::logError("credentials conversion failed \n");
     }
 
 #endif //DISABLE_VERIFICATION
@@ -130,6 +130,7 @@ bool Connection::acceptConn()
     {
         Logger::logError("invoker doesn't have enough credentials to call launcher \n");
 
+        sendMsg(INVOKER_MSG_BAD_CREDS);
         closeConn();
         return false;
     }

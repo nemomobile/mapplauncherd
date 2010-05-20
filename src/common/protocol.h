@@ -42,5 +42,6 @@ const uint32_t INVOKER_MSG_END                = 0xdead0000;
 const uint32_t INVOKER_MSG_PID                = 0x1d1d0000;
 const uint32_t INVOKER_MSG_EXIT               = 0xe4170000;
 const uint32_t INVOKER_MSG_ACK                = 0x600d0000;
+const uint32_t INVOKER_MSG_BAD_CREDS          = 0x60035800;
 
 #endif // PROTOCOL_H
