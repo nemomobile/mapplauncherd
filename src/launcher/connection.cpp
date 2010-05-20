@@ -30,6 +30,10 @@
 #include <cerrno>
 #include <unistd.h>
 
+#ifndef DISABLE_VERIFICATION
+    const char * Connection::m_credsStr = "applauncherd-token::access";
+#endif
+
 PoolType Connection::socketPool;
 
 Connection::Connection(const string socketId) :
@@ -48,6 +52,17 @@ Connection::Connection(const string socketId) :
     {
         Logger::logErrorAndDie(EXIT_FAILURE, "socket isn't initialized\n");
     }
+
+#ifndef DISABLE_VERIFICATION
+
+    m_credsType = creds_str2creds(m_credsStr, &m_credsValue);
+
+    if (m_credsType == CREDS_BAD)
+    {
+        Logger::logErrorAndDie(EXIT_FAILURE, "credential conversion failed \n");
+    }
+
+#endif //DISABLE_VERIFICATION
 }
 
 Connection::~Connection()
@@ -93,6 +108,7 @@ void Connection::initSocket(const string socketId)
 bool Connection::acceptConn()
 {
     m_fd = accept(m_curSocket, NULL, NULL);
+
     if (m_fd < 0)
     {
         if (errno != EINTR)
@@ -101,6 +117,25 @@ bool Connection::acceptConn()
             return false;
         }
     }
+
+#ifndef DISABLE_VERIFICATION
+
+    creds_t ccreds = creds_getpeer(m_fd);
+
+    int allow = creds_have_p(ccreds, m_credsType, m_credsValue);
+
+    creds_free(ccreds);
+
+    if (!allow)
+    {
+        Logger::logError("invoker doesn't have enough credentials to call launcher \n");
+
+        closeConn();
+        return false;
+    }
+
+#endif //DISABLE_VERIFICATION
+
     return true;
 }
 

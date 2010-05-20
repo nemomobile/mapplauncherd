@@ -17,6 +17,10 @@ else (EXISTS ${M_COMPONENT_CACHE})
     message(STATUS "  not found")
 endif (EXISTS ${M_COMPONENT_CACHE})
 
+if ($ENV{DISABLE_VERIFICATION})
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DDISABLE_VERIFICATION")
+endif ($ENV{DISABLE_VERIFICATION})
+
 # Set sources
 set(SRC appdata.cpp booster.cpp connection.cpp daemon.cpp mbooster.cpp logger.cpp main.cpp qtbooster.cpp)
 

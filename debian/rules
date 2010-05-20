@@ -6,8 +6,8 @@
 configure: configure-stamp
 configure-stamp: 
 	dh_testdir
-	# Configure Applauncherd to be build with tests
-	BUILD_TESTS=1 ./configure
+	# Configure Applauncherd to be build with tests and without checking invoker credentials
+	BUILD_TESTS=1 DISABLE_VERIFICATION=1 ./configure
 
 	touch configure-stamp
 
