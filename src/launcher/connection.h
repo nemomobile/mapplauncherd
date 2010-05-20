@@ -151,13 +151,11 @@ private:
     int      m_io[3];
     uint32_t m_priority;
 
-#ifndef DISABLE_VERIFICATION
+#if defined (HAVE_CREDS) && ! defined (DISABLE_VERIFICATION)
     static const char * m_credsStr;
-
     creds_value_t m_credsValue;
     creds_type_t  m_credsType;
 #endif
-
 
 #ifdef UNIT_TEST
     friend class Ut_Connection;
