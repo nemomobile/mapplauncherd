@@ -30,7 +30,7 @@
 #include <cerrno>
 #include <unistd.h>
 
-#ifndef DISABLE_VERIFICATION
+#if defined (HAVE_CREDS) && ! defined (DISABLE_VERIFICATION)
     const char * Connection::m_credsStr = "applauncherd-token::access";
 #endif
 
@@ -53,7 +53,7 @@ Connection::Connection(const string socketId) :
         Logger::logErrorAndDie(EXIT_FAILURE, "socket isn't initialized\n");
     }
 
-#ifndef DISABLE_VERIFICATION
+#if defined (HAVE_CREDS) && ! defined (DISABLE_VERIFICATION)
 
     m_credsType = creds_str2creds(m_credsStr, &m_credsValue);
 
@@ -62,7 +62,7 @@ Connection::Connection(const string socketId) :
         Logger::logError("credentials conversion failed \n");
     }
 
-#endif //DISABLE_VERIFICATION
+#endif
 }
 
 Connection::~Connection()
@@ -118,7 +118,7 @@ bool Connection::acceptConn()
         }
     }
 
-#ifndef DISABLE_VERIFICATION
+#if defined (HAVE_CREDS) && ! defined (DISABLE_VERIFICATION)
 
     creds_t ccreds = creds_getpeer(m_fd);
 
@@ -135,7 +135,7 @@ bool Connection::acceptConn()
         return false;
     }
 
-#endif //DISABLE_VERIFICATION
+#endif
 
     return true;
 }

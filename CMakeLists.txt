@@ -16,6 +16,28 @@ if (${QTVERSION} VERSION_LESS 4.6.0)
     message(FATAL_ERROR "You need Qt4.6, found ${QTVERSION}.")
 endif (${QTVERSION} VERSION_LESS 4.6.0)
 
+# Find creds.h (and libcreds if the header is found)
+message(STATUS "checking for creds.h")
+find_file(CREDS_H NAMES creds.h PATHS /usr/include/sys)
+if (EXISTS ${CREDS_H})
+    message(STATUS "  found: " ${CREDS_H})
+    message(STATUS "checking for libcreds")
+    find_library(LIBCREDS NAMES creds)
+    if (EXISTS ${LIBCREDS})
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DHAVE_CREDS")
+        link_libraries(${LIBCREDS})
+	    message(STATUS "  found: " ${LIBCREDS})
+    else (EXISTS ${LIBCREDS})
+    	message(STATUS "  not found: Platform Security is disabled.")
+    endif (EXISTS ${LIBCREDS})
+else (EXISTS ${CREDS_H})
+  	message(STATUS "  not found: Platform Security is disabled.")
+endif (EXISTS ${CREDS_H})
+
+if ($ENV{DISABLE_VERIFICATION})
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DDISABLE_VERIFICATION")
+endif ($ENV{DISABLE_VERIFICATION})
+
 # Sub build: applauncherd
 add_subdirectory(src)
 
