@@ -67,6 +67,8 @@ binary-arch: build install
 	dh_gencontrol
 	dh_md5sums
 	dh_builddeb 
+	aegis-deb-add -control debian/applauncherd/DEBIAN/control .. debian/applauncherd.aegis=_aegis
+
 
 binary: binary-indep binary-arch
 .PHONY: build clean binary-indep binary-arch binary install configure

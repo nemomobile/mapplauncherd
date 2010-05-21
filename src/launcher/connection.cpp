@@ -59,7 +59,7 @@ Connection::Connection(const string socketId) :
 
     if (m_credsType == CREDS_BAD)
     {
-        Logger::logError("credentials conversion failed \n");
+        Logger::logError("credentials %s conversion failed \n", m_credsStr);
     }
 
 #endif
