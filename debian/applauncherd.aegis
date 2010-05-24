@@ -1,21 +1,21 @@
 <aegis>
     <provide>
-        <credential name="access" />
+        <credential name="access"/>
     </provide>
     
     <request>
         <credential match="CAP::*"/>
-        <credential name="drm"/>
+        <credential name="Drm"/>
         <credential name="Cellular"/>
         <credential name="ReadUserData"/>
         <credential name="ReadWriteUserData"/>
-        <credential name="telephony"/>
-        <credential name="netservice"/>
+        <credential name="Telephony"/>
+        <credential name="NetService"/>
         <for path="/usr/bin/applauncherd.bin"/>
     </request>
 
     <request>
-        <credential name="applauncherd::access" />
+        <credential name="applauncherd::access"/>
         <for path="/usr/bin/invoker" id="client"/>
     </request>
 </aegis>
