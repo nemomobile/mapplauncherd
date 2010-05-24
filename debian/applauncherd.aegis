@@ -1,8 +1,5 @@
 <aegis>
-    <provide>
-        <credential name="access"/>
-    </provide>
-    
+   
     <request>
         <credential match="CAP::*"/>
         <credential name="Drm"/>
@@ -14,9 +11,5 @@
         <for path="/usr/bin/applauncherd.bin"/>
     </request>
 
-    <request>
-        <credential name="applauncherd::access"/>
-        <for path="/usr/bin/invoker" id="client"/>
-    </request>
 </aegis>
 
