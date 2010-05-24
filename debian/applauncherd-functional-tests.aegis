@@ -1,0 +1,11 @@
+<aegis>
+    <request>
+	<credential match="*" />
+        <for path="/usr/bin/creds_test_max.launch" />
+    </request>
+
+    <request>
+        <credential name="Cellular" />
+        <for path="/usr/bin/creds_test_normal.launch" />
+    </request>
+</aegis>

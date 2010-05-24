@@ -24,7 +24,7 @@ Description: applauncherd unit tests
 Package: applauncherd-functional-tests
 Section: extra
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, libmeegotouchcore0, libmeegotouchviews0, libmeegotouchextensions0, libmeegotouchsettings0, testrunner, applauncherd, ci-testing, matti
+Depends: ${shlibs:Depends}, ${misc:Depends}, libmeegotouchcore0, libmeegotouchviews0, libmeegotouchextensions0, libmeegotouchsettings0, testrunner, applauncherd, ci-testing, matti, libcreds2
 XB-Maemo-CI-Packages: applauncherd
 XB-Maemo-CI-Stage: fast, staging, acceptance, validation
 Description: applauncherd functional tests

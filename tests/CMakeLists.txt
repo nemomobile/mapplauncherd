@@ -29,5 +29,6 @@ add_subdirectory(perftests)
 # Sub build: functests
 add_subdirectory(functests)
 
-
+# Sub build: creds
+add_subdirectory(creds)
 

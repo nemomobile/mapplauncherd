@@ -82,6 +82,7 @@ binary-arch: build install
 	dh_md5sums
 	dh_builddeb 
 	aegis-deb-add -control debian/applauncherd/DEBIAN/control .. debian/applauncherd.aegis=_aegis
+	aegis-deb-add -control debian/applauncherd-functional-tests/DEBIAN/control .. debian/applauncherd-functional-tests.aegis=_aegis
 
 
 binary: binary-indep binary-arch
