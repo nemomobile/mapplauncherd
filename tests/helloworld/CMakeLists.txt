@@ -7,8 +7,8 @@ include(${QT_USE_FILE})
 add_library(helloworld MODULE ${SRC})
 
 # Install
-install(PROGRAMS libhelloworld.so DESTINATION /usr/bin RENAME helloworld.launch)
-install(PROGRAMS scripts/helloworld DESTINATION /usr/bin/)
+install(PROGRAMS libhelloworld.so DESTINATION /usr/bin RENAME fala_ft_hello.launch)
+install(PROGRAMS scripts/fala_ft_hello DESTINATION /usr/bin/)
 install(PROGRAMS scripts/qhelloworld DESTINATION /usr/bin/)
 
 # Install symlinks so that /usr/bin/helloworld_X launches /usr/bin/helloworld_X.launch
