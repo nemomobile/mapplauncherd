@@ -1,13 +1,13 @@
 <aegis>
    
     <request>
-        <credential match="CAP::*"/>
-        <credential name="Drm"/>
+        <credential name="CAP::setgid"/>
+        <credential name="CAP::setuid"/>
+        <credential name="CAP::setfcap"/>
+        <credential name="drm"/>
         <credential name="Cellular"/>
         <credential name="ReadUserData"/>
         <credential name="ReadWriteUserData"/>
-        <credential name="Telephony"/>
-        <credential name="NetService"/>
         <for path="/usr/bin/applauncherd.bin"/>
     </request>
 
