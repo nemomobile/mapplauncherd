@@ -81,9 +81,13 @@ binary-arch: build install
 	dh_gencontrol
 	dh_md5sums
 	dh_builddeb 
+ifeq ($(DEB_HOST_ARCH), arm)
 	aegis-deb-add -control debian/applauncherd/DEBIAN/control .. debian/applauncherd.aegis=_aegis
 	aegis-deb-add -control debian/applauncherd-functional-tests/DEBIAN/control .. debian/applauncherd-functional-tests.aegis=_aegis
-
+else ifeq ($(DEB_HOST_ARCH), armel)
+	aegis-deb-add -control debian/applauncherd/DEBIAN/control .. debian/applauncherd.aegis=_aegis
+	aegis-deb-add -control debian/applauncherd-functional-tests/DEBIAN/control .. debian/applauncherd-functional-tests.aegis=_aegis
+endif
 
 binary: binary-indep binary-arch
 .PHONY: build clean binary-indep binary-arch binary install configure
