@@ -44,11 +44,39 @@
 #include "invokelib.h"
 #include "search.h"
 
+#ifdef HAVE_CREDS
+    #include <sys/creds.h>
+#endif
+
 static const int DEFAULT_DELAY = 0;
 
 enum APP_TYPE { M_APP, QT_APP, UNKNOWN_APP };
 
 extern char ** environ;
+
+/*
+ * Show a list of credentials that the client has
+ */
+static void showcredentials(void)
+{
+#ifdef HAVE_CREDS
+    creds_t creds;
+    creds_value_t value;
+    creds_type_t type;
+    int i;
+
+    creds = creds_gettask(0);
+    for (i = 0; (type = creds_list(creds, i,  &value)) != CREDS_BAD; ++i) {
+        char buf[200];
+        (void)creds_creds2str(type, value, buf, sizeof(buf));
+        buf[sizeof(buf)-1] = 0;
+        printf("\t%s\n", buf);
+    }
+    creds_free(creds);
+#else
+    printf("credentials information isn't available \n");
+#endif
+}
 
 
 static bool invoke_recv_ack(int fd)
@@ -267,6 +295,11 @@ int main(int argc, char *argv[])
             app_type = QT_APP;
         else if (strcmp(argv[1], "--version") == 0)
             version();
+        else if (strcmp(argv[1], "--creds") == 0)
+        {
+            showcredentials();
+            exit(0);
+        }
         else if (strcmp(argv[1], "--help") == 0)
             usage(0);
         else
@@ -292,6 +325,8 @@ int main(int argc, char *argv[])
             else if (strcmp(argv[i], "--version") == 0)
                 continue;
             else if (strcmp(argv[i], "--help") == 0)
+                continue;
+            else if (strcmp(argv[i], "--creds") == 0)
                 continue;
             else if (strncmp(argv[i], "--", 2) == 0)
             {
