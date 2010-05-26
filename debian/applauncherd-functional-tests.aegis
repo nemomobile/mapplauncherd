@@ -1,11 +1,17 @@
 <aegis>
     <request>
-	<credential match="*" />
-        <for path="/usr/bin/creds_test_max.launch" />
+	<credential name="Tcb" />
+	<credential name="Drm" />
+	<credential name="Telephony" />
+	<credential name="CAP::setuid" />
+	<credential name="CAP::setgid" />
+	<credential name="CAP::setfcap" />
+	<credential name="CAP::sys_ptrace" />
+        <for path="/usr/bin/fala_ft_creds1.launch" />
     </request>
 
     <request>
         <credential name="Cellular" />
-        <for path="/usr/bin/creds_test_normal.launch" />
+        <for path="/usr/bin/fala_ft_creds2.launch" />
     </request>
 </aegis>

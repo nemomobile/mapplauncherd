@@ -36,7 +36,8 @@ Usage:    test-func-launcher <launcherable application>
 
 Example:  test-func-launcher /usr/bin/fala_ft_hello
 
-Author:   ext-nimika.1.keshri@nokia.com
+Authors:   ext-nimika.1.keshri@nokia.com
+           ext-oskari.timperi@nokia.com
 """
 
 import os
@@ -135,6 +136,28 @@ class launcher_tests (unittest.TestCase):
             debug(op)
             return None
 
+    def get_creds(self, path):
+        """
+        Tries to launch an application and if successful, returns the
+        credentials the application has as a list. 
+        """
+
+        # try launch the specified application
+        handle = self.run_app_with_launcher(path)
+        pid = self.get_pid(path)
+
+        debug("%s has PID %s" % (basename(path), pid,))
+
+        self.assert_(pid != None, "Couldn't launch %s" % basename(path))
+
+        # get the status and output (needs creds-get from libcreds2-tools
+        # package)
+        st, op = commands.getstatusoutput("/usr/bin/creds-get -p %s" % pid)
+
+        self.kill_process(path)
+
+        return op.split("\n")
+
     #Testcases
     def test_001(self):
         """
@@ -226,6 +249,64 @@ class launcher_tests (unittest.TestCase):
         times = []
         for i in xrange(5):
             times.append(self.run_app_with_launcher(PREFERED_APP))
+
+    def test_008(self):
+        """
+        Test that the fala_ft_creds* applications have the correct
+        credentials set (check aegis file included in the debian package)
+        """
+        op1 = self.get_creds('/usr/bin/fala_ft_creds1')
+        op2 = self.get_creds('/usr/bin/fala_ft_creds2')
+
+        debug("fala_ft_creds1 has %s" % ', '.join(op1))
+        debug("fala_ft_creds2 has %s" % ', '.join(op2))
+
+        # required common caps
+        caps = ['UID::user', 'GID::users', 'SRC::com.nokia.maemo',
+                'applauncherd-functional-tests::applauncherd-functional-tests']
+
+        # required caps for fala_ft_creds1
+        cap1 = ['Tcb', 'Drm', 'Telephony', 'CAP::setuid', 'CAP::setgid',
+                'CAP::setfcap', 'CAP::sys_ptrace'] + caps
+
+        # required caps for fala_ft_creds2
+        cap2 = ['Cellular'] + caps
+
+        # check that all required creds are there
+        for cap in cap1:
+            self.assert_(cap in op1, "%s not set for fala_ft_creds1" % cap)
+
+        for cap in cap2:
+            self.assert_(cap in op2, "%s not set for fala_ft_creds2" % cap)
+
+        # check that no other creds are set
+        op1.sort()
+        cap1.sort()
+
+        self.assert_(op1 == cap1, "fala_ft_creds1 has non-requested creds!")
+
+        op2.sort()
+        cap2.sort()
+
+        self.assert_(op2 == cap2, "fala_ft_creds2 has non-requested creds!")
+
+    # uncomment this test when cred_confine starts working correctly
+    # def test_009(self):
+    #     """
+    #     Check that an application that doesn't have aegis file doesn't
+    #     get any funny credentials.
+    #     """
+
+    #     creds = self.get_creds('/usr/bin/fala_ft_hello')
+    #     debug("fala_ft_hello has %s" % ', '.join(creds))
+
+    #     req_creds = ['UID::nobody', 'GID::nogroup']
+
+    #     creds.sort()
+    #     req_creds.sort()
+
+    #     self.assert_(creds == req_creds, "fala_ft_hello has too many creds!")
+
         
 
 # main
