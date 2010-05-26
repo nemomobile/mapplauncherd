@@ -5,10 +5,11 @@ link_libraries(${MEEGOTOUCH_LIBRARIES})
 include(${QT_USE_FILE})
 add_library(creds_test MODULE ${SRC})
 
-install(PROGRAMS libcreds_test.so DESTINATION /usr/bin RENAME creds_test_max.launch)
-install(PROGRAMS creds_test DESTINATION /usr/bin RENAME creds_test_max)
+# max creds
+install(PROGRAMS libcreds_test.so DESTINATION /usr/bin RENAME fala_ft_creds1.launch)
+install(PROGRAMS fala_ft_creds DESTINATION /usr/bin RENAME fala_ft_creds1)
 
-install(PROGRAMS libcreds_test.so DESTINATION /usr/bin RENAME creds_test_normal.launch)
-install(PROGRAMS creds_test DESTINATION /usr/bin RENAME creds_test_normal)
-
+# "normal" creds
+install(PROGRAMS libcreds_test.so DESTINATION /usr/bin RENAME fala_ft_creds2.launch)
+install(PROGRAMS fala_ft_creds DESTINATION /usr/bin RENAME fala_ft_creds2)
 

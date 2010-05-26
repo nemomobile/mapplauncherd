@@ -11,7 +11,7 @@ usr/bin/helloworld_1.launch
 usr/bin/helloworld_2.launch
 usr/bin/qhelloworld
 usr/bin/prestartapp.launch
-usr/bin/creds_test_max
-usr/bin/creds_test_max.launch
-usr/bin/creds_test_normal
-usr/bin/creds_test_normal.launch
+usr/bin/fala_ft_creds1
+usr/bin/fala_ft_creds1.launch
+usr/bin/fala_ft_creds2
+usr/bin/fala_ft_creds2.launch
