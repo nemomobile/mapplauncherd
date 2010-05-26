@@ -61,7 +61,7 @@ endif (EXISTS ${Doxygen})
 # Install README
 install(FILES README DESTINATION /usr/share/doc/applauncherd)
 
-# Install applauncherd.pc
-install(FILES data/applauncherd.pc DESTINATION /usr/lib/pkgconfig)
+# Install meegotouch-boostable.pc
+install(FILES data/meegotouch-boostable.pc DESTINATION /usr/lib/pkgconfig)
 
 
