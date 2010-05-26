@@ -43,7 +43,7 @@ This is the "standard" way to compile shared libraries using gcc/g++.
   TEMPLATE = lib
   CONFIG += plugin
 
-  and QMake will use corect options for compiler and linker.
+  and QMake will use correct options for compiler and linker.
 
   Tips for CMake
   --------------
