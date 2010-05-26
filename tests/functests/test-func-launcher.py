@@ -34,7 +34,7 @@ Requirements:
 
 Usage:    test-func-launcher <launcherable application>
 
-Example:  test-func-launcher /usr/bin/helloworld
+Example:  test-func-launcher /usr/bin/fala_ft_hello
 
 Author:   ext-nimika.1.keshri@nokia.com
 """
@@ -48,8 +48,8 @@ import unittest
 
 LAUNCHER_BINARY='/usr/bin/applauncherd'
 DEV_NULL = file("/dev/null","w")
-LAUNCHABLE_APPS = ['/usr/bin/helloworld','/usr/bin/helloworld_1', '/usr/bin/helloworld_2']
-PREFERED_APP = '/usr/bin/helloworld'
+LAUNCHABLE_APPS = ['/usr/bin/fala_ft_hello','/usr/bin/fala_ft_hello_1', '/usr/bin/fala_ft_hello_2']
+PREFERED_APP = '/usr/bin/fala_ft_hello'
 
 def debug(*msg):
     """
