@@ -81,11 +81,14 @@ binary-arch: build install
 	dh_gencontrol
 	dh_md5sums
 	dh_builddeb 
+# TODO: CLEAN THIS UP!
 ifeq ($(DEB_HOST_ARCH), arm)
-	aegis-deb-add -control debian/applauncherd/DEBIAN/control .. debian/applauncherd.aegis=_aegis
+	aegis-deb-add -control debian/applauncherd-launcher/DEBIAN/control .. debian/applauncherd-launcher.aegis=_aegis
+	aegis-deb-add -control debian/applauncherd-invoker/DEBIAN/control .. debian/applauncherd-invoker.aegis=_aegis
 	aegis-deb-add -control debian/applauncherd-functional-tests/DEBIAN/control .. debian/applauncherd-functional-tests.aegis=_aegis
 else ifeq ($(DEB_HOST_ARCH), armel)
-	aegis-deb-add -control debian/applauncherd/DEBIAN/control .. debian/applauncherd.aegis=_aegis
+	aegis-deb-add -control debian/applauncherd-launcher/DEBIAN/control .. debian/applauncherd-launcher.aegis=_aegis
+	aegis-deb-add -control debian/applauncherd-invoker/DEBIAN/control .. debian/applauncherd-invoker.aegis=_aegis
 	aegis-deb-add -control debian/applauncherd-functional-tests/DEBIAN/control .. debian/applauncherd-functional-tests.aegis=_aegis
 endif
 
