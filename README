@@ -9,14 +9,18 @@ main function.
 The applauncherd daemon is started by UpStart as part of XSession, that is,
 at the same level as the desktop (MeeGo Touch homescreen). Applauncherd forks the 
 will-be-application process a.k.a booster before knowing which application 
-is going to be launched next. The booster process does some initializations 
-that cannot be shared among other processes and therefore have to be done after 
-the fork. This allows, for instance, instantiating a MeeGo Touch application before knowing 
-the name of the application. Then the booster process waits for a connection from the
-invoker with the information about which application should be launched. Each application 
-type (e.g. Qt and MeeGo Touch) has its own booster process. When booster launches the 
-application by calling the "main" function, applauncherd will create new booster 
+is going to be launched next. 
+
+The booster process does some initializations that cannot be shared among other processes and
+therefore have to be done after the fork. This allows, for instance, instantiating a MeeGo Touch
+application before knowing the name of the application. Then the booster process waits for a
+connection from the invoker with the information about which application should be launched. 
+
+Each application type (currently Qt and MeeGo Touch) has its own booster process. When booster launches the application by calling the "main" function, applauncherd will create new booster 
 process of that type.
+
+Please refer to the MeeGo Touch documentation for instructions on MComponentCache and
+how to enable it in your application.
 
 The invoker tells to booster process to load an application binary. Before loading, 
 booster process changes its security credentials so that the code in the application 
@@ -27,53 +31,98 @@ environment variables. Finally, it finds the main function in the
 application binary with dlsym() and calls the main() with the command line
 arguments given by the invoker.
 
+Aegis platform security is used to protect the socket connection between invoker and 
+launcher. Currently this works only on the target device. It is automatically disabled
+by the build scripts when compiling on x86. 
+
 
 Using applauncherd
 ==============================
 
-1. Binaries intended to be run with applauncherd must be linked as a shared library,
-with -shared (and -rdynamic) and compiled to position independent code with -fPIC.
-This is the "standard" way to compile shared libraries using gcc/g++.
+1. COMPILING YOUR APPLICATION TO BE LAUNCHABLE
+
+Binaries intended to be run with applauncherd should be compiled with
+-fPIC option to produce position independent code. In order to produce a position independent
+executable, -pie option and -rdynamic options can be used in linking. This allows the result 
+to be executed traditionally and with the launcher.
+
+To improve linking and load times of shared object libraries the size
+of dynamic export table it is encouraged to hide the unnecessary
+symbols from the resulting binary by using -fvisibility=hidden and
+-fvisibility-inlines-hidden flags in compilation as well. 
 
   Tips for QMake
   --------------
   
   If you are using QMake, you can define following variables in .pro file:
 
-  TEMPLATE = lib
-  CONFIG += plugin
-
-  and QMake will use correct options for compiler and linker.
+  QMAKE_CXXFLAGS += -fPIC -fvisibility=hidden -fvisibility-inlines-hidden
+  QMAKE_LFLAGS += -pie -rdynamic
 
   Tips for CMake
   --------------
 
   With CMake, you can compile and install your program like this:
 
-  -- clip --
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC -fvisibility=hidden -fvisibility-inlines-hidden")
+  set(CMAKE_EXE_LINKER_FLAGS " -pie -rdynamic")
+  install(PROGRAMS myapplication DESTINATION /usr/bin RENAME myapplication.launch)
 
-  add_library(helloworld MODULE ${...YOUR SOURCE...})
-  install(PROGRAMS libhelloworld.so DESTINATION /usr/bin RENAME helloworld.launch)
+With -fvisibility=hidden you must make sure that the symbol for main() is exported. 
+This can be done like this (MeeGo Touch):
+
+  #include <MExport>
+
+  M_EXPORT int main(int argc, char **argv)
+  {
+  ...
+  }
+
+or like this (Qt):
+
+  #include <QtCore/QtGlobal>
   
-  -- clip --
+  Q_DECL_EXPORT int main(int argc, char **argv)
+  {
+  ...
+  }
 
-  CMake takes care of the correct flags when MODULE is defined.  
+or like this (generic way with g++):
 
-2. Rename appication binary to <application_name>.launch and 
-replace original binary by a script that executes invoker with correct 
-application type and the name of application binary as a parameter.
+  extern "C" __attribute__ ((__visibility__("default"))) int main(int argc, char **argv)
+  {
+  ...
+  }
+
+2. LAUNCHING YOUR APPLICATION
+
+Rename appication binary to <application_name>.launch and 
+replace the original binary by a wrapper script that executes invoker with correct 
+application type and the name of the application binary as a parameter. 
+
 Use --type=m parameter for MeeGo Touch applications and --type=qt for plain
 Qt applications and everything else. Launch script example for typical application:
 
-#!/bin/sh
-echo "/usr/bin/invoker --type=m" $0.launch $@
-exec /usr/bin/invoker --type=m $0.launch $@
+  #!/bin/sh
+  echo "/usr/bin/invoker --type=m" $0.launch $@
+  exec /usr/bin/invoker --type=m $0.launch $@
 
-3. Applauncherd is started by UpStart during the boot time, but it
+If you are using D-Bus to launch your application, then this can be done straightly in
+the .service-file without any wrapper scripts:
+
+  [D-BUS Service]
+  Name=com.nokia.launchable_app
+  Exec=/usr/bin/invoker --type=m /usr/bin/launchable_app.launch
+
+3. STARTING Applaucherd
+
+Applauncherd is started by UpStart during the boot time, but it
 can be also started manually in scratchbox or on the device by 
-/usr/bin/applauncherd script
+the /usr/bin/applauncherd -script
 
-4. Add dependancy to applauncherd package to "Depends" section of applications
+4. PACKAGING
+
+Add dependency to applauncherd package to "Depends" section of your applications
 debian/control file.
 
 

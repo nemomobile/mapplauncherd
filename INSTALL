@@ -6,15 +6,15 @@ Applauncherd uses the CMake build system.
 Configure
 ---------
 
-* Applauncherd only:
+* Configure applauncherd only:
 
   ./configure
 
-* Applauncherd + tests:
+* Configure applauncherd + tests:
 
   BUILD_TESTS=1 ./configure
 
-* Applauncherd with security check for invoker disabled:
+* Configure applauncherd with security check for invoker disabled:
 
   DISABLE_VERIFICATION=1 ./configure
 
