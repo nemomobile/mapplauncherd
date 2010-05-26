@@ -11,5 +11,9 @@
         <for path="/usr/bin/applauncherd.bin"/>
     </request>
 
+  <provide>
+    <credential name="access" />
+  </provide>
+
 </aegis>
 
