@@ -1,4 +1,4 @@
-set(CMAKE_VERBOSE_MAKEFILE OFF)
+set(CMAKE_VERBOSE_MAKEFILE ON)
 
 # Set default C++ flags
 #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -W -Wall -g -Wno-long-long -O2 -Wextra -Wpointer-arith -Wwrite-strings -Wold-style-cast -Woverloaded-virtual -Wundef")
@@ -25,6 +25,7 @@ if (EXISTS ${CREDS_H})
     find_library(LIBCREDS NAMES creds)
     if (EXISTS ${LIBCREDS})
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DHAVE_CREDS")
+        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DHAVE_CREDS")
         link_libraries(${LIBCREDS})
 	    message(STATUS "  found: " ${LIBCREDS})
     else (EXISTS ${LIBCREDS})
