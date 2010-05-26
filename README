@@ -1,39 +1,22 @@
 What is applauncherd?
 ==============================
 
-Applauncherd is a daemon and it helps to launch applications faster by 
-preloading MeeGo Touch and Qt dynamically linked libraries and making some 
-initializations before loading the application binary and executing the 
-main function.
+Applauncherd is a daemon and it helps to launch applications faster by preloading MeeGo Touch and Qt dynamically linked libraries and making some initializations before loading the application binary and executing the main function.
 
-The applauncherd daemon is started by UpStart as part of XSession, that is,
-at the same level as the desktop (MeeGo Touch homescreen). Applauncherd forks the 
-will-be-application process a.k.a booster before knowing which application 
-is going to be launched next. 
+The applauncherd daemon is started by UpStart as part of XSession, that is, at the same level as the desktop (MeeGo Touch homescreen). Applauncherd forks the will-be-application process a.k.a booster before knowing which application is going to be launched next. 
 
-The booster process does some initializations that cannot be shared among other processes and
-therefore have to be done after the fork. This allows, for instance, instantiating a MeeGo Touch
-application before knowing the name of the application. Then the booster process waits for a
-connection from the invoker with the information about which application should be launched. 
+Users use the launcher always through a special invoker program. The invoker (/usr/bin/invoker) tells booster process to load an application binary. 
 
-Each application type (currently Qt and MeeGo Touch) has its own booster process. When booster launches the application by calling the "main" function, applauncherd will create new booster 
-process of that type.
+Before loading, booster process changes its security credentials so that the code in the application binary will be executed with the correct credentials. Loading the binary is done with dlopen(), and therefore the application needs to be compiled and linked as a shared library or a position independent executable. The booster process also sets the
+environment variables. Finally, it finds the main function in the application binary with dlsym() and calls the main() with the command line arguments given by the invoker.
 
-Please refer to the MeeGo Touch documentation for instructions on MComponentCache and
-how to enable it in your application.
+Aegis platform security is used to protect the socket connection between invoker and launcher. Currently this works only on the target device. It is automatically disabled by the build scripts when compiling on x86. 
 
-The invoker tells to booster process to load an application binary. Before loading, 
-booster process changes its security credentials so that the code in the application 
-binary will be executed with the correct credentials. Loading the binary is done with 
-dlopen(), and therefore the application needs to be compiled and linked as a shared 
-library or a position independent executable. The booster process also sets the
-environment variables. Finally, it finds the main function in the
-application binary with dlsym() and calls the main() with the command line
-arguments given by the invoker.
+Each application type (currently Qt and MeeGo Touch) has its own booster process. When booster launches the application by calling the "main()" function, applauncherd will create new booster process of that type. Qt booster can be used for all kinds of applicationts.
 
-Aegis platform security is used to protect the socket connection between invoker and 
-launcher. Currently this works only on the target device. It is automatically disabled
-by the build scripts when compiling on x86. 
+Booster processes do some initializations that cannot be shared among other processes and therefore have to be done after the fork. This allows, for instance, instantiating a MeeGo Touch application before knowing the name of the application. Then the booster process waits for a connection from the invoker with the information about which application should be launched. 
+
+With MeeGo Touch booster it's possible to fetch certain objects from a cache. This will significantly reduce the startup time of an application. Please refer to the MeeGo Touch documentation for instructions on MComponentCache and how to enable it in your application.
 
 
 Using applauncherd
@@ -41,15 +24,9 @@ Using applauncherd
 
 1. COMPILING YOUR APPLICATION TO BE LAUNCHABLE
 
-Binaries intended to be run with applauncherd should be compiled with
--fPIC option to produce position independent code. In order to produce a position independent
-executable, -pie option and -rdynamic options can be used in linking. This allows the result 
-to be executed traditionally and with the launcher.
+Binaries intended to be run with applauncherd should be compiled with -fPIC option to produce position independent code. In order to produce a position independent executable, -pie option and -rdynamic options can be used in linking. This allows the result to be executed traditionally and with the launcher.
 
-To improve linking and load times of shared object libraries the size
-of dynamic export table it is encouraged to hide the unnecessary
-symbols from the resulting binary by using -fvisibility=hidden and
--fvisibility-inlines-hidden flags in compilation as well. 
+To improve linking and load times of shared object libraries the size of dynamic export table it is encouraged to hide the unnecessary symbols from the resulting binary by using -fvisibility=hidden and -fvisibility-inlines-hidden flags in compilation as well. 
 
   Tips for QMake
   --------------
@@ -67,6 +44,11 @@ symbols from the resulting binary by using -fvisibility=hidden and
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC -fvisibility=hidden -fvisibility-inlines-hidden")
   set(CMAKE_EXE_LINKER_FLAGS " -pie -rdynamic")
   install(PROGRAMS myapplication DESTINATION /usr/bin RENAME myapplication.launch)
+
+The correct flags can also be obtained with:
+
+  pkg-config --cflags --libs meegotouch-boostable
+
 
 With -fvisibility=hidden you must make sure that the symbol for main() is exported. 
 This can be done like this (MeeGo Touch):
@@ -96,19 +78,15 @@ or like this (generic way with g++):
 
 2. LAUNCHING YOUR APPLICATION
 
-Rename appication binary to <application_name>.launch and 
-replace the original binary by a wrapper script that executes invoker with correct 
-application type and the name of the application binary as a parameter. 
+Rename appication binary to <application_name>.launch and replace the original binary by a wrapper script that executes invoker with correct application type and the name of the application binary as a parameter. 
 
-Use --type=m parameter for MeeGo Touch applications and --type=qt for plain
-Qt applications and everything else. Launch script example for typical application:
+Use --type=m parameter for MeeGo Touch applications and --type=qt for plain Qt applications and everything else. Launch script example for typical application:
 
   #!/bin/sh
   echo "/usr/bin/invoker --type=m" $0.launch $@
   exec /usr/bin/invoker --type=m $0.launch $@
 
-If you are using D-Bus to launch your application, then this can be done straightly in
-the .service-file without any wrapper scripts:
+If you are using D-Bus to launch your application, then this can be done straightly in the .service-file without any wrapper scripts:
 
   [D-BUS Service]
   Name=com.nokia.launchable_app
@@ -116,14 +94,11 @@ the .service-file without any wrapper scripts:
 
 3. STARTING Applaucherd
 
-Applauncherd is started by UpStart during the boot time, but it
-can be also started manually in scratchbox or on the device by 
-the /usr/bin/applauncherd -script
+Applauncherd is started by UpStart during the boot time, but it can be also started manually in scratchbox or on the device by the /usr/bin/applauncherd -script
 
 4. PACKAGING
 
-Add dependency to applauncherd package to "Depends" section of your applications
-debian/control file.
+Add dependency to applauncherd package to "Depends" section of your applications debian/control file.
 
 
 Current known issues
