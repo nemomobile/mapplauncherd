@@ -7,14 +7,14 @@ Standards-Version: 3.8.0
 
 Package: applauncherd
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, applauncherd-invoker, applauncherd-launcher
+Depends: ${shlibs:Depends}, ${misc:Depends}, applauncherd-invoker
 Description: Meta package for applaucherd and invoker
  Launcher daemon and invoker to speed up launches. 
  Special boosters for MeeGo Touch and Qt.
 
 Package: applauncherd-invoker
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, libcreds2 [arm armel]
+Depends: ${shlibs:Depends}, ${misc:Depends}, applauncherd-launcher, libcreds2 [arm armel]
 Description: Invoker part of applaucherd
  Launcher daemon and invoker to speed up launches. 
  Special boosters for MeeGo Touch and Qt.
