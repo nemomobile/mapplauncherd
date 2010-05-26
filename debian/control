@@ -7,15 +7,29 @@ Standards-Version: 3.8.0
 
 Package: applauncherd
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, libcreds2
-Description: Launcher daemon and invoker to speed up launches
+Depends: ${shlibs:Depends}, ${misc:Depends}, applauncherd-invoker, applauncherd-launcher
+Description: Meta package for applaucherd and invoker
+ Launcher daemon and invoker to speed up launches. 
+ Special boosters for MeeGo Touch and Qt.
+
+Package: applauncherd-invoker
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, libcreds2 [arm armel]
+Description: Invoker part of applaucherd
+ Launcher daemon and invoker to speed up launches. 
+ Special boosters for MeeGo Touch and Qt.
+
+Package: applauncherd-launcher
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, libcreds2 [arm armel]
+Description: Launcher part of applaucherd
  Launcher daemon and invoker to speed up launches. 
  Special boosters for MeeGo Touch and Qt.
  
 Package: applauncherd-tests
 Section: extra
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, libmeegotouchcore0, libmeegotouchviews0, libmeegotouchextensions0, libmeegotouchsettings0, testrunner, applauncherd, ci-testing, libcreds2 [arm armel]
+Depends: ${shlibs:Depends}, ${misc:Depends}, libmeegotouchcore0, libmeegotouchviews0, libmeegotouchextensions0, libmeegotouchsettings0, testrunner, applauncherd, ci-testing, libcreds[arm armel]
 XB-Maemo-CI-Packages: applauncherd
 XB-Maemo-CI-Stage: fast, staging, acceptance, validation
 Description: applauncherd unit tests
@@ -24,7 +38,7 @@ Description: applauncherd unit tests
 Package: applauncherd-functional-tests
 Section: extra
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, libmeegotouchcore0, libmeegotouchviews0, libmeegotouchextensions0, libmeegotouchsettings0, testrunner, applauncherd, ci-testing, matti, libcreds2, libcreds2-tools
+Depends: ${shlibs:Depends}, ${misc:Depends}, libmeegotouchcore0, libmeegotouchviews0, libmeegotouchextensions0, libmeegotouchsettings0, testrunner, applauncherd, ci-testing, matti, libcreds2 [arm armel], libcreds2-tools [arm armel]
 XB-Maemo-CI-Packages: applauncherd
 XB-Maemo-CI-Stage: fast, staging, acceptance, validation
 Description: applauncherd functional tests

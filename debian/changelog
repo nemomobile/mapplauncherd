@@ -1,8 +1,9 @@
 applauncherd (0.4.1~1) unstable; urgency=low
 
   * Platform security stuff added: confine for the forked process + verification for the invoker (disabled for now)
+  * Applauncherd package divided into applauncherd-launcher and applauncherd-invoker
 
- -- Jussi Lind <jussi.lind@tnokia.com>  Thu, 20 May 2010 15:38:42 +0300
+ -- Jussi Lind <jussi.lind@nokia.com>  Thu, 20 May 2010 15:38:42 +0300
 
 applauncherd (0.3.1-1) stable; urgency=low
 
