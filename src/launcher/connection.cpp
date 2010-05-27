@@ -25,6 +25,7 @@
 #include "logger.h"
 
 #include <sys/socket.h>
+#include <sys/stat.h> // For chmod
 #include <cstring>
 #include <cstdlib>
 #include <cerrno>
@@ -100,6 +101,10 @@ void Connection::initSocket(const string socketId)
 
         if (listen(sockfd, 10) < 0)
             Logger::logErrorAndDie(EXIT_FAILURE, "listening to invoker socket\n");
+
+        chmod(socketId.c_str(), S_IRUSR | S_IWUSR | S_IXUSR |
+                                S_IRGRP | S_IWGRP | S_IXGRP |
+                                S_IROTH | S_IWOTH | S_IXOTH);
 
         socketPool[socketId] = sockfd;
     }
