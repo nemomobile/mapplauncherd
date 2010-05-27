@@ -6,7 +6,6 @@
 	<credential name="CAP::setuid" />
 	<credential name="CAP::setgid" />
 	<credential name="CAP::setfcap" />
-	<credential name="CAP::sys_ptrace" />
         <for path="/usr/bin/fala_ft_creds1.launch" />
     </request>
 

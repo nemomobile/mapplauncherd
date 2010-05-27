@@ -267,7 +267,7 @@ class launcher_tests (unittest.TestCase):
 
         # required caps for fala_ft_creds1
         cap1 = ['Tcb', 'Drm', 'Telephony', 'CAP::setuid', 'CAP::setgid',
-                'CAP::setfcap', 'CAP::sys_ptrace'] + caps
+                'CAP::setfcap'] + caps
 
         # required caps for fala_ft_creds2
         cap2 = ['Cellular'] + caps
