@@ -1,7 +1,7 @@
 <aegis>
     <request>
-	<credential name="Tcb" />
-	<credential name="Drm" />
+	<credential name="tcb" />
+	<credential name="drm" />
 	<credential name="Telephony" />
 	<credential name="CAP::setuid" />
 	<credential name="CAP::setgid" />
