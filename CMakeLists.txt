@@ -1,4 +1,4 @@
-set(CMAKE_VERBOSE_MAKEFILE ON)
+set(CMAKE_VERBOSE_MAKEFILE OFF)
 
 # Set default C++ flags
 #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -W -Wall -g -Wno-long-long -O2 -Wextra -Wpointer-arith -Wwrite-strings -Wold-style-cast -Woverloaded-virtual -Wundef")
@@ -61,7 +61,7 @@ endif (EXISTS ${Doxygen})
 # Install README
 install(FILES README DESTINATION /usr/share/doc/applauncherd)
 
-# Install applauncherd.pc
-install(FILES data/applauncherd.pc DESTINATION /usr/lib/pkgconfig/applauncherd.pc)
+# Install meegotouch-boostable.pc
+install(FILES data/meegotouch-boostable.pc DESTINATION /usr/lib/pkgconfig)
 
 

@@ -1,0 +1,9 @@
+<aegis>
+
+  <request>
+        <credential name="CAP::dac_override"/>
+        <credential name="applauncherd-launcher::access"/>
+    	<for path="/usr/bin/invoker" id="client"/>
+  </request>
+
+</aegis>
