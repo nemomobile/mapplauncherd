@@ -60,7 +60,7 @@ Daemon::Daemon(int & argc, char * argv[]) :
     }
 
     // Parse arguments
-    parseArgs(vector<string>(argv, argv + argc));
+    parseArgs(ArgVect(argv, argv + argc));
 
     // Disable console output
     if (m_quiet)
@@ -232,7 +232,7 @@ bool Daemon::forkBooster(char type, int pipefd[2])
 
 void Daemon::reapZombies()
 {
-    vector<pid_t>::iterator i(m_children.begin());
+    PidVect::iterator i(m_children.begin());
     while (i != m_children.end())
     {
         if (waitpid(*i, NULL, WNOHANG))
@@ -340,9 +340,9 @@ void Daemon::usage() const
     exit(EXIT_SUCCESS);
 }
 
-void Daemon::parseArgs(const vector<string> & args)
+void Daemon::parseArgs(const ArgVect & args)
 {
-    for (vector<string>::const_iterator i(args.begin()); i != args.end(); i++)
+    for (ArgVect::const_iterator i(args.begin()); i != args.end(); i++)
     {
         if ((*i) == "--help")
         {

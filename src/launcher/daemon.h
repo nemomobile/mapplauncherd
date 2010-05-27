@@ -83,7 +83,8 @@ private:
     Daemon & operator= (const Daemon & r);
 
     //! Parse arguments
-    void parseArgs(const vector<string> & args);
+    typedef vector<string> ArgVect;
+    void parseArgs(const ArgVect & args);
 
     //! Fork to a daemon
     void daemonize();
@@ -107,7 +108,8 @@ private:
     bool m_quiet;
 
     //! Vector of current child PID's
-    vector<pid_t> m_children;
+    typedef vector<pid_t> PidVect;
+    PidVect m_children;
 
     int    m_initialArgc;
     char** m_initialArgv;
