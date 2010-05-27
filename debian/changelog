@@ -1,3 +1,12 @@
+applauncherd (0.5.0-1) stable; urgency=low
+
+  * applauncherd-dev install meegotouch-boostable.prf for qmake
+  * Socket permissions set to 777
+  * Documentation updates
+  * Aegis tests updated / fixed
+
+ -- Jussi Lind <jussi.lind@nokia.com>  Thu, 27 May 2010 14:34:47 +0300
+
 applauncherd (0.4.0-1) stable; urgency=low
 
   * Platform security stuff added: confine for the forked process + verification for the invoker (disabled for now)
