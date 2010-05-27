@@ -70,6 +70,7 @@ int main(int argc, char * argv[])
     Logger::openLog(PROG_NAME);
     Logger::logNotice("%s starting..", PROG_NAME);
 
+    // Check that an instance of launcher is not already running
     if(!getLock())
     {
         Logger::logErrorAndDie(EXIT_FAILURE, "try to launch second instance");
@@ -79,7 +80,7 @@ int main(int argc, char * argv[])
     signal(SIGCHLD, reapZombies);
     signal(SIGHUP,  exitBooster);
 
-
+    // Create main daemon instance
     Daemon myDaemon(argc, argv);
 
     // Run the main loop
