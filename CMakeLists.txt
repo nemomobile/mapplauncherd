@@ -62,6 +62,8 @@ endif (EXISTS ${Doxygen})
 install(FILES README DESTINATION /usr/share/doc/applauncherd)
 
 # Install meegotouch-boostable.pc
-install(FILES data/meegotouch-boostable.pc DESTINATION /usr/lib/pkgconfig)
+install(FILES data/pkgconfig/meegotouch-boostable.pc DESTINATION /usr/lib/pkgconfig)
 
+# Install the qmake config feature file
+install(FILES data/mkspecs/features/meegotouch-boostable.prf DESTINATION /usr/share/qt4/mkspecs/features)
 
