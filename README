@@ -110,7 +110,11 @@ If you are using D-Bus to launch your application, then this can be done straigh
 
 Applauncherd is started by UpStart during the boot time, but it can be also started manually in scratchbox or on the device by the /usr/bin/applauncherd -script
 
-4. PACKAGING
+4. PLATFORM SECURITY (Aegis)
+
+Altough the connection between invoker and launcher is protected by Aegis, Application developer doesn't need to request for any additional security tokens to make things work.
+
+5. PACKAGING
 
 Add dependency to applauncherd package to "Depends" section of your applications debian/control file.
 
