@@ -45,6 +45,10 @@
           <step expected_result="0">source /tmp/session_bus_address.user; DISPLAY=:0 `pyversions -d` /usr/share/applauncherd-functional-tests/test-func-launcher.py test_008</step>
       </case>
 
+      <case name="launcher10" type="Functional" description="Test that launcher and invoker have correct credentials" timeout="120" level="System">
+          <step expected_result="0">source /tmp/session_bus_address.user; DISPLAY=:0 `pyversions -d` /usr/share/applauncherd-functional-tests/test-func-launcher.py test_010</step>
+      </case>
+
       <environments>
           <scratchbox>false</scratchbox>
           <hardware>true</hardware>    

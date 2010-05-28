@@ -307,7 +307,34 @@ class launcher_tests (unittest.TestCase):
 
     #     self.assert_(creds == req_creds, "fala_ft_hello has too many creds!")
 
-        
+    def test_010(self):
+        """
+        Test that the launcher registered customized credentials 
+        and invoker has proper credentials to access launcher
+        """
+
+        INVOKER_BINARY='/usr/bin/invoker'
+        FAKE_INVOKER_BINARY='/usr/bin/invoker2'
+
+        op1 = self.get_creds(INVOKER_BINARY)
+        debug("/usr/bin/invoker has %s" % ', '.join(op1))
+
+        # required custom caps
+        caps = ['applauncherd-launcher::access']
+
+        for cap in caps:
+            self.assert_(cap in op1, "%s not set for invoker" % cap)
+
+        st, op = commands.getstatusoutput("cp %s %s" % (INVOKER_BINARY, FAKE_INVOKER_BINARY))
+        self.assert_(st == 0, "can't make copy of invoker")
+
+        op2 = self.get_creds(FAKE_INVOKER_BINARY)
+        debug("fake invoker has %s" % ', '.join(op2))
+
+        for cap in caps:
+            self.assert_(not (cap in op2), "%s is set for fake invoker" % cap)
+
+ 
 
 # main
 if __name__ == '__main__':
