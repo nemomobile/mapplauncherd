@@ -38,6 +38,7 @@
 #include <unistd.h>
 #include <errno.h>
 #include <sys/wait.h>
+#include <limits.h>
 
 #include "report.h"
 #include "protocol.h"
@@ -53,6 +54,8 @@ static const int DEFAULT_DELAY = 0;
 enum APP_TYPE { M_APP, QT_APP, UNKNOWN_APP };
 
 extern char ** environ;
+
+
 
 /*
  * Show a list of credentials that the client has
@@ -76,6 +79,8 @@ static void showcredentials(void)
 #else
     printf("credentials information isn't available \n");
 #endif
+
+    exit(0);
 }
 
 
@@ -253,7 +258,7 @@ static void version(void)
 
 static void usage(int status)
 {
-    printf("\nUsage: %s --type=TYPE [options] [file] [args]\n"
+    printf("\nUsage: %s [options] [--type=TYPE]  [file] [args]\n"
            "Launch m or qt application.\n\n"
            "TYPE chooses the type of booster used. Qt-booster may be used to launch anything.\n"
            "Possible values for TYPE: \n"
@@ -269,6 +274,28 @@ static void usage(int status)
     exit(status);
 }
 
+static unsigned int get_delay(char *delay_arg)
+{
+    unsigned int delay;
+
+    if (delay_arg)
+    {
+        errno = 0;    /* To distinguish success/failure after call */
+        delay = strtoul(delay_arg, NULL, 10);
+
+        /* Check for various possible errors */
+        if ((errno == ERANGE && delay == ULONG_MAX) || delay == 0)
+        {
+            report(report_error, "wrong value of delay parameter: %s \n", delay_arg);
+            usage(1);
+        }
+    }
+    else
+        delay = DEFAULT_DELAY;
+
+    return delay;
+}
+
 int main(int argc, char *argv[])
 {
     int i;
@@ -278,6 +305,7 @@ int main(int argc, char *argv[])
     char *prog_name = NULL;
     int prog_prio = 0;
     char *delay_str = NULL;
+    unsigned int delay;
     int magic_options = 0;
     enum APP_TYPE app_type = UNKNOWN_APP;
 
@@ -286,41 +314,34 @@ int main(int argc, char *argv[])
         /* Check application type to start */
         if (argc < 2)
         {
-            report(report_error, "application type is missing \n");
-            usage(1);
-        }
-        else if (strcmp(argv[1], "--type=m") == 0)
-            app_type = M_APP;
-        else if (strcmp(argv[1], "--type=qt") == 0)
-            app_type = QT_APP;
-        else if (strcmp(argv[1], "--version") == 0)
-            version();
-        else if (strcmp(argv[1], "--creds") == 0)
-        {
-            showcredentials();
-            exit(0);
-        }
-        else if (strcmp(argv[1], "--help") == 0)
-            usage(0);
-        else
-        {
-            report(report_error, "unknown type of application %s \n", argv[1]);
+            report(report_error, "parameters are missing \n");
             usage(1);
         }
 
-        /* Parse invoker options and search binary to launch */
-        if (argc < 3)
+        else if (argc == 2)
         {
-            report(report_error, "application name is missing \n");
-            usage(1);
+            /* just print some info and exit, no need to launch an application */
+            if (strcmp(argv[1], "--version") == 0)
+                version();
+            else if (strcmp(argv[1], "--creds") == 0)
+                showcredentials();
+            else if (strcmp(argv[1], "--help") == 0)
+                usage(0);
+            else
+            {
+                report(report_error, "application name or type is missing \n");
+                usage(1);
+            }
         }
-        for (i = 2; i < argc; ++i)
+
+        for (i = 1; i < argc; ++i)
         {
             if (strcmp(argv[i], "--delay") == 0)
             {
                 if (argv[++i])
-                    delay_str = argv[i];
-
+                {
+                    delay = get_delay(argv[i]);
+                }
             }
             else if (strcmp(argv[i], "--version") == 0)
                 continue;
@@ -328,6 +349,10 @@ int main(int argc, char *argv[])
                 continue;
             else if (strcmp(argv[i], "--creds") == 0)
                 continue;
+            else if (strcmp(argv[i], "--type=m") == 0)
+                app_type = M_APP;
+            else if (strcmp(argv[i], "--type=qt") == 0)
+                app_type = QT_APP;
             else if (strncmp(argv[i], "--", 2) == 0)
             {
                 report(report_error, "unknown parameter %s \n", argv[i]);
@@ -384,6 +409,13 @@ int main(int argc, char *argv[])
 
     if (prog_name)
         free(prog_name);
+
+    if (delay)
+    {
+        /* DBUS cannot cope some times if the invoker exits too early. */
+        debug("delaying exit for %d seconds\n", delay);
+        sleep(delay);
+    }
 
     close(fd);
 
