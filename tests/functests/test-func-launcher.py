@@ -126,7 +126,7 @@ class launcher_tests (unittest.TestCase):
     def kill_process(self, appname):
         temp = basename(appname)[:14]
         st, op = commands.getstatusoutput("pkill -9 %s" % temp)
-        os.wait()
+        #os.wait()
 
     def process_state(self, processid):
         st, op = commands.getstatusoutput('cat /proc/%s/stat' %processid)
