@@ -410,14 +410,14 @@ int main(int argc, char *argv[])
     if (prog_name)
         free(prog_name);
 
+    close(fd);
+
     if (delay)
     {
         /* DBUS cannot cope some times if the invoker exits too early. */
         debug("delaying exit for %d seconds\n", delay);
         sleep(delay);
     }
-
-    close(fd);
 
     return 0;
 }
