@@ -144,6 +144,11 @@ class launcher_tests (unittest.TestCase):
 
         # try launch the specified application
         handle = self.run_app_with_launcher(path)
+
+        # sleep for a moment to allow applauncherd to start the process
+        time.sleep(1)
+
+        # with luck, the process should have correct name by now
         pid = self.get_pid(path)
 
         debug("%s has PID %s" % (basename(path), pid,))
