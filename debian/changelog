@@ -1,3 +1,12 @@
+applauncherd (0.5.0-1) stable; urgency=low
+
+  * Platform security feature improved
+  * mcomponentcache enabled
+  * disable LD_BIND_NOW environment variable
+  * added delay parameter to invoker, invoker debug logging disabled by default, code refactoring
+
+ -- Nimika Keshri <nimika.1.keshri@nokia.com>  Fri, 04 Jun 2010 12:18:59 +0300
+
 applauncherd (0.4.1-1) stable; urgency=low
 
   * applauncherd-dev install meegotouch-boostable.prf for qmake
