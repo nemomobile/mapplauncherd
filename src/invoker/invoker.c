@@ -305,7 +305,7 @@ int main(int argc, char *argv[])
     char *prog_name = NULL;
     int prog_prio = 0;
     char *delay_str = NULL;
-    unsigned int delay;
+    unsigned int delay = DEFAULT_DELAY;
     int magic_options = 0;
     enum APP_TYPE app_type = UNKNOWN_APP;
 
