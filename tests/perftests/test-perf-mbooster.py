@@ -175,7 +175,7 @@ class launcher_perf_tests (unittest.TestCase):
 
 
     def perftest_with_launcher(self, appname):
-        debug("run app without launcher without duihome")
+        debug("run app with launcher without duihome")
         twlnd = self.run_with_launcher_without_duihome(appname)
         time.sleep(5)
 
