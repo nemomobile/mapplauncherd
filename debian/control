@@ -48,6 +48,15 @@ XB-Maemo-CI-Stage: fast, staging, acceptance, validation
 Description: applauncherd functional tests
  Functional testing binaries and shellscripts for testing applauncherd.
 
+Package: applauncherd-testapps
+Section: extra
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, libmeegotouchcore0, libmeegotouchviews0, libmeegotouchextensions0, libmeegotouchsettings0, testrunner, applauncherd, ci-testing, matti, libcreds2 [arm armel], libcreds2-tools [arm armel]
+XB-Maemo-CI-Packages: applauncherd
+XB-Maemo-CI-Stage: fast, staging, acceptance, validation
+Description: applauncherd test applications
+ test applications for applauncherd tests
+
 Package: applauncherd-performance-tests
 Section: extra
 Architecture: any

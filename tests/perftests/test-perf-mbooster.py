@@ -45,7 +45,7 @@ import time
 import sys
 import unittest
 
-TESTAPP = '/usr/bin/testapp'
+TESTAPP = '/usr/bin/fala_testapp'
 LOG_FILE = '/tmp/testapp.log'
 DEV_NULL = file("/dev/null","w")
 
