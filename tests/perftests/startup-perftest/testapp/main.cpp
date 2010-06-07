@@ -52,9 +52,9 @@ int main(int argc, char **argv) {
     MApplicationWindow* w = new MApplicationWindow;
 #endif
     
-//    MyApplicationPage p;
+    MyApplicationPage p;
     w->show();
-//    p.appear();
+    p.appear();
     return app->exec();
 }
 
