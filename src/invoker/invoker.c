@@ -55,12 +55,10 @@ enum APP_TYPE { M_APP, QT_APP, UNKNOWN_APP };
 
 extern char ** environ;
 
-
-
 /*
  * Show a list of credentials that the client has
  */
-static void showcredentials(void)
+static void show_credentials(void)
 {
 #ifdef HAVE_CREDS
     creds_t creds;
@@ -83,7 +81,6 @@ static void showcredentials(void)
     exit(0);
 }
 
-
 static bool invoke_recv_ack(int fd)
 {
     uint32_t action;
@@ -99,8 +96,8 @@ static bool invoke_recv_ack(int fd)
     {
         die(1, "receiving wrong ack (%08x)\n", action);
     }
-    else
-        return true;
+
+    return true;
 }
 
 static int invoker_init(enum APP_TYPE app_type)
@@ -114,13 +111,19 @@ static int invoker_init(enum APP_TYPE app_type)
 
     sun.sun_family = AF_UNIX;  //AF_FILE;
 
-    int maxSize = sizeof(sun.sun_path) - 1;
+    const int maxSize = sizeof(sun.sun_path) - 1;
     if(app_type == M_APP)
+    {
         strncpy(sun.sun_path, INVOKER_M_SOCK, maxSize);
+    }
     else if (app_type == QT_APP)
+    {
         strncpy(sun.sun_path, INVOKER_QT_SOCK, maxSize);
+    }
     else
+    {
         die(1, "unknown type of application: %d \n", app_type);
+    }
 
     sun.sun_path[maxSize] = '\0';
 
@@ -206,7 +209,7 @@ static bool invoker_send_env(int fd)
 static bool invoker_send_io(int fd)
 {
     struct msghdr msg;
-    struct cmsghdr *cmsg;
+    struct cmsghdr *cmsg = NULL;
     int io[3] = { 0, 1, 2 };
     char buf[CMSG_SPACE(sizeof(io))];
     struct iovec iov;
@@ -296,18 +299,43 @@ static unsigned int get_delay(char *delay_arg)
     return delay;
 }
 
+static void invoke(int prog_argc, char **prog_argv, char *prog_name,
+                   enum APP_TYPE app_type, int magic_options)
+{
+    int prog_prio = getpriority(PRIO_PROCESS, 0);
+
+    errno = 0;
+    if (errno && prog_prio < 0)
+    {
+        prog_prio = 0;
+    }
+
+    int fd = invoker_init(app_type);
+
+    invoker_send_magic(fd, magic_options);
+    invoker_send_name(fd, prog_argv[0]);
+    invoker_send_exec(fd, prog_name);
+    invoker_send_args(fd, prog_argc, prog_argv);
+    invoker_send_prio(fd, prog_prio);
+    invoker_send_io(fd);
+    invoker_send_env(fd);
+    invoker_send_end(fd);
+
+    if (prog_name)
+        free(prog_name);
+
+    close(fd);
+}
+
 int main(int argc, char *argv[])
 {
-    int i;
-    int fd;
-    int prog_argc = 0;
-    char **prog_argv;
-    char *prog_name = NULL;
-    int prog_prio = 0;
-    char *delay_str = NULL;
-    unsigned int delay = DEFAULT_DELAY;
-    int magic_options = 0;
-    enum APP_TYPE app_type = UNKNOWN_APP;
+    enum APP_TYPE app_type      = UNKNOWN_APP;
+    int           prog_argc     = 0;
+    int           magic_options = 0;
+    unsigned int  delay         = DEFAULT_DELAY;
+    char        **prog_argv     = NULL;
+    char         *prog_name     = NULL;
+    // char         *delay_str     = NULL;
 
     if (strstr(argv[0], PROG_NAME))
     {
@@ -317,16 +345,21 @@ int main(int argc, char *argv[])
             report(report_error, "parameters are missing \n");
             usage(1);
         }
-
         else if (argc == 2)
         {
             /* just print some info and exit, no need to launch an application */
             if (strcmp(argv[1], "--version") == 0)
+            {
                 version();
+            }
             else if (strcmp(argv[1], "--creds") == 0)
-                showcredentials();
+            {
+                show_credentials();
+            }
             else if (strcmp(argv[1], "--help") == 0)
+            {
                 usage(0);
+            }
             else
             {
                 report(report_error, "application name or type is missing \n");
@@ -334,6 +367,7 @@ int main(int argc, char *argv[])
             }
         }
 
+        int i;
         for (i = 1; i < argc; ++i)
         {
             if (strcmp(argv[i], "--delay") == 0)
@@ -344,15 +378,25 @@ int main(int argc, char *argv[])
                 }
             }
             else if (strcmp(argv[i], "--version") == 0)
+            {
                 continue;
+            }
             else if (strcmp(argv[i], "--help") == 0)
+            {
                 continue;
+            }
             else if (strcmp(argv[i], "--creds") == 0)
+            {
                 continue;
+            }
             else if (strcmp(argv[i], "--type=m") == 0)
+            {
                 app_type = M_APP;
+            }
             else if (strcmp(argv[i], "--type=qt") == 0)
+            {
                 app_type = QT_APP;
+            }
             else if (strncmp(argv[i], "--", 2) == 0)
             {
                 report(report_error, "unknown parameter %s \n", argv[i]);
@@ -369,10 +413,13 @@ int main(int argc, char *argv[])
 
                 char *period = strstr(argv[i], ".launch");
                 if (period)
+                {
                     *period = '\0';
+                }
 
                 prog_argc = argc - i;
                 prog_argv = &argv[i];
+
                 break;
             }
         }
@@ -388,29 +435,9 @@ int main(int argc, char *argv[])
         die(1, "application's name is unknown \n");
     }
 
+    /* Send commands to the launcher daemon */
     info("invoking execution: '%s'\n", prog_name);
-
-    errno = 0;
-    prog_prio = getpriority(PRIO_PROCESS, 0);
-    if (errno && prog_prio < 0)
-      prog_prio = 0;
-
-
-    fd = invoker_init(app_type);
-
-    invoker_send_magic(fd, magic_options);
-    invoker_send_name(fd, prog_argv[0]);
-    invoker_send_exec(fd, prog_name);
-    invoker_send_args(fd, prog_argc, prog_argv);
-    invoker_send_prio(fd, prog_prio);
-    invoker_send_io(fd);
-    invoker_send_env(fd);
-    invoker_send_end(fd);
-
-    if (prog_name)
-        free(prog_name);
-
-    close(fd);
+    invoke(prog_argc, prog_argv, prog_name, app_type, magic_options);
 
     if (delay)
     {
@@ -421,4 +448,3 @@ int main(int argc, char *argv[])
 
     return 0;
 }
-
