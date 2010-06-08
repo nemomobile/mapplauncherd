@@ -1,5 +1,0 @@
-This is a sketch of more reliable startup performance test.
-
-How to measure start-up time:
-
-(rm /tmp/testapp.log; pkill -STOP duihome; ./gettimeofday ; invoker --type=m ./testapp >/dev/null 2>&1; sleep 2; pkill -CONT duihome; cat /tmp/testapp.log | tail -n2) | awk '/gettimeofday/{start=$1}/enterDisplay/{print "total time: "($1-start)}'

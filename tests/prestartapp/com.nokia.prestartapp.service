@@ -1,4 +1,0 @@
-[D-BUS Service]
-Name=com.nokia.prestartapp
-Exec=/usr/bin/invoker --type=m /usr/bin/prestartapp.launch -prestart
-

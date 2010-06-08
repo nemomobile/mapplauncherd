@@ -53,6 +53,8 @@ int main(int argc, char **argv) {
 #endif
     
     MyApplicationPage p;
+    MApplication::setPrestartMode(M::LazyShutdown);
+    p.setTitle("Applauncherd testapp");
     w->show();
     p.appear();
     return app->exec();

@@ -7,8 +7,8 @@ set(CMAKE_EXE_LINKER_FLAGS "-pie -rdynamic")
 
 # Enable Qt-support
 include(${QT_USE_FILE})
-add_executable(testapp ${SRC})
+add_executable(fala_testapp ${SRC})
 
 # Install
-install(PROGRAMS testapp DESTINATION /usr/bin/)
-
+install(PROGRAMS fala_testapp DESTINATION /usr/bin/)
+install(FILES com.nokia.fala_testapp.service DESTINATION /usr/share/dbus-1/services)

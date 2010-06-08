@@ -15,10 +15,7 @@ else (EXISTS ${M_COMPONENT_CACHE})
 endif (EXISTS ${M_COMPONENT_CACHE})
 
 # Sub build: helloworld
-add_subdirectory(helloworld)
-
-# Sub build: prestartapp
-add_subdirectory(prestartapp)
+add_subdirectory(TestApps/helloworld)
 
 # Sub build: unit tests
 add_subdirectory(unittests)
@@ -30,5 +27,7 @@ add_subdirectory(perftests)
 add_subdirectory(functests)
 
 # Sub build: creds
-add_subdirectory(creds)
+add_subdirectory(TestApps/creds)
 
+# Sub build: creds
+add_subdirectory(TestApps/testapp)
