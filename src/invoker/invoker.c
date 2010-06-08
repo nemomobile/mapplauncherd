@@ -302,9 +302,9 @@ static unsigned int get_delay(char *delay_arg)
 static void invoke(int prog_argc, char **prog_argv, char *prog_name,
                    enum APP_TYPE app_type, int magic_options)
 {
+    errno = 0;
     int prog_prio = getpriority(PRIO_PROCESS, 0);
 
-    errno = 0;
     if (errno && prog_prio < 0)
     {
         prog_prio = 0;
