@@ -1,0 +1,521 @@
+
+#operatorItem.Landscape {
+    preferred-size: 128 79;
+    minimum-size: 128 79;
+    maximum-size: 128 79;
+
+    text-color: $COLOR_FOREGROUND;
+    font: $FONT_DEFAULT;
+    text-margin-left: 20px;
+}
+
+#operatorItem.Portrait {
+    preferred-size: 105 93;
+    minimum-size: 105 93;
+    maximum-size: 105 93;
+
+    text-color: $COLOR_FOREGROUND;
+    font: $FONT_DEFAULT;
+    text-margin-left: 20px;
+}
+
+#operatorItem:pressed {
+    text-color: $COLOR_INVERTED_FOREGROUND;
+    background-image: "duibutton-background-pressed" 0 0 0 0;
+}
+
+#operatorItem:selected {
+    background-image: "duibutton-background-selected" 0 0 0 0;
+    text-color: $COLOR_INVERTED_FOREGROUND;
+}
+
+#operatorItem:disabled {
+    background-image: "calculator-button-disabled" 0 0 0 0;
+    text-color: $COLOR_INVERTED_FOREGROUND;
+}
+
+#otherItem.Landscape {
+    preferred-size: 128 79;
+    minimum-size: 128 79;
+    maximum-size: 128 79;
+
+/*    background-image: "calculator-button" 0 0 0 0; */
+    pressed-background-image: "calc-button-pressed" 0 0 0 0;
+    text-color: $COLOR_FOREGROUND;
+    font: $FONT_DEFAULT;
+    text-margin-left: 20px;
+    icon-size: 32 28;
+}
+
+#otherItem.Portrait {
+    preferred-size: 105 93;
+    minimum-size: 105 93;
+    maximum-size: 105 93;
+
+  /*  background-image: "calculator-button" 0 0 0 0; */
+    text-color: $COLOR_FOREGROUND;
+    font: $FONT_DEFAULT;
+    text-margin-left: 20px;
+    icon-size: 32 28;
+}
+
+#otherItem:pressed {
+    background-image: "duibutton-background-pressed" 0 0 0 0;
+}
+
+#otherItem:disabled {
+    background-image: "calculator-button-disabled" 0 0 0 0; 
+}
+
+#disabledItem.Landscape {
+    preferred-size: 128 79;
+    minimum-size: 128 79;
+    maximum-size: 128 79;
+
+    background-image: "calculator-button-disabled" 0 0 0 0; 
+    pressed-background-image: "calculator-button-disabled" 0 0 0 0;
+    text-color: $COLOR_FOREGROUND;
+    font: $FONT_DEFAULT;
+    text-margin-left: 20px;
+}
+
+#disabledItem.Portrait {
+    preferred-size: 105 93;
+    minimum-size: 105 93;
+    maximum-size: 105 93;
+
+    background-image: "calculator-button-disabled" 0 0 0 0; 
+    text-color: $COLOR_FOREGROUND;
+    font: $FONT_DEFAULT;
+    text-margin-left: 20px;
+}
+
+#numberItem.Landscape {
+    preferred-size: 128 79;
+    minimum-size: 128 79;
+    maximum-size: 128 79;
+/*    background-image: "calculator-button" 0 0 0 0;
+    pressed-background-image: "calc-button-pressed" 0 0 0 0; */
+    text-color: $COLOR_ACCENT2;
+    font: $FONT_DEFAULT;
+    text-margin-left: 20px;
+}
+
+#numberItem.Portrait {
+    preferred-size: 145 93;
+    minimum-size: 145 93;
+    maximum-size: 145 93;
+
+/*    background-image: "calculator-button" 0 0 0 0;
+    pressed-background-image: "calc-button-pressed" 0 0 0 0; */
+    text-color: $COLOR_ACCENT2;
+    font: $FONT_DEFAULT;
+    text-margin-left: 20px;
+}
+
+#numberItem:pressed {
+    background-image: "duibutton-background-pressed" 0 0 0 0;
+}
+
+#equalsItem.Landscape {
+    preferred-size: 268 79;
+    minimum-size: 268 79;
+    maximum-size: 268 79;
+
+/*    background-image: "calculator-button-result" 0 0 0 0; */
+    background-image: "duibutton-background-selected" 10px 10px 10px 10px;
+    pressed-background-image: "equals-button-pressed" 0 0 0 0;
+    text-color: $COLOR_INVERTED_FOREGROUND;
+    font: $FONT_DEFAULT;
+    text-margin-left: 20px;
+}
+
+#equalsItem.Portrait {
+    preferred-size: 302 93;
+    minimum-size: 302 93;
+    maximum-size: 302 93;
+
+/*    background-image: "calculator-button-result" 0 0 0 0; */
+    background-image: "duibutton-background-selected" 10px 10px 10px 10px;
+    pressed-background-image: "equals-button-pressed" 0 0 0 0;
+    text-color: $COLOR_INVERTED_FOREGROUND;
+    font: $FONT_DEFAULT;
+    text-margin-left: 20px;
+}
+
+#equalsItem:pressed {
+    background-image: "duibutton_toggle_background_pressed" 0 0 0 0;
+    text-color: $COLOR_FOREGROUND;
+}
+
+#clearItem.Landscape {
+    preferred-size: 268 79;
+    minimum-size: 268 79;
+    maximum-size: 268 79;
+ /*   background-image: "calculator-button" 0 0 0 0; */
+    pressed-background-image: "calc-button-pressed" 0 0 0 0;
+    text-color: $COLOR_FOREGROUND;
+    font: $FONT_DEFAULT;
+    text-margin-left: 20px;
+    icon-size: 28 18;
+    icon-align: right;
+}
+
+#clearItem.Portrait {
+    preferred-size: 105 93;
+    minimum-size: 105 93;
+    maximum-size: 105 93;
+
+/*    background-image: "calculator-button" 0 0 0 0; */
+    text-color: $COLOR_FOREGROUND;
+    font: $FONT_DEFAULT;
+    text-margin-left: 20px;
+    icon-size: 28 18;
+}
+
+#clearItem:pressed {
+    background-image: "duibutton-background-pressed" 0 0 0 0;
+}
+
+MLabelStyle {
+    font: $FONT_DEFAULT;
+}
+
+
+#calculationLineBoxItem.Landscape {
+    /* background-image: "calculator-text-field" 0 0 0 0; */
+    background-image: "duitextedit-background" 10px 10px 10px 10px;
+    background-boxed-percent: 10;
+    maximum-size: 410 79;
+    preferred-size: 410 79;
+    minimum-size: 410 79;
+}
+
+
+#calculationLineBoxItem.Portrait {
+    /* background-image: "calculator-text-field" 0 0 0 0; */
+    background-image: "duitextedit-background" 10px 10px 10px 10px;
+    background-boxed-percent: 10;
+    maximum-size: 456 93;
+    preferred-size: 456 93;
+    minimum-size: 456 93;
+}
+
+#calculationLineBoxItem:selected {
+    background-image: "duitextedit-background-selected" 10px 10px 10px 10px;
+}
+
+#calculationLineItem.Landscape {
+    font: "Nokia Sans Wide" 42px;
+    color: $COLOR_FOREGROUND;
+    maximum-size: 378 64;
+    preferred-size: 378 64;
+    minimum-size: 378 64;
+    margin-top: 0;
+    margin-left: 12;
+    margin-right: 12;
+}
+
+
+#calculationLineItem.Portrait {
+    font: "Nokia Sans Wide" 47px;
+    color: $COLOR_FOREGROUND;
+    maximum-size: 422 93;
+    preferred-size: 422 93;
+    minimum-size: 422 93;
+    margin-top: 0;
+    margin-left: 12;
+    margin-right: 12;
+}
+
+#historyTimeOfCalc.Landscape {
+    font: $FONT_XSMALL;
+    color: $COLOR_FOREGROUND;
+    maximum-size: 162 30;
+    preferred-size: 162 30;
+    minimum-size: 162 30;
+    margin-top: 0;
+    margin-left: 4;
+}
+
+#historyTimeOfCalc.Portrait {
+    font: $FONT_XSMALL;
+    color: $COLOR_FOREGROUND;
+    maximum-size: 162 30;
+    preferred-size: 162 30;
+    minimum-size: 162 30;
+    margin-top: 0;
+    margin-left: 0;
+}
+
+#historyName.Landscape {
+    font: $FONT_SMALL;
+    color: $COLOR_FOREGROUND;
+    maximum-size: 500 20;
+    preferred-size: 500 20;
+    minimum-size: 500 20;
+    margin-top: 0;
+}
+
+#historyName.Portrait {
+    font: $FONT_SMALL;
+    color: $COLOR_FOREGROUND;
+    maximum-size: 278 20;
+    preferred-size: 278 20;
+    minimum-size: 278 20;
+    margin-top: 0;
+}
+
+#historyStoredRes.Landscape {
+    font: $FONT_LARGE;
+    color: $COLOR_SECONDARY_FOREGROUND;
+    maximum-size: 644 34;
+    preferred-size: 644 34;
+    minimum-size: 644 34;
+    margin-top: 0;
+}
+
+#historyStoredRes.Portrait {
+    font: $FONT_LARGE;
+    color: $COLOR_SECONDARY_FOREGROUND;
+    maximum-size: 270 34;
+    preferred-size: 270 34;
+    minimum-size: 270 34;
+    margin-top: 0;
+}
+
+#historyStoredRef.Landscape {
+    font: $FONT_XSMALL;
+    color: $COLOR_FOREGROUND;
+    maximum-size: 820 20;
+    preferred-size: 820 20;
+    minimum-size: 820 20;
+    margin-top: 0;
+}
+
+#historyStoredRef.Portrait {
+    font: $FONT_XSMALL;
+    color: $COLOR_FOREGROUND;
+    maximum-size: 440 20;
+    preferred-size: 440 20;
+    minimum-size: 440 20;
+    margin-top: 0;
+}
+
+#savedTimeOfCalc {
+    font: $FONT_XSMALL;
+    color: $COLOR_INVERTED_FOREGROUND;
+}
+
+#savedStoredRes {
+    font: "Nokia Sans Wide" 32px;
+    color: #FFA000;
+}
+
+#savedStoredRef {
+    font: "Nokia Sans Wide" 14px;
+    color: #FFFFFF;
+}
+
+#savedCalcName {
+    font: "Nokia Sans Wide" 21px;
+    color: #FFFFFF;
+}
+
+#emptyLabel.Landscape {
+    font: $FONT_DEFAULT;
+    color: $COLOR_FOREGROUND;
+    margin-top: 160;
+}
+
+#emptyLabel.Portrait {
+    font: $FONT_DEFAULT;
+    color: $COLOR_FOREGROUND;
+    margin-top: 320;
+}
+
+#emptyHistory.Landscape {
+    background-image: ;
+    maximum-size: 864 404;
+    preferred-size: 864 404;
+    minimum-size: 864 404;
+    margin-left: -8;
+    margin-right: -8;
+    margin-top: -8;
+    margin-bottom: -8;
+}
+
+#emptyHistory.Portrait {
+    background-image: ;
+    maximum-size: 504 716;
+    preferred-size: 504 716;
+    minimum-size: 504 716;
+    margin-left: -16;
+    margin-right: -16;
+    margin-top: -16;
+    margin-bottom: -16;
+}
+
+
+MAbstractLayoutPolicyStyle {
+	vertical-spacing: 0;
+	horizontal-spacing: 0;
+}
+
+calcpage {
+    background-image: "duiapplicationpage-background";
+}
+
+CalculationHistoryItemStyle.Landscape {
+    background-image-single : "duilist-single-background" 8px 8px 8px 8px;
+    background-image-singlecolumn-top : "duilist-singlecolumn-top-background" 8px 8px 8px 8px;
+    background-image-singlecolumn-center : "duilist-singlecolumn-center-background" 8px 8px 8px 8px;
+    background-image-singlecolumn-bottom : "duilist-singlecolumn-bottom-background" 8px 8px 8px 8px;
+    background-color: $COLOR_BACKGROUND;
+    background-opacity: 1.0;
+
+    preferred-size: 848 88;
+    minimum-size: 848 88;
+    maximum-size: 848 88;
+
+    margin-left:   0;
+    margin-right:  0;
+    margin-top:    0;
+    margin-bottom: 0;
+
+    padding-left:   0;
+    padding-top:    0;
+    padding-right:  0;
+    padding-bottom: 0;
+}
+
+CalculationHistoryItemStyle.Portrait {
+    background-image-single : "duilist-single-background" 8px 8px 8px 8px;
+    background-image-singlecolumn-top : "duilist-singlecolumn-top-background" 8px 8px 8px 8px;
+    background-image-singlecolumn-center : "duilist-singlecolumn-center-background" 8px 8px 8px 8px;
+    background-image-singlecolumn-bottom : "duilist-singlecolumn-bottom-background" 8px 8px 8px 8px;
+    background-color: $COLOR_BACKGROUND;
+    background-opacity: 1.0;
+
+    preferred-size: 464 88;
+    minimum-size: 464 88;
+    maximum-size: 464 88;
+
+    margin-left:   0;
+    margin-right:  0;
+    margin-top:    0;
+    margin-bottom: 0;
+
+    padding-left:   0;
+    padding-top:    0;
+    padding-right:  0;
+    padding-bottom: 0;
+}
+
+CalculationHistoryItemStyle:selected {
+    background-image-single : "duilist-single-background-selected" 8px 8px 8px 8px;
+    background-image-singlecolumn-top : "duilist-singlecolumn-top-background-selected" 8px 8px 8px 8px;
+    background-image-singlecolumn-center : "duilist-singlecolumn-center-background-selected" 8px 8px 8px 8px;
+    background-image-singlecolumn-bottom : "duilist-singlecolumn-bottom-background-selected" 8px 8px 8px 8px;
+    background-color: $COLOR_INVERTED_FOREGROUND;
+    background-opacity: 1.0;
+}
+
+CalculationHistoryItemStyle:pressed {
+    background-image-single : "duilist-single-background-pressed" 8px 8px 8px 8px;
+    background-image-singlecolumn-top : "duilist-singlecolumn-top-background-pressed" 8px 8px 8px 8px;
+    background-image-singlecolumn-center : "duilist-singlecolumn-center-background-pressed" 8px 8px 8px 8px;
+    background-image-singlecolumn-bottom : "duilist-singlecolumn-bottom-background-pressed" 8px 8px 8px 8px;
+    background-color: $COLOR_INVERTED_FOREGROUND;
+}
+
+SavedCalculationItemStyle.Landscape {
+    background-image-single : "duilist-single-background" 8px 8px 8px 8px;
+    background-image-singlecolumn-top : "duilist-singlecolumn-top-background" 8px 8px 8px 8px;
+    background-image-singlecolumn-center : "duilist-singlecolumn-center-background" 8px 8px 8px 8px;
+    background-image-singlecolumn-bottom : "duilist-singlecolumn-bottom-background" 8px 8px 8px 8px;
+    background-color: $COLOR_BACKGROUND;
+    background-opacity: 1.0;
+
+    preferred-size: 848 108;
+    minimum-size: 848 108;
+    maximum-size: 848 108;
+
+    margin-left:   0;
+    margin-right:  0;
+    margin-top:    0;
+    margin-bottom: 0;
+
+    padding-left:   0;
+    padding-top:    0;
+    padding-right:  0;
+    padding-bottom: 0;
+}
+
+SavedCalculationItemStyle.Portrait {
+    background-image-single : "duilist-single-background" 8px 8px 8px 8px;
+    background-image-singlecolumn-top : "duilist-singlecolumn-top-background" 8px 8px 8px 8px;
+    background-image-singlecolumn-center : "duilist-singlecolumn-center-background" 8px 8px 8px 8px;
+    background-image-singlecolumn-bottom : "duilist-singlecolumn-bottom-background" 8px 8px 8px 8px;
+    background-color: $COLOR_BACKGROUND;
+    background-opacity: 1.0;
+
+    preferred-size: 464 108;
+    minimum-size: 464 108;
+    maximum-size: 464 108;
+
+    margin-left:   0;
+    margin-right:  0;
+    margin-top:    0;
+    margin-bottom: 0;
+
+    padding-left:   0;
+    padding-top:    0;
+    padding-right:  0;
+    padding-bottom: 0;
+}
+
+SavedCalculationItemStyle:selected {
+    background-image-single : "duilist-single-background-selected" 8px 8px 8px 8px;
+    background-image-singlecolumn-top : "duilist-singlecolumn-top-background-selected" 8px 8px 8px 8px;
+    background-image-singlecolumn-center : "duilist-singlecolumn-center-background-selected" 8px 8px 8px 8px;
+    background-image-singlecolumn-bottom : "duilist-singlecolumn-bottom-background-selected" 8px 8px 8px 8px;
+    background-color: $COLOR_INVERTED_FOREGROUND;
+    background-opacity: 1.0;
+}
+
+SavedCalculationItemStyle:pressed {
+    background-image-single : "duilist-single-background-pressed" 8px 8px 8px 8px;
+    background-image-singlecolumn-top : "duilist-singlecolumn-top-background-pressed" 8px 8px 8px 8px;
+    background-image-singlecolumn-center : "duilist-singlecolumn-center-background-pressed" 8px 8px 8px 8px;
+    background-image-singlecolumn-bottom : "duilist-singlecolumn-bottom-background-pressed" 8px 8px 8px 8px;
+    background-color: $COLOR_INVERTED_FOREGROUND;
+}
+
+CalculationLineWidgetStyle.Landscape {
+    /* background-image: "calculator-text-field" 0 0 0 0; */
+    background-image-single: "duitextedit-background" 8px 8px 8px 8px;
+    maximum-size: 410 83;
+    preferred-size: 410 83;
+    minimum-size: 410 83;
+    margin-left: 4;
+    margin-right: 4;
+    margin-top: 4;
+    margin-bottom: 4;
+}
+
+
+CalculationLineWidgetStyle.Portrait {
+    /* background-image: "calculator-text-field" 0 0 0 0; */
+    background-image-single: "duitextedit-background" 8px 8px 8px 8px;
+    maximum-size: 456 93;
+    preferred-size: 456 93;
+    minimum-size: 456 93;
+    margin-top: 12;
+    margin-bottom: 12;
+}
+
+CalculationLineWidgetStyle:selected {
+    background-image: "duitextedit-background-selected" 8px 8px 8px 8px;
+}
+
