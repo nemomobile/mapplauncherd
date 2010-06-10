@@ -5,6 +5,8 @@ DOMDIR = dom
 WIDGETSDIR = widgets
 UTILITYDIR = utility
 
+M_APPLICATION_NAME = testcalc
+
 INCLUDEPATH += . $$BASICDIR $$COREINTERFACEDIR $$DOMDIR $$WIDGETSDIR $$UTILITYDIR \
     /usr/include/meegotouch
 
