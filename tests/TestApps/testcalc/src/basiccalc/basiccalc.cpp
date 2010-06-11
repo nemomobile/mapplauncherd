@@ -34,7 +34,8 @@ BasicCalc::BasicCalc()
 		  calculationDone( false ),
 		  saveInProgress( false )
 {
-    setTitle( TXT_CALC_TITLE );
+    //setTitle( TXT_CALC_TITLE );
+    setTitle( QString(TXT_CALC_TITLE)== "!! "? "Calculator" : TXT_CALC_TITLE);
     // use the singleton instance
     core = CoreInterface::instance();
     utility = CalcUtilities::instance();
@@ -197,12 +198,12 @@ void BasicCalc::createContent()
     buttonDecimal = new MButton( mylocale.formatNumber(1.2)==""? ".":QString( mylocale.formatNumber(1.2)[1]) );
 
     buttonDivide = new MButton( QString(TXT_CALC_DIVIDE)=="!! "? "/" : TXT_CALC_DIVIDE );
-    //buttonMultiply = new MButton( TXT_CALC_MULTIPLY);
-    buttonMultiply = new MButton("*");
+    buttonMultiply = new MButton( TXT_CALC_MULTIPLY);
+    //buttonMultiply = new MButton("*");
     buttonSubtract = new MButton( QString(TXT_CALC_SUBTRACT)=="!! "?"-" : TXT_CALC_SUBTRACT );
     buttonAdd = new MButton( QString(TXT_CALC_ADD)=="!! "?"+" : TXT_CALC_ADD );
-    //buttonEquals = new MButton( QString(TXT_CALC_EQUAL)=="!! "?"=" : TXT_CALC_EQUAL );
-    buttonEquals = new MButton( "=" );
+    buttonEquals = new MButton( QString(TXT_CALC_EQUAL)=="!! "?"=" : TXT_CALC_EQUAL );
+    //buttonEquals = new MButton( "=" );
     buttonAdd->setCheckable( true );
     buttonSubtract->setCheckable( true );
     buttonMultiply->setCheckable( true );

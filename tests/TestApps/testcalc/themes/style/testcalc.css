@@ -21,11 +21,13 @@
 
 #operatorItem:pressed {
     text-color: $COLOR_INVERTED_FOREGROUND;
-    background-image: "duibutton-background-pressed" 0 0 0 0;
+    /* background-image: "duibutton-background-pressed" 0 0 0 0; */
+    background-image: "meegotouch-button-background-pressed" 0 0 0 0;
 }
 
-operatorItem:selected {
-    background-image: "duibutton-background-selected" 0 0 0 0;
+#operatorItem:selected {
+    background-image: "meegotouch-button-background-selected" 0 0 0 0;
+    /* background-image: "duibutton-background-selected" 0 0 0 0; */
     text-color: $COLOR_INVERTED_FOREGROUND;
 }
 
@@ -60,7 +62,8 @@ operatorItem:selected {
 }
 
 #otherItem:pressed {
-    background-image: "duibutton-background-pressed" 0 0 0 0;
+    /* background-image: "duibutton-background-pressed" 0 0 0 0; */
+    background-image: "meegotouch-button-background-pressed" 0 0 0 0;
 }
 
 #otherItem:disabled {
@@ -114,7 +117,8 @@ operatorItem:selected {
 }
 
 #numberItem:pressed {
-    background-image: "duibutton-background-pressed" 0 0 0 0;
+    /* background-image: "duibutton-background-pressed" 0 0 0 0; */
+    background-image: "meegotouch-button-background-pressed" 0 0 0 0;
 }
 
 #equalsItem.Landscape {
@@ -123,7 +127,7 @@ operatorItem:selected {
     maximum-size: 268 79;
 
 /*    background-image: "calculator-button-result" 0 0 0 0; */
-    background-image: "duibutton-background-selected" 10px 10px 10px 10px;
+    background-image: "meegotouch-button-background-selected" 10px 10px 10px 10px;
     pressed-background-image: "equals-button-pressed" 0 0 0 0;
     text-color: $COLOR_INVERTED_FOREGROUND;
     font: $FONT_DEFAULT;
@@ -136,7 +140,7 @@ operatorItem:selected {
     maximum-size: 302 93;
 
 /*    background-image: "calculator-button-result" 0 0 0 0; */
-    background-image: "duibutton-background-selected" 10px 10px 10px 10px;
+    background-image: "meegotouch-button-background-selected" 10px 10px 10px 10px;
     pressed-background-image: "equals-button-pressed" 0 0 0 0;
     text-color: $COLOR_INVERTED_FOREGROUND;
     font: $FONT_DEFAULT;
@@ -144,7 +148,7 @@ operatorItem:selected {
 }
 
 #equalsItem:pressed {
-    background-image: "duibutton_toggle_background_pressed" 0 0 0 0;
+    background-image: "meegotouch-button-background-pressed" 0 0 0 0;
     text-color: $COLOR_FOREGROUND;
 }
 
@@ -174,7 +178,7 @@ operatorItem:selected {
 }
 
 #clearItem:pressed {
-    background-image: "duibutton-background-pressed" 0 0 0 0;
+    background-image: "meegotouch-button-background-pressed" 0 0 0 0;
 }
 
 MLabelStyle {
@@ -362,15 +366,15 @@ MAbstractLayoutPolicyStyle {
 	horizontal-spacing: 0;
 }
 
-calcpage {
-    background-image: "duiapplicationpage-background";
+#calcpage {
+    background-image: "meegotouch-applicationpage-background";
 }
 
 CalculationHistoryItemStyle.Landscape {
-    background-image-single : "duilist-single-background" 8px 8px 8px 8px;
-    background-image-singlecolumn-top : "duilist-singlecolumn-top-background" 8px 8px 8px 8px;
-    background-image-singlecolumn-center : "duilist-singlecolumn-center-background" 8px 8px 8px 8px;
-    background-image-singlecolumn-bottom : "duilist-singlecolumn-bottom-background" 8px 8px 8px 8px;
+    background-image-single : "meegotouch-list-background" 8px 8px 8px 8px;
+    background-image-singlecolumn-top : "meegotouch-list-background-vertical-top" 8px 8px 8px 8px;
+    background-image-singlecolumn-center : "meegotouch-list-background-vertical-center" 8px 8px 8px 8px;
+    background-image-singlecolumn-bottom : "meegotouch-list-background-vertical-bottom" 8px 8px 8px 8px;
     background-color: $COLOR_BACKGROUND;
     background-opacity: 1.0;
 
@@ -390,10 +394,10 @@ CalculationHistoryItemStyle.Landscape {
 }
 
 CalculationHistoryItemStyle.Portrait {
-    background-image-single : "duilist-single-background" 8px 8px 8px 8px;
-    background-image-singlecolumn-top : "duilist-singlecolumn-top-background" 8px 8px 8px 8px;
-    background-image-singlecolumn-center : "duilist-singlecolumn-center-background" 8px 8px 8px 8px;
-    background-image-singlecolumn-bottom : "duilist-singlecolumn-bottom-background" 8px 8px 8px 8px;
+    background-image-single : "meegotouch-list-background" 8px 8px 8px 8px;
+    background-image-singlecolumn-top : "meegotouch-list-background-vertical-top" 8px 8px 8px 8px;
+    background-image-singlecolumn-center : "meegotouch-list-background-vertical-center" 8px 8px 8px 8px;
+    background-image-singlecolumn-bottom : "meegotouch-list-background-vertical-bottom" 8px 8px 8px 8px;
     background-color: $COLOR_BACKGROUND;
     background-opacity: 1.0;
 
@@ -413,27 +417,27 @@ CalculationHistoryItemStyle.Portrait {
 }
 
 CalculationHistoryItemStyle:selected {
-    background-image-single : "duilist-single-background-selected" 8px 8px 8px 8px;
-    background-image-singlecolumn-top : "duilist-singlecolumn-top-background-selected" 8px 8px 8px 8px;
-    background-image-singlecolumn-center : "duilist-singlecolumn-center-background-selected" 8px 8px 8px 8px;
-    background-image-singlecolumn-bottom : "duilist-singlecolumn-bottom-background-selected" 8px 8px 8px 8px;
+    background-image-single : "meegotouch-list-background-selected" 8px 8px 8px 8px;
+    background-image-singlecolumn-top : "meegotouch-list-background-selected-vertical-top" 8px 8px 8px 8px;
+    background-image-singlecolumn-center : "meegotouch-list-background-selected-vertical-center" 8px 8px 8px 8px;
+    background-image-singlecolumn-bottom : "meegotouch-list-background-selected-vertical-bottom" 8px 8px 8px 8px;
     background-color: $COLOR_INVERTED_FOREGROUND;
     background-opacity: 1.0;
 }
 
 CalculationHistoryItemStyle:pressed {
-    background-image-single : "duilist-single-background-pressed" 8px 8px 8px 8px;
-    background-image-singlecolumn-top : "duilist-singlecolumn-top-background-pressed" 8px 8px 8px 8px;
-    background-image-singlecolumn-center : "duilist-singlecolumn-center-background-pressed" 8px 8px 8px 8px;
-    background-image-singlecolumn-bottom : "duilist-singlecolumn-bottom-background-pressed" 8px 8px 8px 8px;
+    background-image-single : "meegotouch-list-background-pressed" 8px 8px 8px 8px;
+    background-image-singlecolumn-top : "meegotouch-list-background-pressed-vertical-top" 8px 8px 8px 8px;
+    background-image-singlecolumn-center : "meegotouch-list-background-pressed-vertical-center" 8px 8px 8px 8px;
+    background-image-singlecolumn-bottom : "meegotouch-list-background-pressed-vertical-bottom" 8px 8px 8px 8px;
     background-color: $COLOR_INVERTED_FOREGROUND;
 }
 
 SavedCalculationItemStyle.Landscape {
-    background-image-single : "duilist-single-background" 8px 8px 8px 8px;
-    background-image-singlecolumn-top : "duilist-singlecolumn-top-background" 8px 8px 8px 8px;
-    background-image-singlecolumn-center : "duilist-singlecolumn-center-background" 8px 8px 8px 8px;
-    background-image-singlecolumn-bottom : "duilist-singlecolumn-bottom-background" 8px 8px 8px 8px;
+    background-image-single : "meegotouch-list-background" 8px 8px 8px 8px;
+    background-image-singlecolumn-top : "meegotouch-list-background-vertical-top" 8px 8px 8px 8px;
+    background-image-singlecolumn-center : "meegotouch-list-background-vertical-center" 8px 8px 8px 8px;
+    background-image-singlecolumn-bottom : "meegotouch-list-background-vertical-bottom" 8px 8px 8px 8px;
     background-color: $COLOR_BACKGROUND;
     background-opacity: 1.0;
 
@@ -453,10 +457,10 @@ SavedCalculationItemStyle.Landscape {
 }
 
 SavedCalculationItemStyle.Portrait {
-    background-image-single : "duilist-single-background" 8px 8px 8px 8px;
-    background-image-singlecolumn-top : "duilist-singlecolumn-top-background" 8px 8px 8px 8px;
-    background-image-singlecolumn-center : "duilist-singlecolumn-center-background" 8px 8px 8px 8px;
-    background-image-singlecolumn-bottom : "duilist-singlecolumn-bottom-background" 8px 8px 8px 8px;
+    background-image-single : "meegotouch-list-background" 8px 8px 8px 8px;
+    background-image-singlecolumn-top : "meegotouch-list-background-vertical-top" 8px 8px 8px 8px;
+    background-image-singlecolumn-center : "meegotouch-list-background-vertical-center" 8px 8px 8px 8px;
+    background-image-singlecolumn-bottom : "meegotouch-list-background-vertical-bottom" 8px 8px 8px 8px;
     background-color: $COLOR_BACKGROUND;
     background-opacity: 1.0;
 
@@ -476,19 +480,19 @@ SavedCalculationItemStyle.Portrait {
 }
 
 SavedCalculationItemStyle:selected {
-    background-image-single : "duilist-single-background-selected" 8px 8px 8px 8px;
-    background-image-singlecolumn-top : "duilist-singlecolumn-top-background-selected" 8px 8px 8px 8px;
-    background-image-singlecolumn-center : "duilist-singlecolumn-center-background-selected" 8px 8px 8px 8px;
-    background-image-singlecolumn-bottom : "duilist-singlecolumn-bottom-background-selected" 8px 8px 8px 8px;
+    background-image-single : "meegotouch-list-background-selected" 8px 8px 8px 8px;
+    background-image-singlecolumn-top : "meegotouch-list-background-selected-vertical-top" 8px 8px 8px 8px;
+    background-image-singlecolumn-center : "meegotouch-list-background-selected-vertical-center" 8px 8px 8px 8px;
+    background-image-singlecolumn-bottom : "meegotouch-list-background-selected-vertical-bottom" 8px 8px 8px 8px;
     background-color: $COLOR_INVERTED_FOREGROUND;
     background-opacity: 1.0;
 }
 
 SavedCalculationItemStyle:pressed {
-    background-image-single : "duilist-single-background-pressed" 8px 8px 8px 8px;
-    background-image-singlecolumn-top : "duilist-singlecolumn-top-background-pressed" 8px 8px 8px 8px;
-    background-image-singlecolumn-center : "duilist-singlecolumn-center-background-pressed" 8px 8px 8px 8px;
-    background-image-singlecolumn-bottom : "duilist-singlecolumn-bottom-background-pressed" 8px 8px 8px 8px;
+    background-image-single : "meegotouch-list-background-pressed" 8px 8px 8px 8px;
+    background-image-singlecolumn-top : "meegotouch-list-background-pressed-vertical-top" 8px 8px 8px 8px;
+    background-image-singlecolumn-center : "meegotouch-list-background-pressed-vertical-center" 8px 8px 8px 8px;
+    background-image-singlecolumn-bottom : "meegotouch-list-background-pressed-vertical-bottom" 8px 8px 8px 8px;
     background-color: $COLOR_INVERTED_FOREGROUND;
 }
 

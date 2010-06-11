@@ -4,7 +4,7 @@
 /********************************************************************************
  *                          SERVICE API RELATED CONSTANTS                       *
  ********************************************************************************/
-#define DBUS_APPLICATION_NAME QString( "com.nokia.calc" )
+#define DBUS_APPLICATION_NAME QString( "com.nokia.testcalc" )
 
 /*********************************************************************************
  *                               TRANSLATION STRINGS                             *
@@ -66,9 +66,9 @@
 
 #define CALC_ENGINE_PROGRAM	"osso_calculator_engine"
 // BACKING OFF FAST LAUNCH
-#if 0
-#define CALCULATOR_APPNAME	QString("essentials.launch")
-#endif
+//#if 0
+//#define CALCULATOR_APPNAME	QString("essentials.launch")
+//#endif
 #define CALCULATOR_APPNAME	QString("testcalc")
 #define CALC_HIDDENDIR		QString(".testcalc")
 
