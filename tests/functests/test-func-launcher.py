@@ -49,7 +49,7 @@ import unittest
 
 LAUNCHER_BINARY='/usr/bin/applauncherd'
 DEV_NULL = file("/dev/null","w")
-LAUNCHABLE_APPS = ['/usr/bin/fala_ft_hello','/usr/bin/fala_ft_hello_1', '/usr/bin/fala_ft_hello_2']
+LAUNCHABLE_APPS = ['/usr/bin/fala_ft_hello','/usr/bin/fala_ft_hello1', '/usr/bin/fala_ft_hello2']
 PREFERED_APP = '/usr/bin/fala_ft_hello'
 
 def debug(*msg):
@@ -126,7 +126,7 @@ class launcher_tests (unittest.TestCase):
     def kill_process(self, appname):
         temp = basename(appname)[:14]
         st, op = commands.getstatusoutput("pkill -9 %s" % temp)
-        #os.wait()
+        os.wait()
 
     def process_state(self, processid):
         st, op = commands.getstatusoutput('cat /proc/%s/stat' %processid)
@@ -146,7 +146,7 @@ class launcher_tests (unittest.TestCase):
         handle = self.run_app_with_launcher(path)
 
         # sleep for a moment to allow applauncherd to start the process
-        time.sleep(1)
+        time.sleep(5)
 
         # with luck, the process should have correct name by now
         pid = self.get_pid(path)
