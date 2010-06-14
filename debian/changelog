@@ -1,3 +1,10 @@
+applauncherd (0.5.0-3) stable; urgency=low
+
+  * Fixes: NB#174460, applauncherd-functional-tests package fails very frequently in ART
+  * Coverity tool fixes
+
+ -- Nimika Keshri <nimika.1.keshri@nokia.com>  Mon, 14 Jun 2010 19:26:20 +0300
+
 applauncherd (0.5.0-2) stable; urgency=low
 
   * delay is initialized to DEFAULT_DELAY
