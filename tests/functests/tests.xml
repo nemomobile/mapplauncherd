@@ -9,6 +9,7 @@
       <pre_steps>
         <step>export DISPLAY=:0</step>
         <step>source /tmp/session_bus_address.user</step>
+        <step>sleep 20</step>
         <!-- step>other pre steps</step -->
       </pre_steps>
 

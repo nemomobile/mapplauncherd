@@ -39,8 +39,11 @@ class TC_PRESTARTLAUNCHTESTS < Test::Unit::TestCase
 
 	def test_launch_prestarted_app
 	#Test that a prestarted application can be launched
-
         @appname = 'fala_testapp'
+        if system("pgrep #{@appname}") == true
+            system("kill -9 `pgrep #{@appname}`")
+        end
+        sleep 2    
         verify_equal(false,2,"Application is Prestarted"){
                 system "pidof #{@appname}"}
         sleep 2
@@ -54,7 +57,7 @@ class TC_PRESTARTLAUNCHTESTS < Test::Unit::TestCase
         sleep 1
 
         string = `export DISPLAY=:0; source /tmp/session_bus_address.user;dbus-send --dest=com.nokia.#{@appname} --type="method_call" /org/maemo/m com.nokia.MApplicationIf.launch`
-        @app = @sut.application( :name => 'applauncherd.bin' ) 
+        @app = @sut.application( :name => 'fala_testapp' ) 
         @app.MButton( :name => 'CloseButton' ).tap
         newid = string = `pidof #{@appname}`
         verify_true(30,"The application is not prestarted"){pid == newid}
