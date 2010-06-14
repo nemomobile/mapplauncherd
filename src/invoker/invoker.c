@@ -302,29 +302,32 @@ static unsigned int get_delay(char *delay_arg)
 static void invoke(int prog_argc, char **prog_argv, char *prog_name,
                    enum APP_TYPE app_type, int magic_options)
 {
-    errno = 0;
-    int prog_prio = getpriority(PRIO_PROCESS, 0);
-
-    if (errno && prog_prio < 0)
+    if (prog_name && prog_argv)
     {
-        prog_prio = 0;
+        errno = 0;
+        int prog_prio = getpriority(PRIO_PROCESS, 0);
+
+        if (errno && prog_prio < 0)
+        {
+            prog_prio = 0;
+        }
+
+        int fd = invoker_init(app_type);
+
+        invoker_send_magic(fd, magic_options);
+        invoker_send_name(fd, prog_argv[0]);
+        invoker_send_exec(fd, prog_name);
+        invoker_send_args(fd, prog_argc, prog_argv);
+        invoker_send_prio(fd, prog_prio);
+        invoker_send_io(fd);
+        invoker_send_env(fd);
+        invoker_send_end(fd);
+
+        if (prog_name)
+            free(prog_name);
+
+        close(fd);
     }
-
-    int fd = invoker_init(app_type);
-
-    invoker_send_magic(fd, magic_options);
-    invoker_send_name(fd, prog_argv[0]);
-    invoker_send_exec(fd, prog_name);
-    invoker_send_args(fd, prog_argc, prog_argv);
-    invoker_send_prio(fd, prog_prio);
-    invoker_send_io(fd);
-    invoker_send_env(fd);
-    invoker_send_end(fd);
-
-    if (prog_name)
-        free(prog_name);
-
-    close(fd);
 }
 
 int main(int argc, char *argv[])

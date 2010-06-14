@@ -116,11 +116,8 @@ bool Connection::acceptConn()
 
     if (m_fd < 0)
     {
-        if (errno != EINTR)
-        {
-            Logger::logError("accepting connections (%s)\n", strerror(errno));
-            return false;
-        }
+        Logger::logError("accepting connections (%s)\n", strerror(errno));
+        return false;
     }
 
 #if defined (HAVE_CREDS) && ! defined (DISABLE_VERIFICATION)
