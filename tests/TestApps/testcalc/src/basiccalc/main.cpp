@@ -40,25 +40,15 @@ public:
 };
 
 
-M_EXPORT int main( int argc, char** argv )
+M_EXPORT 
+int main( int argc, char** argv )
 {
     MApplication* app = MComponentCache::mApplication(argc, argv, "testcalc", new BasicCalcApplicationService() );
-    //MApplication* app = MComponentCache::mApplication(argc, argv, "essentials", new BasicCalcApplicationService() );
-    //MApplication* app = MComponentCache::mApplication(argc, argv);
+//    MApplication* app = MComponentCache::mApplication(argc, argv, "essentials", new BasicCalcApplicationService() );
     qDebug() << "argc = " << argc << endl;
     qDebug() << "argv[0] = " << argv[0] << endl;
     
     MApplicationWindow* window = MComponentCache::mApplicationWindow();
-
-
-#if 0
-    CalcRetranslator calcRetranslator;
-    QObject::connect( 
-		&app, 
-		SIGNAL(localeSettingsChanged()), 
-		&calcRetranslator,
-		SLOT(calcRetranslate()) );
-#endif
 
     window->show();
 

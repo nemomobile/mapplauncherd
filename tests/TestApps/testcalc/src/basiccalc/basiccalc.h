@@ -209,6 +209,11 @@ private:
     */
     void chopOffCalculationLine();
 
+	 /*
+	  *\brief does the operator and operand mapping
+	  */
+	void init();
+
     /** 
       \brief The calculation bar which displays the ongoing calculation in the calculator in both portrait and landscape
     */

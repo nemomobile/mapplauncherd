@@ -109,10 +109,9 @@ signals:
     void savedCalculationsCleared();
     void itemAlreadyExists();
     void itemSaved();
-    void reinitializeSave();
     
 public slots:
-    void handleSavedCalculationItemClicked();
+    void handleSavedCalculationItemClicked( QModelIndex );
     void handleItemSelected(bool);
     void confirmDeleteAccept();
     void confirmDeleteReject();
@@ -126,6 +125,8 @@ public slots:
     void renameCalcRejected();
     
     void showDeleteCalculationsPage();
+
+    void itemLongTapped( QModelIndex );
     
 private:
 
@@ -142,6 +143,7 @@ private:
 
     MDialog* renameDialog;
     MTextEdit* renameText;
+	MButton* renameButton;
 
     SavedCalculationItem* renameItem;
     SavedCalculationItem* deleteCandidate;
@@ -149,6 +151,8 @@ private:
     DeleteSavedItems* deleteSavedItems;
 
     CalcUtilities* utility;
+
+    QModelIndex longTappedIndex;
 };
 
 class DeleteSavedItemsCellCreator : public SavedCalculationsCellCreator

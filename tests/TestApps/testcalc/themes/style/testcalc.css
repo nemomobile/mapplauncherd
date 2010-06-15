@@ -4,9 +4,11 @@
     minimum-size: 128 79;
     maximum-size: 128 79;
 
-    text-color: $COLOR_FOREGROUND;
-    font: $FONT_DEFAULT;
+    text-color: $COLOR_INVERTED_FOREGROUND;
+    font: $FONT_XLARGE;
     text-margin-left: 20px;
+	margin-left: $MARGIN_DOUBLE;
+	margin-top:$MARGIN_DOUBLE;
 }
 
 #operatorItem.Portrait {
@@ -14,26 +16,40 @@
     minimum-size: 105 93;
     maximum-size: 105 93;
 
-    text-color: $COLOR_FOREGROUND;
-    font: $FONT_DEFAULT;
+    text-color: $COLOR_INVERTED_FOREGROUND;
+    font: $FONT_XLARGE;
     text-margin-left: 20px;
+
+	margin-left: $MARGIN_DOUBLE;
+	margin-top:$MARGIN_DOUBLE;
+  	  
 }
 
 #operatorItem:pressed {
-    text-color: $COLOR_INVERTED_FOREGROUND;
+    text-color: $COLOR_FOREGROUND;
     /* background-image: "duibutton-background-pressed" 0 0 0 0; */
     background-image: "meegotouch-button-background-pressed" 0 0 0 0;
+
+	margin-left: $MARGIN_DOUBLE;
+	margin-top:$MARGIN_DOUBLE;
+	  
 }
 
 #operatorItem:selected {
     background-image: "meegotouch-button-background-selected" 0 0 0 0;
     /* background-image: "duibutton-background-selected" 0 0 0 0; */
-    text-color: $COLOR_INVERTED_FOREGROUND;
+    text-color: $COLOR_FOREGROUND;
+
+	margin-left: $MARGIN_DOUBLE;
+	margin-top:$MARGIN_DOUBLE;	
 }
 
 #operatorItem:disabled {
     background-image: "calculator-button-disabled" 0 0 0 0;
     text-color: $COLOR_INVERTED_FOREGROUND;
+
+	margin-left: $MARGIN_DOUBLE;
+	margin-top:$MARGIN_DOUBLE;		
 }
 
 #otherItem.Landscape {
@@ -43,10 +59,13 @@
 
 /*    background-image: "calculator-button" 0 0 0 0; */
     pressed-background-image: "calc-button-pressed" 0 0 0 0;
-    text-color: $COLOR_FOREGROUND;
-    font: $FONT_DEFAULT;
+    text-color: $COLOR_INVERTED_FOREGROUND;
+    font: $FONT_XLARGE;
     text-margin-left: 20px;
     icon-size: 32 28;
+	margin-left: $MARGIN_DOUBLE;
+	margin-top:$MARGIN_DOUBLE;
+	
 }
 
 #otherItem.Portrait {
@@ -55,19 +74,40 @@
     maximum-size: 105 93;
 
   /*  background-image: "calculator-button" 0 0 0 0; */
-    text-color: $COLOR_FOREGROUND;
-    font: $FONT_DEFAULT;
+    text-color: $COLOR_INVERTED_FOREGROUND;
+    font: $FONT_XLARGE;
     text-margin-left: 20px;
     icon-size: 32 28;
+   	
+	margin-left: $MARGIN_DOUBLE;	 
+	margin-top:$MARGIN_DOUBLE;
 }
 
 #otherItem:pressed {
     /* background-image: "duibutton-background-pressed" 0 0 0 0; */
     background-image: "meegotouch-button-background-pressed" 0 0 0 0;
+	text-color: $COLOR_FOREGROUND;
+	margin-left: $MARGIN_DOUBLE;
+	margin-top:$MARGIN_DOUBLE;
+	
 }
+
+#otherItem:selected {
+		background-image: "meegotouch-button-background-pressed" 0 0 0 0;
+		
+		text-color: $COLOR_FOREGROUND;
+		margin-left: $MARGIN_DOUBLE;
+		margin-top:$MARGIN_DOUBLE;
+		
+}
+		 
 
 #otherItem:disabled {
     background-image: "calculator-button-disabled" 0 0 0 0; 
+	
+	margin-left: $MARGIN_DOUBLE;
+	margin-top:$MARGIN_DOUBLE;
+	
 }
 
 #disabledItem.Landscape {
@@ -78,8 +118,12 @@
     background-image: "calculator-button-disabled" 0 0 0 0; 
     pressed-background-image: "calculator-button-disabled" 0 0 0 0;
     text-color: $COLOR_FOREGROUND;
-    font: $FONT_DEFAULT;
+    font: $FONT_XLARGE;
     text-margin-left: 20px;
+
+	margin-left: $MARGIN_DOUBLE;
+	margin-bottom:$MARGIN_DOUBLE;
+	
 }
 
 #disabledItem.Portrait {
@@ -89,8 +133,12 @@
 
     background-image: "calculator-button-disabled" 0 0 0 0; 
     text-color: $COLOR_FOREGROUND;
-    font: $FONT_DEFAULT;
+    font: $FONT_XLARGE;
     text-margin-left: 20px;
+	
+	margin-left: $MARGIN_DOUBLE;
+	margin-bottom:$MARGIN_DOUBLE;
+
 }
 
 #numberItem.Landscape {
@@ -99,9 +147,11 @@
     maximum-size: 128 79;
 /*    background-image: "calculator-button" 0 0 0 0;
     pressed-background-image: "calc-button-pressed" 0 0 0 0; */
-    text-color: $COLOR_ACCENT2;
-    font: $FONT_DEFAULT;
+    text-color: $COLOR_ACCENT1;
+    font: $FONT_XLARGE;
     text-margin-left: 20px;
+	margin-left: $MARGIN_DOUBLE;
+	margin-top:$MARGIN_DOUBLE;
 }
 
 #numberItem.Portrait {
@@ -111,14 +161,21 @@
 
 /*    background-image: "calculator-button" 0 0 0 0;
     pressed-background-image: "calc-button-pressed" 0 0 0 0; */
-    text-color: $COLOR_ACCENT2;
-    font: $FONT_DEFAULT;
+    text-color: $COLOR_ACCENT1;
+    font: $FONT_XLARGE;
     text-margin-left: 20px;
+	
+	margin-left: $MARGIN_DOUBLE;
+	margin-top:$MARGIN_DOUBLE;
 }
 
 #numberItem:pressed {
     /* background-image: "duibutton-background-pressed" 0 0 0 0; */
     background-image: "meegotouch-button-background-pressed" 0 0 0 0;
+	text-color:$COLOR_FOREGROUND;
+	margin-left: $MARGIN_DOUBLE;
+	margin-top:$MARGIN_DOUBLE;
+		
 }
 
 #equalsItem.Landscape {
@@ -130,8 +187,11 @@
     background-image: "meegotouch-button-background-selected" 10px 10px 10px 10px;
     pressed-background-image: "equals-button-pressed" 0 0 0 0;
     text-color: $COLOR_INVERTED_FOREGROUND;
-    font: $FONT_DEFAULT;
+    font: $FONT_XLARGE;
     text-margin-left: 20px;
+	margin-left: $MARGIN_DOUBLE;
+	margin-top:$MARGIN_DOUBLE;
+		
 }
 
 #equalsItem.Portrait {
@@ -143,13 +203,20 @@
     background-image: "meegotouch-button-background-selected" 10px 10px 10px 10px;
     pressed-background-image: "equals-button-pressed" 0 0 0 0;
     text-color: $COLOR_INVERTED_FOREGROUND;
-    font: $FONT_DEFAULT;
+    font: $FONT_XLARGE;
     text-margin-left: 20px;
+	
+	margin-left: $MARGIN_DOUBLE;
+	margin-top:$MARGIN_DOUBLE;
+		
 }
 
 #equalsItem:pressed {
     background-image: "meegotouch-button-background-pressed" 0 0 0 0;
     text-color: $COLOR_FOREGROUND;
+	
+	margin-left: $MARGIN_DOUBLE;
+	margin-top:$MARGIN_DOUBLE;	
 }
 
 #clearItem.Landscape {
@@ -158,11 +225,14 @@
     maximum-size: 268 79;
  /*   background-image: "calculator-button" 0 0 0 0; */
     pressed-background-image: "calc-button-pressed" 0 0 0 0;
-    text-color: $COLOR_FOREGROUND;
-    font: $FONT_DEFAULT;
+    text-color: $COLOR_INVERTED_FOREGROUND;
+    font: $FONT_XLARGE;
     text-margin-left: 20px;
     icon-size: 28 18;
     icon-align: right;
+	margin-left: $MARGIN_DOUBLE;
+	margin-top:$MARGIN_DOUBLE;
+
 }
 
 #clearItem.Portrait {
@@ -171,14 +241,20 @@
     maximum-size: 105 93;
 
 /*    background-image: "calculator-button" 0 0 0 0; */
-    text-color: $COLOR_FOREGROUND;
-    font: $FONT_DEFAULT;
+    text-color: $COLOR_INVERTED_FOREGROUND;
+    font: $FONT_XLARGE;
     text-margin-left: 20px;
     icon-size: 28 18;
+	margin-left: $MARGIN_DOUBLE;
+	margin-top:$MARGIN_DOUBLE;
+		
 }
 
 #clearItem:pressed {
     background-image: "meegotouch-button-background-pressed" 0 0 0 0;
+	margin-left: $MARGIN_DOUBLE;
+	margin-top:$MARGIN_DOUBLE;
+
 }
 
 MLabelStyle {
@@ -188,7 +264,7 @@ MLabelStyle {
 
 #calculationLineBoxItem.Landscape {
     /* background-image: "calculator-text-field" 0 0 0 0; */
-    background-image: "duitextedit-background" 10px 10px 10px 10px;
+    background-image: "meegotouch-textedit-background-selected" 10px 10px 10px 10px;
     background-boxed-percent: 10;
     maximum-size: 410 79;
     preferred-size: 410 79;
@@ -198,7 +274,7 @@ MLabelStyle {
 
 #calculationLineBoxItem.Portrait {
     /* background-image: "calculator-text-field" 0 0 0 0; */
-    background-image: "duitextedit-background" 10px 10px 10px 10px;
+    background-image: "meegotouch-textedit-background-selected" 10px 10px 10px 10px;
     background-boxed-percent: 10;
     maximum-size: 456 93;
     preferred-size: 456 93;
@@ -206,16 +282,15 @@ MLabelStyle {
 }
 
 #calculationLineBoxItem:selected {
-    background-image: "duitextedit-background-selected" 10px 10px 10px 10px;
+    background-image: "meegotouch-textedit-background-selected" 10px 10px 10px 10px;
 }
 
 #calculationLineItem.Landscape {
-    font: "Nokia Sans Wide" 42px;
+    font: "Nokia Sans Wide" 40px;
     color: $COLOR_FOREGROUND;
     maximum-size: 378 64;
     preferred-size: 378 64;
     minimum-size: 378 64;
-    margin-top: 0;
     margin-left: 12;
     margin-right: 12;
 }
@@ -227,7 +302,6 @@ MLabelStyle {
     maximum-size: 422 93;
     preferred-size: 422 93;
     minimum-size: 422 93;
-    margin-top: 0;
     margin-left: 12;
     margin-right: 12;
 }
@@ -238,7 +312,6 @@ MLabelStyle {
     maximum-size: 162 30;
     preferred-size: 162 30;
     minimum-size: 162 30;
-    margin-top: 0;
     margin-left: 4;
 }
 
@@ -273,20 +346,39 @@ MLabelStyle {
 #historyStoredRes.Landscape {
     font: $FONT_LARGE;
     color: $COLOR_SECONDARY_FOREGROUND;
-    maximum-size: 644 34;
-    preferred-size: 644 34;
-    minimum-size: 644 34;
+    maximum-size: -1 34;
+    preferred-size: -1 34;
+    minimum-size: -1 34;
     margin-top: 0;
 }
 
+/*#historyError.Landscape {
+		font: $FONT_LARGE;
+		color: #FF0000;
+		 maximum-size: 300 34;
+		 preferred-size: -1 34;
+		 minimum-size: -1 34;
+		margin-top: 0;
+}*/
+						
 #historyStoredRes.Portrait {
     font: $FONT_LARGE;
     color: $COLOR_SECONDARY_FOREGROUND;
-    maximum-size: 270 34;
-    preferred-size: 270 34;
-    minimum-size: 270 34;
+    maximum-size: -1 34;
+    preferred-size: -1 34;
+    minimum-size: -1 34;
     margin-top: 0;
 }
+
+/*#historyError.Portrait {
+		font: $FONT_LARGE;
+		text-color:#E31F14;
+		maximum-size: -1 34;
+		preferred-size: -1 34;
+		minimum-size: -1 34;
+		margin-top: 0;
+}*/
+						
 
 #historyStoredRef.Landscape {
     font: $FONT_XSMALL;
@@ -371,10 +463,10 @@ MAbstractLayoutPolicyStyle {
 }
 
 CalculationHistoryItemStyle.Landscape {
-    background-image-single : "meegotouch-list-background" 8px 8px 8px 8px;
-    background-image-singlecolumn-top : "meegotouch-list-background-vertical-top" 8px 8px 8px 8px;
-    background-image-singlecolumn-center : "meegotouch-list-background-vertical-center" 8px 8px 8px 8px;
-    background-image-singlecolumn-bottom : "meegotouch-list-background-vertical-bottom" 8px 8px 8px 8px;
+    background-image-single : "meegotouch-list-fullwidth-background" 8px 8px 8px 8px;
+    background-image-singlecolumn-top : "meegotouch-list-fullwidth-background" 8px 8px 8px 8px;
+    background-image-singlecolumn-center : "meegotouch-list-fullwidth-background" 8px 8px 8px 8px;
+    background-image-singlecolumn-bottom : "meegotouch-list-fullwidth-background" 8px 8px 8px 8px;
     background-color: $COLOR_BACKGROUND;
     background-opacity: 1.0;
 
@@ -385,7 +477,7 @@ CalculationHistoryItemStyle.Landscape {
     margin-left:   0;
     margin-right:  0;
     margin-top:    0;
-    margin-bottom: 0;
+	margin-bottom: 0;
 
     padding-left:   0;
     padding-top:    0;
@@ -394,10 +486,10 @@ CalculationHistoryItemStyle.Landscape {
 }
 
 CalculationHistoryItemStyle.Portrait {
-    background-image-single : "meegotouch-list-background" 8px 8px 8px 8px;
-    background-image-singlecolumn-top : "meegotouch-list-background-vertical-top" 8px 8px 8px 8px;
-    background-image-singlecolumn-center : "meegotouch-list-background-vertical-center" 8px 8px 8px 8px;
-    background-image-singlecolumn-bottom : "meegotouch-list-background-vertical-bottom" 8px 8px 8px 8px;
+    background-image-single : "meegotouch-list-fullwidth-background" 8px 8px 8px 8px;
+    background-image-singlecolumn-top : "meegotouch-list-fullwidth-background" 8px 8px 8px 8px;
+    background-image-singlecolumn-center : "meegotouch-list-fullwidth-background" 8px 8px 8px 8px;
+    background-image-singlecolumn-bottom : "meegotouch-list-fullwidth-background" 8px 8px 8px 8px;
     background-color: $COLOR_BACKGROUND;
     background-opacity: 1.0;
 
@@ -417,27 +509,27 @@ CalculationHistoryItemStyle.Portrait {
 }
 
 CalculationHistoryItemStyle:selected {
-    background-image-single : "meegotouch-list-background-selected" 8px 8px 8px 8px;
-    background-image-singlecolumn-top : "meegotouch-list-background-selected-vertical-top" 8px 8px 8px 8px;
-    background-image-singlecolumn-center : "meegotouch-list-background-selected-vertical-center" 8px 8px 8px 8px;
-    background-image-singlecolumn-bottom : "meegotouch-list-background-selected-vertical-bottom" 8px 8px 8px 8px;
+    background-image-single : "meegotouch-list-fullwidth-background-selected" 8px 8px 8px 8px;
+    background-image-singlecolumn-top : "meegotouch-list-fullwidth-background-selected" 8px 8px 8px 8px;
+    background-image-singlecolumn-center : "meegotouch-list-fullwidth-background-selected" 8px 8px 8px 8px;
+    background-image-singlecolumn-bottom : "meegotouch-list-fullwidth-background-selected" 8px 8px 8px 8px;
     background-color: $COLOR_INVERTED_FOREGROUND;
     background-opacity: 1.0;
 }
 
 CalculationHistoryItemStyle:pressed {
-    background-image-single : "meegotouch-list-background-pressed" 8px 8px 8px 8px;
-    background-image-singlecolumn-top : "meegotouch-list-background-pressed-vertical-top" 8px 8px 8px 8px;
-    background-image-singlecolumn-center : "meegotouch-list-background-pressed-vertical-center" 8px 8px 8px 8px;
-    background-image-singlecolumn-bottom : "meegotouch-list-background-pressed-vertical-bottom" 8px 8px 8px 8px;
+    background-image-single : "meegotouch-list-fullwidth-background-pressed" 8px 8px 8px 8px;
+    background-image-singlecolumn-top : "meegotouch-list-fullwidth-background-pressed" 8px 8px 8px 8px;
+    background-image-singlecolumn-center : "meegotouch-list-fullwidth-background-pressed" 8px 8px 8px 8px;
+    background-image-singlecolumn-bottom : "meegotouch-list-fullwidth-background-pressed" 8px 8px 8px 8px;
     background-color: $COLOR_INVERTED_FOREGROUND;
 }
 
 SavedCalculationItemStyle.Landscape {
-    background-image-single : "meegotouch-list-background" 8px 8px 8px 8px;
-    background-image-singlecolumn-top : "meegotouch-list-background-vertical-top" 8px 8px 8px 8px;
-    background-image-singlecolumn-center : "meegotouch-list-background-vertical-center" 8px 8px 8px 8px;
-    background-image-singlecolumn-bottom : "meegotouch-list-background-vertical-bottom" 8px 8px 8px 8px;
+    background-image-single : "meegotouch-list-fullwidth-background" 8px 8px 8px 8px;
+    background-image-singlecolumn-top : "meegotouch-list-fullwidth-background" 8px 8px 8px 8px;
+    background-image-singlecolumn-center : "meegotouch-list-fullwidth-background" 8px 8px 8px 8px;
+    background-image-singlecolumn-bottom : "meegotouch-list-fullwidth-background" 8px 8px 8px 8px;
     background-color: $COLOR_BACKGROUND;
     background-opacity: 1.0;
 
@@ -457,10 +549,10 @@ SavedCalculationItemStyle.Landscape {
 }
 
 SavedCalculationItemStyle.Portrait {
-    background-image-single : "meegotouch-list-background" 8px 8px 8px 8px;
-    background-image-singlecolumn-top : "meegotouch-list-background-vertical-top" 8px 8px 8px 8px;
-    background-image-singlecolumn-center : "meegotouch-list-background-vertical-center" 8px 8px 8px 8px;
-    background-image-singlecolumn-bottom : "meegotouch-list-background-vertical-bottom" 8px 8px 8px 8px;
+    background-image-single : "meegotouch-list-fullwidth-background" 8px 8px 8px 8px;
+    background-image-singlecolumn-top : "meegotouch-list-fullwidth-background" 8px 8px 8px 8px;
+    background-image-singlecolumn-center : "meegotouch-list-fullwidth-background" 8px 8px 8px 8px;
+    background-image-singlecolumn-bottom : "meegotouch-list-fullwidth-background" 8px 8px 8px 8px;
     background-color: $COLOR_BACKGROUND;
     background-opacity: 1.0;
 
@@ -480,25 +572,25 @@ SavedCalculationItemStyle.Portrait {
 }
 
 SavedCalculationItemStyle:selected {
-    background-image-single : "meegotouch-list-background-selected" 8px 8px 8px 8px;
-    background-image-singlecolumn-top : "meegotouch-list-background-selected-vertical-top" 8px 8px 8px 8px;
-    background-image-singlecolumn-center : "meegotouch-list-background-selected-vertical-center" 8px 8px 8px 8px;
-    background-image-singlecolumn-bottom : "meegotouch-list-background-selected-vertical-bottom" 8px 8px 8px 8px;
+    background-image-single : "meegotouch-list-fullwidth-background-selected" 8px 8px 8px 8px;
+    background-image-singlecolumn-top : "meegotouch-list-fullwidth-background-selected" 8px 8px 8px 8px;
+    background-image-singlecolumn-center : "meegotouch-list-fullwidth-background-selected" 8px 8px 8px 8px;
+    background-image-singlecolumn-bottom : "meegotouch-list-fullwidth-background-selected" 8px 8px 8px 8px;
     background-color: $COLOR_INVERTED_FOREGROUND;
     background-opacity: 1.0;
 }
 
 SavedCalculationItemStyle:pressed {
-    background-image-single : "meegotouch-list-background-pressed" 8px 8px 8px 8px;
-    background-image-singlecolumn-top : "meegotouch-list-background-pressed-vertical-top" 8px 8px 8px 8px;
-    background-image-singlecolumn-center : "meegotouch-list-background-pressed-vertical-center" 8px 8px 8px 8px;
-    background-image-singlecolumn-bottom : "meegotouch-list-background-pressed-vertical-bottom" 8px 8px 8px 8px;
+    background-image-single : "meegotouch-list-fullwidth-background-pressed" 8px 8px 8px 8px;
+    background-image-singlecolumn-top : "meegotouch-list-fullwidth-background-pressed" 8px 8px 8px 8px;
+    background-image-singlecolumn-center : "meegotouch-list-fullwidth-background-pressed" 8px 8px 8px 8px;
+    background-image-singlecolumn-bottom : "meegotouch-list-fullwidth-background-pressed" 8px 8px 8px 8px;
     background-color: $COLOR_INVERTED_FOREGROUND;
 }
 
 CalculationLineWidgetStyle.Landscape {
     /* background-image: "calculator-text-field" 0 0 0 0; */
-    background-image-single: "duitextedit-background" 8px 8px 8px 8px;
+    background-image-single: "meegotouch-textedit-background-selected" 8px 8px 8px 8px;
     maximum-size: 410 83;
     preferred-size: 410 83;
     minimum-size: 410 83;
@@ -511,7 +603,7 @@ CalculationLineWidgetStyle.Landscape {
 
 CalculationLineWidgetStyle.Portrait {
     /* background-image: "calculator-text-field" 0 0 0 0; */
-    background-image-single: "duitextedit-background" 8px 8px 8px 8px;
+    background-image-single: "meegotouch-textedit-background-selected" 8px 8px 8px 8px;
     maximum-size: 456 93;
     preferred-size: 456 93;
     minimum-size: 456 93;
@@ -520,6 +612,6 @@ CalculationLineWidgetStyle.Portrait {
 }
 
 CalculationLineWidgetStyle:selected {
-    background-image: "duitextedit-background-selected" 8px 8px 8px 8px;
+    background-image: "meegotouch-textedit-background-selected" 8px 8px 8px 8px;
 }
 

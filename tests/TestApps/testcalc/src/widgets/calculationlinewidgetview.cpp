@@ -100,7 +100,8 @@ void CalculationLineWidgetViewPrivate::updateText()
     else if( ( numeral.contains( "." ) &&  numeral.endsWith( "0" ) ) || 
 	     numeral.endsWith( "." ) )
     { // non-exponential
-	mystring = locale.formatNumber( numeral.toDouble(), MAX_VALUE_LENGTH );
+	
+		mystring = locale.formatNumber( numeral.toDouble(), MAX_VALUE_LENGTH );
 	if( !mystring.contains( QString(locale.formatNumber(1.2)[1]) ) )
 	    mystring += QString(locale.formatNumber(1.2)[1]);
 	if( numeral.endsWith("0" ) )

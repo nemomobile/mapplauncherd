@@ -167,31 +167,6 @@ MWidget* CalculationHistoryCellCreator::createCell(
     if( !cell )
     {
 	cell = new CalculationHistoryItem;
-	QObject::connect(
-		cell,
-		SIGNAL( clicked() ),
-		parent,
-		SLOT( handleHistoryItemClicked() ) );
-	    
-	MAction* action;
-	action = new MAction( TXT_CALC_SAVE, cell );
-	action->setLocation( MAction::ObjectMenuLocation );
-	cell->addAction( action );
-	QObject::connect(
-	    action,
-	    SIGNAL(triggered()),
-	    parent,
-	    SLOT(initiateSaveCalculation()) );
-        
-	action = new MAction( TXT_CALC_DELETE, cell );
-	action->setLocation( MAction::ObjectMenuLocation );
-	cell->addAction( action );
-
-	QObject::connect(
-	    action,
-	    SIGNAL(triggered()),
-	    parent,
-	    SLOT(initiateDeleteCalculation()) );
     }
     
     updateCell( index, cell );
@@ -262,7 +237,6 @@ MWidget* DeleteHistoryItemsCellCreator::createCell(
 CalculationHistory::CalculationHistory() 
 	             : model( NULL ), 
 		       confirmDialog(NULL), 
-		       deleteCandidate( NULL ),
 		       deleteHistoryItems( NULL ),
 		       centralWidgetLayout( NULL ),
 		       list( NULL )
@@ -308,8 +282,21 @@ void CalculationHistory::createContent()
     list->setShowGroups(false);
     list->setCellCreator(new CalculationHistoryCellCreator(this));
     list->setItemModel(model);
+	
+    MAction* action;
+    action = new MAction( TXT_CALC_SAVE, list );
+    action->setLocation( MAction::ObjectMenuLocation );
+    list->addAction( action );
+    QObject::connect( action, SIGNAL(triggered()), this, SLOT(initiateSaveCalculation()) );
+
+    action = new MAction( TXT_CALC_DELETE, list );
+    action->setLocation( MAction::ObjectMenuLocation );
+    list->addAction( action );
+    QObject::connect( action, SIGNAL(triggered()), this, SLOT(initiateDeleteCalculation()) );
     
-    connect( this, SIGNAL( appeared() ), list->selectionModel(), SLOT( clearSelection() ) );
+    connect( this, SIGNAL( disappeared() ), list->selectionModel(), SLOT( clearSelection() ) );
+    connect( list, SIGNAL( itemClicked(QModelIndex) ), this, SLOT( handleHistoryItemClicked(QModelIndex) ) );
+    connect( list, SIGNAL( itemLongTapped(QModelIndex) ), this, SLOT( itemLongTapped(QModelIndex) ) );
     
     deleteHistoryItems = new DeleteHistoryItems(model);
     connect( 
@@ -400,44 +387,35 @@ void CalculationHistory::updateContent()
     list->selectionModel()->clearSelection();
 }
 
-void CalculationHistory::handleHistoryItemClicked( )
+void CalculationHistory::handleHistoryItemClicked( QModelIndex index )
 {
-    CalculationHistoryItem *object = qobject_cast<CalculationHistoryItem*>(sender());
-    // need to emit a signal here to return back to the main calculation view screen
-    emit this->itemClicked( object->result() );
+    emit this->itemClicked( index.sibling( index.row(), 1 ).data().toString() );
+}
+
+void CalculationHistory::itemLongTapped( QModelIndex index )
+{
+    longTappedIndex = index;
 }
 
 void CalculationHistory::initiateSaveCalculation()
 {
     qDebug() << Q_FUNC_INFO << endl;
-    CalculationHistoryItem* item = qobject_cast<CalculationHistoryItem*>(sender()->parent());
-    if( item )
-    {
-	qDebug() << "Got 'im!" << endl;
-	qDebug() << "input = " << item->input() << endl
-		 << "result = " << item->result() << endl
-		 << "datetime = " << item->timeOfCalculation()
-	         << "index = " << item->index() << endl;
-	qDebug() << "show name of calculation dialog" << endl;
-	CalculationItem calcItem;
-	calcItem["name"] = "";
-	calcItem["datetime"] = item->timeOfCalculation();
-	calcItem["input"] = item->input();
-	calcItem["result"] = item->result();
-	emit save(calcItem);
-    }
+    CalculationItem calcItem;
+    calcItem["name"] = "";
+    calcItem["datetime"] = longTappedIndex.sibling( longTappedIndex.row(), 0 ).data().toString();
+    calcItem["input"] = longTappedIndex.sibling( longTappedIndex.row(), 2 ).data().toString();
+    calcItem["result"] = longTappedIndex.sibling( longTappedIndex.row(), 1 ).data().toString();
+    emit save(calcItem);
 }
 
 void CalculationHistory::initiateDeleteCalculation()
 {
     qDebug() << Q_FUNC_INFO << endl;
-    CalculationHistoryItem* item = qobject_cast<CalculationHistoryItem*>(sender()->parent());
-    deleteCandidate = item;
 
     MLocale locale;
     
     QString mystring;
-    QString numeral = item->result();
+    QString numeral = longTappedIndex.sibling( longTappedIndex.row(), 1 ).data().toString();
     if( numeral.length() > MAX_VALUE_LENGTH )
 	utility->convertToExponential( numeral );
 
@@ -520,40 +498,27 @@ void CalculationHistory::showDeleteCalculationsPage()
 
 void CalculationHistory::confirmClearAccept()
 {
-    CalculationHistoryItem* item = deleteCandidate;
-    if( item )
-    {
-	qDebug() << "Got 'im!" << endl;
-	qDebug() << "input = " << item->input() << endl
-		 << "result = " << item->result() << endl
-		 << "datetime = " << item->timeOfCalculation()
-	         << "index = " << item->index() << endl;
-        QDir::setCurrent( QDir::homePath() + "/" + CALC_HIDDENDIR );
-        QFile file( CALCULATOR_HISTORY );
-        file.setPermissions( QFile::ReadOwner |
+    QDir::setCurrent( QDir::homePath() + "/" + CALC_HIDDENDIR );
+    QFile file( CALCULATOR_HISTORY );
+    file.setPermissions( QFile::ReadOwner |
 		            QFile::WriteOwner |
 			    QFile::ReadGroup |
 			    QFile::ReadOther );
-        if( file.exists() )
-        {
-            CalcDomReader reader( file );
-            QDomElement root;
-            reader.cloneRoot( root );
-	    CalcDomWriter writer( root );
-	    if( writer.removeByIndex( item->index() ) )
-		qDebug() << "item removed!" << endl;
-	    else
-		qDebug() << "item wasn't removed" << endl;
-	    writer.saveToFile( file );
-	}
-
-	this->updateContent();
+    if( file.exists() )
+    {
+        CalcDomReader reader( file );
+        QDomElement root;
+        reader.cloneRoot( root );
+	CalcDomWriter writer( root );
+	writer.removeByIndex( longTappedIndex.sibling( longTappedIndex.row(), 3 ).data().toString() ); 
+	writer.saveToFile( file );
     }
+
+    this->updateContent();
 }
 
 void CalculationHistory::confirmClearReject()
 {
-    deleteCandidate = NULL;
 }
 
 void CalculationHistory::addItem( CalculationItem& calcItem )
@@ -578,8 +543,6 @@ void CalculationHistory::addItem( CalculationItem& calcItem )
             QDomElement root;
             reader.cloneRoot( root );
             CalcDomWriter writer( root );
-	    if( writer.count() == MAX_CALCULATION_HISTORY_ITEMS )
-		writer.removeOldestItem();
             writer.addItem( calcItem );
             writer.saveToFile( file );
         }
@@ -609,6 +572,19 @@ void CalculationHistory::retranslateUi()
 	(this->actions()[0])->setText( TXT_CALC_DEL_LIST );
 
     ((MLabel*)emptyHistoryLayoutPolicy->itemAt( 0 ))->setText( TXT_CALC_HISTORY_BLANK );
+
+    list->clearActions();
+    
+    MAction* action;
+    action = new MAction( TXT_CALC_SAVE, list );
+    action->setLocation( MAction::ObjectMenuLocation );
+    list->addAction( action );
+    QObject::connect( action, SIGNAL(triggered()), this, SLOT(initiateSaveCalculation()) );
+
+    action = new MAction( TXT_CALC_DELETE, list );
+    action->setLocation( MAction::ObjectMenuLocation );
+    list->addAction( action );
+    QObject::connect( action, SIGNAL(triggered()), this, SLOT(initiateDeleteCalculation()) );
 }
 
 DeleteHistoryItems::DeleteHistoryItems( CalculationHistoryDataModel* model )
@@ -623,7 +599,7 @@ DeleteHistoryItems::DeleteHistoryItems( CalculationHistoryDataModel* model )
     dellist->setShowGroups(false);
     dellist->setCellCreator(new DeleteHistoryItemsCellCreator(this));
     dellist->setItemModel(model);
-    connect( this, SIGNAL( appeared() ), dellist->selectionModel(), SLOT( clearSelection() ) );
+    connect( this, SIGNAL( disappeared() ), dellist->selectionModel(), SLOT( clearSelection() ) );
 }
 
 DeleteHistoryItems::~DeleteHistoryItems() 

@@ -116,7 +116,7 @@ void SavedCalculationItemViewPrivate::updateText()
     }
     else
     {
-	mystring = locale.formatDateTime( calendar, MLocale::DateMedium );
+	mystring = locale.formatDateTime( calendar, MLocale::DateMedium, MLocale::TimeShort );
     }
     
     labelTimeOfCalculation->setText(mystring);
@@ -161,7 +161,7 @@ void SavedCalculationItemViewPrivate::updateText()
     // This logic takes care of localizing the input string according to the display language setting
     //
     QString num = q_ptr->model()->input();
-    QRegExp rx("^?\\d+\\.?\\d*$?");
+    QRegExp rx("^?[1-9]+\\.?\\d*$?");
     int idx=rx.indexIn( num);
     int pos=0;
     qDebug() << "my reg exp matches " << rx.captureCount() << " times" << endl;

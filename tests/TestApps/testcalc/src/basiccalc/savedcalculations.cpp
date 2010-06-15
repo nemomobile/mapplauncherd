@@ -123,8 +123,8 @@ bool SavedCalculationsDataModel::insertRow( int row, const QModelIndex& parent )
 bool SavedCalculationsDataModel::populateHeaderData( CalcDomReader& reader, int row, QStringList& data )
 {
     CalculationItem item;
-    reader.readItem( row, item );
-    data << item.value( "name" )
+	 reader.readItem( row, item );
+	data << item.value( "name" )
 	    << item.value( "datetime" ) 
 	    << item.value( "result" )
 	    << item.value( "input" )
@@ -174,30 +174,6 @@ MWidget* SavedCalculationsCellCreator::createCell(
     if( !cell )
     {
 	cell = new SavedCalculationItem;
-	QObject::connect(
-		cell,
-		SIGNAL( clicked() ),
-		parent,
-		SLOT( handleSavedCalculationItemClicked() ) );
-	    
-	MAction* action = new MAction( TXT_CALC_SAVED_RENAME, cell );
-	action->setLocation( MAction::ObjectMenuLocation );
-	cell->addAction( action );
-	QObject::connect(
-	    action,
-	    SIGNAL(triggered()),
-	    parent,
-	    SLOT(initiateRenameCalculation()) );
-
-	action = new MAction( TXT_CALC_DELETE, cell );
-	action->setLocation( MAction::ObjectMenuLocation );
-	cell->addAction( action );
-
-	QObject::connect(
-	    action,
-	    SIGNAL(triggered()),
-	    parent,
-	    SLOT(initiateDeleteCalculation()) );
     }
     
     updateCell( index, cell );
@@ -259,7 +235,6 @@ SavedCalculations::SavedCalculations()
 			  renameText( NULL ),
 			  renameDialog( NULL ),
 			  renameItem( NULL ),
-			  deleteCandidate( NULL ),
 			  deleteSavedItems( NULL ),
 			  centralWidgetLayout( NULL ),
 			  list( NULL )
@@ -305,8 +280,21 @@ void SavedCalculations::createContent()
     list->setShowGroups(false);
     list->setCellCreator(new SavedCalculationsCellCreator(this));
     list->setItemModel(model);
-    connect( this, SIGNAL( appeared() ), list->selectionModel(), SLOT( clearSelection() ) );
 
+    MAction* action = new MAction( TXT_CALC_SAVED_RENAME, list );
+    action->setLocation( MAction::ObjectMenuLocation );
+    list->addAction( action );
+    QObject::connect( action, SIGNAL(triggered()), this, SLOT(initiateRenameCalculation()) );
+
+    action = new MAction( TXT_CALC_DELETE, list );
+    action->setLocation( MAction::ObjectMenuLocation );
+    list->addAction( action );
+    QObject::connect( action, SIGNAL(triggered()), this, SLOT(initiateDeleteCalculation()) );
+
+    connect( this, SIGNAL( disappeared() ), list->selectionModel(), SLOT( clearSelection() ) );
+    connect( list, SIGNAL( itemClicked(QModelIndex) ), this, SLOT( handleSavedCalculationItemClicked(QModelIndex) ) );
+    connect( list, SIGNAL( itemLongTapped(QModelIndex) ), this, SLOT( itemLongTapped(QModelIndex) ) );
+    
     deleteSavedItems = new DeleteSavedItems( model );
     connect(
 	deleteSavedItems,
@@ -333,7 +321,6 @@ void SavedCalculations::createContent()
      ****************************************************************************************/
     MWidget* centralWidget = new MWidget;
     QGraphicsLinearLayout* layout = new QGraphicsLinearLayout(Qt::Vertical );
-//    MLabel* label = new MLabel( TXT_CALC_SAVED_NAME, centralWidget);
     
     renameText = new MTextEdit(
                        MTextEditModel::SingleLine,
@@ -343,20 +330,24 @@ void SavedCalculations::createContent()
     renameText->setMaxLength( 30 );
     renameText->setInputMethodCorrectionEnabled( false );
 
-    renameDialog = new MDialog( TXT_CALC_SAVED_RENAME_TITLE, M::SaveButton | M::CancelButton );
-    renameDialog->setCentralWidget( centralWidget );
-    qDebug() << "rename dialog = " << renameDialog << endl;
-    renameDialog->setCloseButtonVisible(true);
-    centralWidget->setLayout( layout );
-//    layout->addItem(label);
-    layout->addItem(renameText);
-    qDebug() << "rename dialog = " << renameDialog << endl;
+     renameDialog = new MDialog( );
+ 	 renameDialog->setTitle(TXT_CALC_SAVED_RENAME_TITLE);
+	 
+	 renameButton = new MButton(TXT_CALC_RENAME_BUTTON);
 
-    connect(
-            renameDialog,
-            SIGNAL(accepted()),
-            this,
-            SLOT(renameCalcAccepted()));
+	 renameDialog->addButton(renameButton->model());
+ 	 renameDialog->addButton(M::CancelButton);	
+
+	 renameDialog->setCentralWidget( centralWidget );
+	 renameDialog->setCloseButtonVisible(true);
+ 	 centralWidget->setLayout( layout );
+  	 layout->addItem(renameText);
+	
+	connect(
+			renameButton,
+			SIGNAL(clicked()),
+			this,
+			SLOT(renameCalcAccepted()));
 
     connect(
             renameDialog,
@@ -426,11 +417,9 @@ void SavedCalculations::updateContent()
     }
 }
 
-void SavedCalculations::handleSavedCalculationItemClicked( )
+void SavedCalculations::handleSavedCalculationItemClicked( QModelIndex index )
 {
-    SavedCalculationItem *object = qobject_cast<SavedCalculationItem*>(sender());
-    // need to emit a signal here to return back to the main calculation view screen
-    emit this->itemClicked( object->result() );
+    emit this->itemClicked( index.sibling( index.row(), 2 ).data().toString() );
 }
 
 void SavedCalculations::handleItemSelected(bool clicked)
@@ -473,21 +462,18 @@ void SavedCalculations::addItem( CalculationItem& calcItem )
             QDomElement root;
             reader.cloneRoot( root );
             CalcDomWriter writer( root );
-	    
-	    if( writer.count() >= MAX_SAVED_CALCULATION_ITEMS )
-	    {
-		utility->showNotificationBanner( TXT_CALC_SAVE_EXCEED, ICO_CALC_CROSS );
-		return;
-	    }
+			calcItem["index"]=reader.count()+1;
             writer.addItem( calcItem );
             if( writer.saveToFile( file ) )
 	    {
-                if( writer.count() <= MAX_SAVED_CALCULATION_ITEMS )
-		    emit this->itemSaved();
+		emit this->itemSaved();
 	    }
         }
         else
+		{
+			calcItem["index"]='0';
             writeNewFile = true;
+		}
     }
     else
         writeNewFile = true;
@@ -508,24 +494,25 @@ int SavedCalculations::count() const
     return 0;
 }
 
+void SavedCalculations::itemLongTapped( QModelIndex index )
+{
+    longTappedIndex = index;
+}
+
+
 void SavedCalculations::initiateRenameCalculation()
 {
     qDebug() << Q_FUNC_INFO << endl;
-    SavedCalculationItem* item = qobject_cast<SavedCalculationItem*>(sender()->parent());
-    if( item )
-    {
-	renameItem = item;
-	renameText->setText( item->name() );
-	renameText->setPrompt( TXT_CALC_SAVE_DEF );
-        renameDialog->appear();
-    }
+    renameText->setText( longTappedIndex.sibling( longTappedIndex.row(), 0 ).data().toString() );
+    renameText->setPrompt( TXT_CALC_SAVE_DEF );
+    renameDialog->appear();
 }
 
 void SavedCalculations::renameCalcAccepted()
 {
     qDebug() << Q_FUNC_INFO << endl;
     
-    if( renameItem && renameItem->name() != renameText->text() )
+    if( longTappedIndex.isValid() && longTappedIndex.sibling( longTappedIndex.row(), 0 ).data().toString() != renameText->text() )
     {
 	// this has to be renamed now
 	// 1) update the xml file
@@ -541,68 +528,47 @@ void SavedCalculations::renameCalcAccepted()
 	    QDomElement root;
 	    reader.cloneRoot( root );
 	    CalcDomWriter writer( root );
-	    if( writer.renameByIndex( renameItem->index(), renameText->text()==""? renameText->prompt() : renameText->text() ) )
-		qDebug() << "item renamed!" << endl;
-	    else
-		qDebug() << "item rename failed!" << endl;
+	    writer.renameByIndex( 
+                    longTappedIndex.sibling( longTappedIndex.row(), 4 ).data().toString(),
+                    renameText->text()==""? renameText->prompt() : renameText->text() );
 	    writer.saveToFile( file );
 	}
 	
 	// 2) update the list view
-	renameItem->setName( renameText->text() );
+	this->updateContent();
     }
-    renameItem = NULL;
 }
 
 void SavedCalculations::renameCalcRejected()
 {
     qDebug() << Q_FUNC_INFO << endl;
-    MDialog* mydialog = qobject_cast<MDialog*>(sender());
-    qDebug() << "mydialog = " << mydialog << endl;
-    renameItem = NULL;
 }
 
 void SavedCalculations::initiateDeleteCalculation()
 {
-    SavedCalculationItem* item = qobject_cast<SavedCalculationItem*>(sender()->parent());
-    deleteCandidate = item;
-    confirmDialog->setText( TXT_CALC_SAVED_DEL_CONF.arg( item->name() ) );
+    confirmDialog->setText( TXT_CALC_SAVED_DEL_CONF.arg( longTappedIndex.sibling( longTappedIndex.row(), 0 ).data().toString() ) );
     confirmDialog->appear();
 }
 
 void SavedCalculations::confirmDeleteAccept()
 {
     qDebug() << Q_FUNC_INFO << endl;
-    SavedCalculationItem* item = deleteCandidate;
-    if( item )
-    {
-        qDebug() << "Got 'im!" << endl;
-	qDebug() << "input = " << item->input() << endl
-		<< "result = " << item->result() << endl
-		<< "datetime = " << item->timeOfCalculation()
-		<< "index = " << item->index() << endl;
-        QDir::setCurrent( QDir::homePath() + "/" + CALC_HIDDENDIR );
-	QFile file( CALCULATOR_SAVED );
-	file.setPermissions( QFile::ReadOwner |
+    QDir::setCurrent( QDir::homePath() + "/" + CALC_HIDDENDIR );
+    QFile file( CALCULATOR_SAVED );
+    file.setPermissions( QFile::ReadOwner |
 				QFile::WriteOwner |
 				QFile::ReadGroup |
 				QFile::ReadOther );
-	if( file.exists() )
-	{
-	    CalcDomReader reader( file );
-	    QDomElement root;
-	    reader.cloneRoot( root );
-	    CalcDomWriter writer( root );
-	    if( writer.removeByIndex( item->index() ) )
-	        qDebug() << "item removed!" << endl;
-	    else
-	        qDebug() << "item wasn't removed" << endl;
-	    writer.saveToFile( file );
-	}
-	this->updateContent();
-	if( model->rowCount() == 0 )
-	    emit this->reinitializeSave();
+    if( file.exists() )
+    {
+	CalcDomReader reader( file );
+	QDomElement root;
+	reader.cloneRoot( root );
+	CalcDomWriter writer( root );
+	writer.removeByIndex( longTappedIndex.sibling( longTappedIndex.row(), 4 ).data().toString() );
+	writer.saveToFile( file );
     }
+    this->updateContent();
 }
 
 void SavedCalculations::confirmDeleteReject()
@@ -652,8 +618,6 @@ void SavedCalculations::initiateDeleteMultipleCalculations( QModelIndexList& sel
     }
     
     this->updateContent();
-    if( model->rowCount() == 0 )
-        emit this->reinitializeSave();
 }
 
 void SavedCalculations::retranslateUi()

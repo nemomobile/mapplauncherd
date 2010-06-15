@@ -35,43 +35,12 @@ BasicCalc::BasicCalc()
 		  saveInProgress( false )
 {
     //setTitle( TXT_CALC_TITLE );
-    setTitle( QString(TXT_CALC_TITLE)== "!! "? "Calculator" : TXT_CALC_TITLE);
+    setTitle( QString(TXT_CALC_TITLE )== "!! "? "TestCalc" : TXT_CALC_CLEAR);
     // use the singleton instance
     core = CoreInterface::instance();
     utility = CalcUtilities::instance();
+	init();
 
-    MLocale locale;
-    qDebug() << locale.formatNumber(0) << endl;
-    qDebug() << locale.formatNumber(1) << endl;
-    qDebug() << locale.formatNumber(2) << endl;
-    qDebug() << locale.formatNumber(3) << endl;
-    qDebug() << locale.formatNumber(4) << endl;
-    qDebug() << locale.formatNumber(5) << endl;
-    qDebug() << locale.formatNumber(6) << endl;
-    qDebug() << locale.formatNumber(7) << endl;
-    qDebug() << locale.formatNumber(8) << endl;
-    qDebug() << locale.formatNumber(9) << endl;
-    
-    numeralMap[locale.formatNumber(0)==""? "0":locale.formatNumber(0)] = "0";
-    numeralMap[locale.formatNumber(1)==""? "1":locale.formatNumber(1)] = "1";
-    numeralMap[locale.formatNumber(2)==""? "2":locale.formatNumber(2)] = "2";
-    numeralMap[locale.formatNumber(3)==""? "3":locale.formatNumber(3)] = "3";
-    numeralMap[locale.formatNumber(4)==""? "4":locale.formatNumber(4)] = "4";
-    numeralMap[locale.formatNumber(5)==""? "5":locale.formatNumber(5)] = "5";
-    numeralMap[locale.formatNumber(6)==""? "6":locale.formatNumber(6)] = "6";
-    numeralMap[locale.formatNumber(7)==""? "7":locale.formatNumber(7)] = "7";
-    numeralMap[locale.formatNumber(8)==""? "8":locale.formatNumber(8)] = "8";
-    numeralMap[locale.formatNumber(9)==""? "9":locale.formatNumber(9)] = "9";
-    
-    operationMap[QString(TXT_CALC_CLEAR)== "!! "? "C" : TXT_CALC_CLEAR] = "C";
-    operationMap[QString(TXT_CALC_BACK)== "!! "? "<-" : TXT_CALC_BACK] = "<-";
-    operationMap[QString(TXT_CALC_SIGN)== "!! "? "+/-" : TXT_CALC_SIGN] = "+/-";
-    operationMap[locale.formatNumber(1.2)==""? ".":QString(locale.formatNumber(1.2)[1])] = ".";
-    operationMap[QString(TXT_CALC_DIVIDE)== "!! "? "/" : TXT_CALC_DIVIDE ] = "/";
-    operationMap[TXT_CALC_MULTIPLY] = "*";
-    operationMap[QString(TXT_CALC_SUBTRACT)== "!! "? "-" : TXT_CALC_SUBTRACT] = "-";
-    operationMap[QString(TXT_CALC_ADD)== "!! "? "+" : TXT_CALC_ADD] = "+";
-    operationMap[QString(TXT_CALC_EQUAL)== "!! "? "=" : TXT_CALC_EQUAL] = "=";
 }
 
 BasicCalc::~BasicCalc()
@@ -82,6 +51,42 @@ BasicCalc::~BasicCalc()
     delete savedCalculations;
 }
 
+void BasicCalc::init()
+{
+		MLocale locale;
+		qDebug() << locale.formatNumber(0) << endl;
+		qDebug() << locale.formatNumber(1) << endl;
+		qDebug() << locale.formatNumber(2) << endl;
+		qDebug() << locale.formatNumber(3) << endl;
+		qDebug() << locale.formatNumber(4) << endl;
+		qDebug() << locale.formatNumber(5) << endl;
+		qDebug() << locale.formatNumber(6) << endl;
+		qDebug() << locale.formatNumber(7) << endl;
+		qDebug() << locale.formatNumber(8) << endl;
+		qDebug() << locale.formatNumber(9) << endl;
+
+		numeralMap[locale.formatNumber(0)==""? "0":locale.formatNumber(0)] = "0";
+		numeralMap[locale.formatNumber(1)==""? "1":locale.formatNumber(1)] = "1";
+		numeralMap[locale.formatNumber(2)==""? "2":locale.formatNumber(2)] = "2";
+		numeralMap[locale.formatNumber(3)==""? "3":locale.formatNumber(3)] = "3";
+		numeralMap[locale.formatNumber(4)==""? "4":locale.formatNumber(4)] = "4";
+		numeralMap[locale.formatNumber(5)==""? "5":locale.formatNumber(5)] = "5";
+		numeralMap[locale.formatNumber(6)==""? "6":locale.formatNumber(6)] = "6";
+		numeralMap[locale.formatNumber(7)==""? "7":locale.formatNumber(7)] = "7";
+		numeralMap[locale.formatNumber(8)==""? "8":locale.formatNumber(8)] = "8";
+		numeralMap[locale.formatNumber(9)==""? "9":locale.formatNumber(9)] = "9";
+
+		operationMap[QString(TXT_CALC_CLEAR)== "!! "? "C" : TXT_CALC_CLEAR] = "C";
+		operationMap[QString(TXT_CALC_BACK)== "!! "? "<-" : TXT_CALC_BACK] = "<-";
+		operationMap[QString(TXT_CALC_SIGN)== "!! "? "+/-" : TXT_CALC_SIGN] = "+/-";
+		operationMap[locale.formatNumber(1.2)==""? ".":QString(locale.formatNumber(1.2)[1])] = ".";
+		operationMap[QString(TXT_CALC_DIVIDE)== "!! "? "/" : TXT_CALC_DIVIDE ] = "/";
+                operationMap[TXT_CALC_MULTIPLY] = "*";
+		operationMap[QString(TXT_CALC_SUBTRACT)== "!! "? "-" : TXT_CALC_SUBTRACT] = "-";
+		operationMap[QString(TXT_CALC_ADD)== "!! "? "+" : TXT_CALC_ADD] = "+";
+		operationMap[QString(TXT_CALC_EQUAL)== "!! "? "=" : TXT_CALC_EQUAL] = "=";
+}
+																															
 void BasicCalc::createContent()
 {
     this->setEscapeMode(MApplicationPageModel::EscapeCloseWindow);
@@ -104,14 +109,6 @@ void BasicCalc::createContent()
     this->addAction( action );
     connect( action, SIGNAL( triggered() ), this, SLOT( paste() ) );
     
-    action = new MAction(TXT_CALC_SAVE_ME, this );
-    action->setLocation( MAction::ApplicationMenuLocation );
-    this->addAction( action );
-    connect(
-            action,
-            SIGNAL(triggered(bool)),
-            this,
-            SLOT(showSaveCalcDialog()));
     
     action = new MAction(TXT_CALC_HISTORY, this );
     action->setLocation( MAction::ApplicationMenuLocation );
@@ -133,6 +130,14 @@ void BasicCalc::createContent()
     
     connect( action, SIGNAL( triggered(bool) ), this, SLOT(showCalculationHistory()) );
 
+    action = new MAction(TXT_CALC_SAVE_ME, this );
+    action->setLocation( MAction::ApplicationMenuLocation );
+    this->addAction( action );
+    connect(
+            action,
+            SIGNAL(triggered(bool)),
+            this,
+            SLOT(showSaveCalcDialog()));
     action = new MAction(TXT_CALC_SAVED, this );
     action->setLocation( MAction::ApplicationMenuLocation );
     this->addAction( action );
@@ -197,13 +202,11 @@ void BasicCalc::createContent()
     buttonSign = new MButton( QString(TXT_CALC_SIGN)=="!! "? "+/-" : TXT_CALC_SIGN );
     buttonDecimal = new MButton( mylocale.formatNumber(1.2)==""? ".":QString( mylocale.formatNumber(1.2)[1]) );
 
-    buttonDivide = new MButton( QString(TXT_CALC_DIVIDE)=="!! "? "/" : TXT_CALC_DIVIDE );
-    buttonMultiply = new MButton( TXT_CALC_MULTIPLY);
-    //buttonMultiply = new MButton("*");
+    buttonDivide   = new MButton( QString(TXT_CALC_DIVIDE)=="!! "? "/" : TXT_CALC_DIVIDE );
+    buttonMultiply = new MButton( QString(TXT_CALC_MULTIPLY)=="!! "? "*" : TXT_CALC_MULTIPLY)   ;
     buttonSubtract = new MButton( QString(TXT_CALC_SUBTRACT)=="!! "?"-" : TXT_CALC_SUBTRACT );
-    buttonAdd = new MButton( QString(TXT_CALC_ADD)=="!! "?"+" : TXT_CALC_ADD );
+    buttonAdd = new MButton( QString(TXT_CALC_ADD)=="!! " ? "+" : TXT_CALC_ADD );
     buttonEquals = new MButton( QString(TXT_CALC_EQUAL)=="!! "?"=" : TXT_CALC_EQUAL );
-    //buttonEquals = new MButton( "=" );
     buttonAdd->setCheckable( true );
     buttonSubtract->setCheckable( true );
     buttonMultiply->setCheckable( true );
@@ -306,6 +309,8 @@ void BasicCalc::createContent()
             SIGNAL(rejected()),
             this,
             SLOT(saveCalcRejected()));
+
+	calculationLine->setFocus();  
 }
 
 void BasicCalc::makeConnections()
@@ -369,6 +374,7 @@ void BasicCalc::makeConnections()
         SIGNAL(result(QString)),
         this,
         SLOT(showResult(QString)) );
+	
 }
 
 MButton* BasicCalc::createButton( const QString text, const char* member )
@@ -393,49 +399,63 @@ void BasicCalc::keyPressEvent(QKeyEvent *event)
 	event->accept();
 	return;
     }
-
+	qDebug()<<"key"<<event->key();
     switch( event->key() )
     {
 	case Qt::Key_0:
+	case Qt::Key_P:
             digitButtons[0]->click();
 	    break;
 	case Qt::Key_1:
+	case Qt::Key_Q:
             digitButtons[1]->click();
 	    break;
 	case Qt::Key_2:
+	case Qt::Key_W:
             digitButtons[2]->click();
 	    break;
 	case Qt::Key_3:
+	case Qt::Key_E:
             digitButtons[3]->click();
 	    break;
 	case Qt::Key_4:
+	case Qt::Key_R:
             digitButtons[4]->click();
 	    break;
 	case Qt::Key_5:
+	case Qt::Key_T:
             digitButtons[5]->click();
 	    break;
 	case Qt::Key_6:
+	case Qt::Key_Y:
             digitButtons[6]->click();
 	    break;
 	case Qt::Key_7:
+	case Qt::Key_U:	
             digitButtons[7]->click();
 	    break;
 	case Qt::Key_8:
+	case Qt::Key_I:
             digitButtons[8]->click();
 	    break;
 	case Qt::Key_9:
+	case Qt::Key_O:
             digitButtons[9]->click();
 	    break;
 	case Qt::Key_Plus:
+	case Qt::Key_J:
 	    buttonAdd->click();
 	    break;
 	case Qt::Key_Minus:
+	case Qt::Key_H:
 	    buttonSubtract->click();
 	    break;
 	case Qt::Key_Asterisk:
+	case Qt::Key_L:
 	    buttonMultiply->click();
 	    break;
 	case Qt::Key_Slash:
+	case Qt::Key_At:
 	    buttonDivide->click();
 	    break;
 	case Qt::Key_Backspace:
@@ -541,10 +561,20 @@ void BasicCalc::digitClicked()
     {
         calculationLineValue = "";
         calculationDone = false;
-	calcState = DIGIT;
+		calcState = DIGIT;
         core->calculationStack()->clear();
     }
-    else if( calcState != SAVE )
+    else if( calcState == SAVE )
+	{
+			  // TERMINATION CONDITION FOR HISTORY
+	if( !storedReference.isEmpty() && storedReference.count() > 1) 
+			saveCalculationTo( HISTORY );
+	        storedReference.clear();
+	 		lastResult = "";
+ 			calculationLineValue = "";
+					   
+	}
+	else
 	calcState = DIGIT;
 
     if( !calculationLineValue.contains( "." ) )
@@ -643,7 +673,7 @@ void BasicCalc::backspaceClicked()
 	    // need to remove the embedded brackets "(" and ")" if they are present
 	    if( core->calculationStack()->last() == ")" )
 		core->calculationStack()->pop_back();
-            if( !core->calculationStack()->isEmpty() )
+		if( !core->calculationStack()->isEmpty() )
 		core->calculationStack()->pop_back();
 	    if( !core->calculationStack()->isEmpty() && 
 		core->calculationStack()->last() == "(" )
@@ -719,7 +749,10 @@ void BasicCalc::backspaceClicked()
 	else
 	{
 	    temp.truncate( temp.length() - 1 );
-	    calculationLineValue = temp;
+		if(temp=="-0.")
+			calculationLineValue="0.";
+		else
+			calculationLineValue = temp;
 	}
         
 	if( !storedReference.isEmpty() )
@@ -807,7 +840,9 @@ void BasicCalc::operatorClicked(bool checked)
     {
 	core->calculationStack()->push( calculationLine->text(), op );
 	if( lastSavedResult != "" )
+	{
             calculationLine->setText( lastSavedResult );
+	}
 	else
 	{
 	    QString temp = calculationLine->text();
@@ -867,20 +902,31 @@ void BasicCalc::equalsClicked()
     buttonSign->setEnabled( true );
     buttonSign->setObjectName( "otherItem" );
 
-    if( calcState != RESULT )
+   if( calcState != RESULT )
     {
 	this->setUnchecked();
 	chopOffCalculationLine();
-        QString calculationLineValue = calculationLine->text();
-        if(  operation != "" )
-        {
-	    core->calculationStack()->push( calculationLine->text(), operation );
-        }
+	QString calculationLineValue = calculationLine->text();
+	if(calculationLine->text()!=lastResult && calcState==SAVE  )
+	{
+			if( !storedReference.isEmpty() )
+					saveCalculationTo( HISTORY );
+			storedReference.clear();
+			lastResult = "";
+											   
+	}
+	
+	if(  operation != "" )
+	{
+			core->calculationStack()->push( calculationLine->text(), operation );
+	}
 	core->calculationStack()->push( calculationLine->text() );
-        calcState = RESULT;
+	
+	calcState = RESULT;
 	operation = "";
 	calculationStarted = false;
 	core->calculate();
+	 
     }
 }
 
@@ -1134,10 +1180,10 @@ void BasicCalc::showResult( const QString& res )
          (res.startsWith("-") && res.length() > MAX_DISPLAY_VALUE+1)) )
     {
 	banner = TXT_CALC_NOTE_CALC_LIMIT;
-	formattedBanner = QString("<style>red{color:#FF0000;}</style>") + 
-		 QString("<red>") +
-		 banner +
-		 QString("</red> ");
+	formattedBanner = /*QString("<style>red{color:#FF0000;}</style>") + 
+		 QString("<red>") +*/
+		 banner/* +
+		 QString("</red> ")*/;
 	storedReference.push_front( formattedBanner );
 	calcState = RESULT;
         calculationDone = true;
@@ -1147,10 +1193,10 @@ void BasicCalc::showResult( const QString& res )
               (res.startsWith("-") && i > MAX_DISPLAY_VALUE+1)) )
     {
 	banner = TXT_CALC_NOTE_CALC_LIMIT;
-	formattedBanner = QString("<style>red{color:#FF0000;}</style>") + 
-		 QString("<red>") +
-		 banner +
-		 QString("</red> ");
+	formattedBanner = /*QString("<style>red{color:#FF0000;}</style>") + 
+		 QString("<red>") +*/
+		 banner/* +
+		 QString("</red> ")*/;
 	storedReference.push_front( formattedBanner );
 	calcState = RESULT;
         calculationDone = true;
@@ -1158,10 +1204,10 @@ void BasicCalc::showResult( const QString& res )
     else if( res.contains("Error") )
     {
 	banner = TXT_CALC_NOTE_INDICATION;
-	formattedBanner = QString("<style>red{color:#FF0000;}</style>") + 
-		 QString("<red>") + 
-		 banner +
-		 QString("</red> ");
+	formattedBanner = /*QString("<style>red{color:#FF0000;}</style>") + 
+		 QString("<red>") +*/ 
+		 banner /*+
+		 QString("</red> ")*/;
         calculationDone = true;
 	if( calcState != SAVE )
 	    storedReference.push_front( formattedBanner );
@@ -1238,7 +1284,9 @@ void BasicCalc::showSaveCalcDialog()
 {
     saveInProgress = false;
     saveText->setPrompt(TXT_CALC_SAVE_DEF);
+    saveText->setText( "" );
     saveDialog->appear();
+    saveText->clearFocus();
 }
 
 void BasicCalc::saveCalcAccepted()
@@ -1283,14 +1331,14 @@ void BasicCalc::saveCalcAccepted()
     savedCalculations->updateContent();
     saveCalculationFromHistory = false;
     saveInProgress = false;
-	saveText->setText("");
+    saveText->setPrompt("");
 }
 
 void BasicCalc::saveCalcRejected()
 {
     qDebug() << "BasicCalc::saveCalcRejected()" << endl;
     saveCalculationFromHistory = false;
-	saveText->setText("");
+    saveText->setPrompt("");
 }
 
 void BasicCalc::calculationHistoryItemClicked( const QString& result )
@@ -1491,8 +1539,13 @@ void BasicCalc::retranslateUi()
 	return;
 
     this->clearActions();
+	
+	numeralMap.clear();
+	operationMap.clear();
+
+	init();
     
-    MAction* action;
+	MAction* action;
     
     action = new MAction( TXT_CALC_COPY, this );
     action->setLocation( MAction::ApplicationMenuLocation );
@@ -1522,7 +1575,7 @@ void BasicCalc::retranslateUi()
     action->setLocation( MAction::ApplicationMenuLocation );
     this->addAction( action );
     connect( action, SIGNAL( triggered(bool) ), this, SLOT(showSavedCalculations()) );
-
+	
     MLocale mylocale;
 
     for( int i=0; i < 10; i++ )
@@ -1541,7 +1594,7 @@ void BasicCalc::retranslateUi()
     saveDialog->setTitle( TXT_CALC_SAVE_TITLE );
     saveText->setPrompt(TXT_CALC_SAVE_DEF);
     QString value = calculationLine->text();
-    calculationLine->setText( "0");
+    calculationLine->setText( RANDOM_PRIME_VALUE );
     calculationLine->setText( value );
 }
                                                 
