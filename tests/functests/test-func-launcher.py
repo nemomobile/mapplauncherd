@@ -246,14 +246,6 @@ class launcher_tests (unittest.TestCase):
         debug("PID of 2nd %s" % process_id1)
         self.assert_( len(process_id1.split(' ')) == 1, "Only one instance of app not running")
 
-    def test_007(self):
-        """
-        To test that application launched in a very fast loop
-        """
-        #launch application more than once 
-        times = []
-        for i in xrange(5):
-            times.append(self.run_app_with_launcher(PREFERED_APP))
 
     def test_008(self):
         """

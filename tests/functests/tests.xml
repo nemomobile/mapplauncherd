@@ -34,9 +34,9 @@
           <step expected_result="0">source /tmp/session_bus_address.user; DISPLAY=:0 `pyversions -d` /usr/share/applauncherd-functional-tests/test-func-launcher.py test_005</step>
       </case>
 
-      <!--case name="launcher6" type="Functional" description="To test that only one instance of a application exist" timeout="120" level="System">
+      <case name="launcher6" type="Functional" description="To test that only one instance of a application exist" timeout="120" level="System">
           <step expected_result="0">source /tmp/session_bus_address.user; DISPLAY=:0 `pyversions -d` /usr/share/applauncherd-functional-tests/test-func-launcher.py test_006</step>
-      </case-->
+      </case>
 
       <!--case name="launcher7" type="Functional" description="To check the pipes used communication between parent and childrens" timeout="120" level="System">
           <step expected_result="0">source /tmp/session_bus_address.user; DISPLAY=:0 `pyversions -d` /usr/share/applauncherd-functional-tests/check_pipes.py</step>
