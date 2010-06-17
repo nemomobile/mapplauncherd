@@ -61,7 +61,7 @@
 
     <set name="Prestart-launched" description="To test that prestarted application is launched" feature="AF DUI Booster for Launcher daemon" requirement="300195">   
       <case name="Prestart-launched" type="Functional" description="To test that prestarted application is launched" timeout="120" level="System">
-          <step expected_result="0">source /tmp/session_bus_address.user; DISPLAY=:0 /usr/share/applauncherd-functional-tests/ts_prestartapp.rb </step>
+          <step expected_result="0">source /tmp/session_bus_address.user; DISPLAY=:0 /usr/share/applauncherd-functional-tests/ts_prestartapp.rb --name test_launch_prestarted_app</step>
       </case>
 
       <environments>
