@@ -9,46 +9,46 @@
       <pre_steps>
         <step>export DISPLAY=:0</step>
         <step>source /tmp/session_bus_address.user</step>
+        <step>sleep 20</step>
         <!-- step>other pre steps</step -->
       </pre_steps>
 
 
-      <case name="launcher1" type="Functional" description="To test if the launcher exists and is executable or not" timeout="120" level="System">
-          <step expected_result="0">source /tmp/session_bus_address.user; DISPLAY=:0 `pyversions -d` /usr/share/applauncherd-functional-tests/test-func-launcher.py test_001</step>
+      <case name="launcher-exist" type="Functional" description="To test if the launcher exists and is executable or not" timeout="120" level="System">
+          <step expected_result="0">source /tmp/session_bus_address.user; DISPLAY=:0 `pyversions -d` /usr/share/applauncherd-functional-tests/test-func-launcher.py test_001_launcher_exist</step>
       </case>
 
-      <case name="launcher2" type="Functional" description="test_launchable_application_exists " timeout="120" level="System">
-          <step expected_result="0">source /tmp/session_bus_address.user; DISPLAY=:0 `pyversions -d` /usr/share/applauncherd-functional-tests/test-func-launcher.py test_002</step>
+      <case name="launchable-app-exist" type="Functional" description="test_launchable_application_exists " timeout="120" level="System">
+          <step expected_result="0">source /tmp/session_bus_address.user; DISPLAY=:0 `pyversions -d` /usr/share/applauncherd-functional-tests/test-func-launcher.py test_002_applications_exist</step>
       </case>
 
-      <case name="launcher3" type="Functional" description="test if len(filename) is less than 20 " timeout="120" level="System">
-          <step expected_result="0">source /tmp/session_bus_address.user; DISPLAY=:0 `pyversions -d` /usr/share/applauncherd-functional-tests/test-func-launcher.py test_003</step>
+      <case name="zombie-state" type="Functional" description="To test that process exits after the application is killed" timeout="120" level="System">
+          <step expected_result="0">source /tmp/session_bus_address.user; DISPLAY=:0 `pyversions -d` /usr/share/applauncherd-functional-tests/test-func-launcher.py test_003_zombie_state</step>
       </case>
 
-      <case name="launcher4" type="Functional" description="To test that process exits after the application is killed" timeout="120" level="System">
-          <step expected_result="0">source /tmp/session_bus_address.user; DISPLAY=:0 `pyversions -d` /usr/share/applauncherd-functional-tests/test-func-launcher.py test_004</step>
+      <case name="launch-multi-app" type="Functional" description="To test that more than one applications are launched by the launcher" timeout="120" level="System">
+          <step expected_result="0">source /tmp/session_bus_address.user; DISPLAY=:0 `pyversions -d` /usr/share/applauncherd-functional-tests/test-func-launcher.py test_004_launch_multiple_apps</step>
       </case>
 
-      <case name="launcher5" type="Functional" description="To test that more than one applications are launched by the launcher" timeout="120" level="System">
-          <step expected_result="0">source /tmp/session_bus_address.user; DISPLAY=:0 `pyversions -d` /usr/share/applauncherd-functional-tests/test-func-launcher.py test_005</step>
+      <case name="one-instance" type="Functional" description="To test that only one instance of a application exist" timeout="120" level="System">
+          <step expected_result="0">source /tmp/session_bus_address.user; DISPLAY=:0 `pyversions -d` /usr/share/applauncherd-functional-tests/test-func-launcher.py test_005_one_instance</step>
       </case>
 
-      <!--case name="launcher6" type="Functional" description="To test that only one instance of a application exist" timeout="120" level="System">
-          <step expected_result="0">source /tmp/session_bus_address.user; DISPLAY=:0 `pyversions -d` /usr/share/applauncherd-functional-tests/test-func-launcher.py test_006</step>
-      </case-->
-
-      <!--case name="launcher7" type="Functional" description="To check the pipes used communication between parent and childrens" timeout="120" level="System">
-          <step expected_result="0">source /tmp/session_bus_address.user; DISPLAY=:0 `pyversions -d` /usr/share/applauncherd-functional-tests/check_pipes.py</step>
-      </case-->
-
-      <case name="launcher8" type="Functional" description="Test that launched applications get correct credentials when they provide Aegis files" timeout="120" level="System">
-          <step expected_result="0">source /tmp/session_bus_address.user; DISPLAY=:0 `pyversions -d` /usr/share/applauncherd-functional-tests/test-func-launcher.py test_008</step>
+      <case name="creds-test" type="Functional" description="Test that launched applications get correct credentials when they provide Aegis files" timeout="120" level="System">
+          <step expected_result="0">source /tmp/session_bus_address.user; DISPLAY=:0 `pyversions -d` /usr/share/applauncherd-functional-tests/test-func-launcher.py test_006_creds</step>
       </case>
 
-      <case name="launcher10" type="Functional" description="Test that launcher and invoker have correct credentials" timeout="120" level="System">
-          <step expected_result="0">source /tmp/session_bus_address.user; DISPLAY=:0 `pyversions -d` /usr/share/applauncherd-functional-tests/test-func-launcher.py test_010</step>
+      <case name="no-aegis-test" type="Functional" description="Check that an application that doesn't have aegis file doesn't get any funny credentials." timeout="120" level="System" insignificant="true" >
+          <step expected_result="0">source /tmp/session_bus_address.user; DISPLAY=:0 `pyversions -d` /usr/share/applauncherd-functional-tests/test-func-launcher.py test_007_no_aegis_Bug170905</step>
       </case>
 
+      <case name="invoker-creds" type="Functional" description="Test that launcher and invoker have correct credentials" timeout="120" level="System">
+          <step expected_result="0">source /tmp/session_bus_address.user; DISPLAY=:0 `pyversions -d` /usr/share/applauncherd-functional-tests/test-func-launcher.py test_008_invoker_creds</step>
+      </case>
+
+      <case name="launch-multi-app-cont" type="Functional" description="Test that launcher and invoker have correct credentials" timeout="120" level="System">
+          <step expected_result="0">source /tmp/session_bus_address.user; DISPLAY=:0 `pyversions -d` /usr/share/applauncherd-functional-tests/test-func-launcher.py test_009_launch_multiple_apps_cont</step>
+      </case>
       <environments>
           <scratchbox>false</scratchbox>
           <hardware>true</hardware>    
@@ -60,7 +60,7 @@
 
     <set name="Prestart-launched" description="To test that prestarted application is launched" feature="AF DUI Booster for Launcher daemon" requirement="300195">   
       <case name="Prestart-launched" type="Functional" description="To test that prestarted application is launched" timeout="120" level="System">
-          <step expected_result="0">source /tmp/session_bus_address.user; DISPLAY=:0 /usr/share/applauncherd-functional-tests/ts_prestartapp.rb </step>
+          <step expected_result="0">source /tmp/session_bus_address.user; DISPLAY=:0 /usr/share/applauncherd-functional-tests/ts_prestartapp.rb --name test_launch_prestarted_app</step>
       </case>
 
       <environments>

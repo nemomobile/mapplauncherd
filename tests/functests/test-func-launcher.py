@@ -49,7 +49,7 @@ import unittest
 
 LAUNCHER_BINARY='/usr/bin/applauncherd'
 DEV_NULL = file("/dev/null","w")
-LAUNCHABLE_APPS = ['/usr/bin/fala_ft_hello','/usr/bin/fala_ft_hello_1', '/usr/bin/fala_ft_hello_2']
+LAUNCHABLE_APPS = ['/usr/bin/fala_ft_hello','/usr/bin/fala_ft_hello1', '/usr/bin/fala_ft_hello2']
 PREFERED_APP = '/usr/bin/fala_ft_hello'
 
 def debug(*msg):
@@ -78,13 +78,6 @@ def start_launcher_daemon():
     if st == 0:
         debug("Launcher already started")
         return op
-    else:
-        p = subprocess.Popen(LAUNCHER_BINARY,
-                shell=False,
-                stdout=DEV_NULL, stderr=DEV_NULL)
-
-        debug("Launcher has started")
-        return p
 
 def check_prerequisites():
     if os.getenv('DISPLAY') == None:
@@ -94,17 +87,17 @@ def check_prerequisites():
         error("DBUS_SESSION_BUS_ADDRESS is not set.\n" +
               "You probably want to source /tmp/session_bus_address.user")
 
+    for app in LAUNCHABLE_APPS: 
+        assert(len(basename(app)) <= 14, "For app: %s, base name !<= 14" % app)
 
 class launcher_tests (unittest.TestCase):
     def setUp(self):
         #setup here
-        self.globalpidlist = []
+        print "Executing SetUp"
 
     def tearDown(self):
         #teardown here
-        if len(self.globalpidlist) > 0:
-            for pid in self.globalpidlist:
-                commands.getstatusoutput("kill -9 %s" % pid) 
+        print "Executing TearDown"
 
     #Other functions
     def run_app_with_launcher(self, appname):
@@ -113,7 +106,7 @@ class launcher_tests (unittest.TestCase):
                 stdout=DEV_NULL, stderr=DEV_NULL)
         return p
 
-    #get_pid = lambda appname: commands.getstatusoutput("pidof %s" % appname)[-1]
+    #get_pid = lambda appname: commands.getstatusoutput("pgrep %s" % appname)[-1]
     
     def get_pid(self, appname):
         temp = basename(appname)[:14]
@@ -126,7 +119,7 @@ class launcher_tests (unittest.TestCase):
     def kill_process(self, appname):
         temp = basename(appname)[:14]
         st, op = commands.getstatusoutput("pkill -9 %s" % temp)
-        #os.wait()
+        os.wait()
 
     def process_state(self, processid):
         st, op = commands.getstatusoutput('cat /proc/%s/stat' %processid)
@@ -146,7 +139,7 @@ class launcher_tests (unittest.TestCase):
         handle = self.run_app_with_launcher(path)
 
         # sleep for a moment to allow applauncherd to start the process
-        time.sleep(1)
+        time.sleep(5)
 
         # with luck, the process should have correct name by now
         pid = self.get_pid(path)
@@ -164,14 +157,14 @@ class launcher_tests (unittest.TestCase):
         return op.split("\n")
 
     #Testcases
-    def test_001(self):
+    def test_001_launcher_exist(self):
         """
         To test if the launcher exists and is executable or not
         """
         self.assert_(os.path.isfile(LAUNCHER_BINARY), "Launcher file does not exist")
         self.assert_(os.access(LAUNCHER_BINARY, os.X_OK), "Launcher exists, but is not executable")
 
-    def test_002(self):
+    def test_002_applications_exist(self):
         """
         test_launchable_application_exists
         """
@@ -180,54 +173,49 @@ class launcher_tests (unittest.TestCase):
             temp = "%s.launch" % app
             if not (os.path.isfile(temp) and os.access(temp, os.X_OK)): 
                 failed_apps.append(temp)
-        if len(failed_apps) > 0:
-            raise AssertionError, "Some applcations do not have the launch files, list: %s" % str(failed_apps)
-        #assert for method 2, type one
-        self.assert_(failed_apps == [], "Some applcations do not have the launch files, list: %s" % str(failed_apps))
-        #assert for method 2, type two
+        self.assert_(failed_apps == [], "Some applications do not have the launch files, list: %s" % str(failed_apps))
 
-    def test_003(self):
-        """
-        test if len(filename) is less than 20
-        """
-        for app in LAUNCHABLE_APPS: 
-            self.assert_(len(basename(app)) <= 20, "For app: %s, base name !<= 20" % app)
-
-    def test_004(self):
+    def test_003_zombie_state(self):
         """
         To test that no Zombie process exist after the application is killed
         """
         #launch application with launcher
         #check if the application is running
         #kill the application (pid = p.pid)
-        #check if pidof appname should be nothing
+        #check if pgrep appname should be nothing
         #self.kill_process(LAUNCHER_BINARY)
         process_handle = self.run_app_with_launcher(PREFERED_APP)
         process_id = self.get_pid(PREFERED_APP)
+        print process_id
         self.kill_process(PREFERED_APP)
         time.sleep(4)
-        process_id = self.get_pid(PREFERED_APP)
-        self.assert_(process_id == None  , "Process still running")
+        process_handle = self.run_app_with_launcher(PREFERED_APP)
+        process_id1 = self.get_pid(PREFERED_APP)
+        print process_id1
+        self.kill_process(PREFERED_APP)
+        time.sleep(4)
+        process_id1 = self.get_pid(PREFERED_APP)
+        print process_id1
+        self.assert_(process_id != process_id1 , "New Process not launched")
+        self.assert_(process_id1 == None , "Process still running")
     
-    def test_005(self):
+    def test_004_launch_multiple_apps(self):
         """
         To test that more than one applications are launched by the launcher 
         """
         for app in LAUNCHABLE_APPS: 
             #launch application with launcher
             #check if the application is running
-            #check if p.pid is same as pidof appname
+            #check if p.pid is same as pgrep appname
             #in a global dictionary, append the pid
             process_handle = self.run_app_with_launcher(app)
             time.sleep(5)
             process_id = self.get_pid(app)
-            self.assert_(not (process_id == None), "process id is None")
-            self.globalpidlist.append(process_id)
-        self.assert_(len(self.globalpidlist) == len(LAUNCHABLE_APPS), "All Applications were not launched using launcher")
-     
-     
+            self.assert_(not (process_id == None), "All Applications were not launched using launcher")
+        self.kill_process(PREFERED_APP)
+       
     
-    def test_006(self):
+    def test_005_one_instance(self):
         """
         To test that only one instance of a application exist 
         """
@@ -235,27 +223,21 @@ class launcher_tests (unittest.TestCase):
         #self.run_app_with_launcher(appname)
         #get pid of application
         #launch applicatoin again
-        #check pidof application
-        #y = commands.getstatusoutput(pidof appname)
+        #check pgrep application
+        #y = commands.getstatusoutput(pgrep appname)
         #len(y[-1].split(' ')) == 1
         process_handle = self.run_app_with_launcher(PREFERED_APP)
         process_id = self.get_pid(PREFERED_APP)
         debug("PID of first %s" % process_id)
         process_handle1 = self.run_app_with_launcher(PREFERED_APP)
-        process_id1 = self.get_pid(PREFERED_APP)
-        debug("PID of 2nd %s" % process_id1)
-        self.assert_( len(process_id1.split(' ')) == 1, "Only one instance of app not running")
+        time.sleep(2)
+        process_id = self.get_pid(PREFERED_APP)
+        debug("PID of 2nd %s" % process_id)
+        self.assert_( len(process_id.split(' ')) == 1, "Only one instance of app not running")
+        self.kill_process(PREFERED_APP)
 
-    def test_007(self):
-        """
-        To test that application launched in a very fast loop
-        """
-        #launch application more than once 
-        times = []
-        for i in xrange(5):
-            times.append(self.run_app_with_launcher(PREFERED_APP))
 
-    def test_008(self):
+    def test_006_creds(self):
         """
         Test that the fala_ft_creds* applications have the correct
         credentials set (check aegis file included in the debian package)
@@ -268,7 +250,8 @@ class launcher_tests (unittest.TestCase):
 
         # required common caps
         caps = ['UID::user', 'GID::users', 'SRC::com.nokia.maemo',
-                'applauncherd-functional-tests::applauncherd-functional-tests']
+                'applauncherd-functional-tests::applauncherd-functional-tests',
+                'AID::com.nokia.maemo.applauncherd-functional-tests.']
 
         # required caps for fala_ft_creds1
         cap1 = ['tcb', 'drm', 'Telephony', 'CAP::setuid', 'CAP::setgid',
@@ -295,24 +278,23 @@ class launcher_tests (unittest.TestCase):
 
         self.assert_(op2 == cap2, "fala_ft_creds2 has non-requested creds!")
 
-    # uncomment this test when cred_confine starts working correctly
-    # def test_009(self):
-    #     """
-    #     Check that an application that doesn't have aegis file doesn't
-    #     get any funny credentials.
-    #     """
+    def test_007_no_aegis_Bug170905(self):
+        """
+        Check that an application that doesn't have aegis file doesn't
+        get any funny credentials.
+        """
 
-    #     creds = self.get_creds('/usr/bin/fala_ft_hello')
-    #     debug("fala_ft_hello has %s" % ', '.join(creds))
+        creds = self.get_creds('/usr/bin/fala_ft_hello')
+        debug("fala_ft_hello has %s" % ', '.join(creds))
 
-    #     req_creds = ['UID::nobody', 'GID::nogroup']
+        req_creds = ['UID::nobody', 'GID::nogroup']
 
-    #     creds.sort()
-    #     req_creds.sort()
+        creds.sort()
+        req_creds.sort()
 
-    #     self.assert_(creds == req_creds, "fala_ft_hello has too many creds!")
+        self.assert_(creds == req_creds, "fala_ft_hello has differnt creds set!")
 
-    def test_010(self):
+    def test_008_invoker_creds(self):
         """
         Test that the launcher registered customized credentials 
         and invoker has proper credentials to access launcher
@@ -339,6 +321,21 @@ class launcher_tests (unittest.TestCase):
         for cap in caps:
             self.assert_(not (cap in op2), "%s is set for fake invoker" % cap)
 
+    def test_009_launch_multiple_apps_cont(self):
+        """
+        To test that more than one applications are launched by the launcher 
+        """
+        for app in LAUNCHABLE_APPS: 
+            #launch application with launcher
+            #check if the application is running
+            #check if p.pid is same as pgrep appname
+            #in a global dictionary, append the pid
+            process_handle = self.run_app_with_launcher(app)
+        time.sleep(8)
+        process_id = self.get_pid('fala_ft_hello')
+        pid_list = process_id.split()
+        self.assert_(len(pid_list) == len(LAUNCHABLE_APPS), "All Applications were not launched using launcher")
+        self.kill_process(PREFERED_APP)
  
 
 # main

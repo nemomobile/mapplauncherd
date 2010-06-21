@@ -64,11 +64,11 @@ class CalculationHistoryItemViewPrivate : public QObject
 
 	QGraphicsLinearLayout *vbox;
 	QGraphicsLinearLayout *hbox;
-
+	
 	MLabel *labelTimeOfCalculation;
 	MLabel *labelResult;
 	MLabel *labelInput;
-	
+
 	typedef const MScalableImage* (CalculationHistoryItemStyle::*backgroundFunc)() const;
 	static QVector<backgroundFunc> backgroundFunctions;
 

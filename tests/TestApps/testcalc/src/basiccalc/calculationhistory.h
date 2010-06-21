@@ -110,12 +110,14 @@ public slots:
     void confirmClearAccept();
     void confirmClearReject();
     
-    void handleHistoryItemClicked();
+    void handleHistoryItemClicked( QModelIndex );
     void initiateSaveCalculation();
     void initiateDeleteCalculation();
     void initiateDeleteMultipleCalculations(QModelIndexList& );
 
     void showDeleteCalculationsPage();
+
+    void itemLongTapped(QModelIndex);
 
 private:
 
@@ -132,9 +134,10 @@ private:
 
     // delete multiple calculations
     DeleteHistoryItems* deleteHistoryItems;
-    CalculationHistoryItem* deleteCandidate;
     
     CalcUtilities* utility;
+
+    QModelIndex longTappedIndex;
 };
 
 class DeleteHistoryItemsCellCreator : public CalculationHistoryCellCreator

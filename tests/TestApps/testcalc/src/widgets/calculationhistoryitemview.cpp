@@ -31,7 +31,7 @@
 #include "calculationhistoryitemview.h"
 #include "calculationhistoryitemview_p.h"
 #include "calculationhistoryitem.h"
-
+#include <calcconstants.h>
 using namespace std;
 
 QVector<CalculationHistoryItemViewPrivate::backgroundFunc> CalculationHistoryItemViewPrivate::backgroundFunctions;
@@ -86,6 +86,12 @@ void CalculationHistoryItemViewPrivate::organizeCalculationHistoryItemLayout()
     labelInput = new MLabel();
     labelInput->setObjectName( "historyStoredRef" );
     labelInput->setTextElide( true );
+	
+   /*	labelError = new MLabel();
+	labelError->setObjectName( "historyError" );
+	hbox1->addItem(labelError);
+	hbox1->addItem(labelInput);*/
+	
     // TODO: temporarily the next line has been disabled.
     // This again has to be re-enabled after bug# 146158
     // has been fixed.
@@ -117,7 +123,8 @@ void CalculationHistoryItemViewPrivate::updateText()
     else
     {
         // just the date
-        mystring = locale.formatDateTime( calendar, MLocale::DateMedium );
+        //mystring = locale.formatDateTime( calendar, MLocale::DateMedium );
+        mystring = locale.formatDateTime( calendar, MLocale::DateMedium, MLocale::TimeShort );
     }
     
     qDebug() << "mystring = " << mystring << endl;
@@ -162,17 +169,38 @@ void CalculationHistoryItemViewPrivate::updateText()
     // This logic takes care of localizing the input string according to the display language setting
     //
     QString num = q_ptr->model()->input();
-    QRegExp rx("^?\\d+\\.?\\d*$?");
+    QRegExp rx("[1-9]+\\.?\\d*$?");
     int idx=rx.indexIn( num);
     int pos=0;
     qDebug() << "my reg exp matches " << rx.captureCount() << " times" << endl;
+	qDebug() << "BEFORE REPLACE "<<num<<endl;
     while(rx.indexIn(num, pos) != -1)
     {
-	idx=rx.indexIn( num,pos);
+		idx=rx.indexIn( num,pos);
         num.replace(rx.cap(0),locale.formatNumber(rx.cap(0).toDouble(),MAX_VALUE_LENGTH ));
         pos += rx.matchedLength();
     }
-    labelInput->setText(num);
+	qDebug() << "AFTER REPLACE "<<num<<endl;
+/*	if((num.contains(TXT_CALC_NOTE_CALC_LIMIT)||num.contains(TXT_CALC_NOTE_INDICATION)))				
+	{
+	  if(num.contains(TXT_CALC_NOTE_CALC_LIMIT))
+	  {
+	 	num.remove(TXT_CALC_NOTE_CALC_LIMIT); 
+		labelError->setText(TXT_CALC_NOTE_CALC_LIMIT);
+	  }
+	  else 
+	  {
+			num.remove(TXT_CALC_NOTE_INDICATION);
+			labelError->setText(TXT_CALC_NOTE_INDICATION);
+	  }
+	  labelError->setColor(Qt::red);
+	}
+	else
+	{
+		labelError->setText("");
+	}*/
+			
+	labelInput->setText(num);
     labelInput->setTextElide( true );
 }
 

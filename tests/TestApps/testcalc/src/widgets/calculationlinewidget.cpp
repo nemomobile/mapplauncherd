@@ -3,7 +3,10 @@
 
 CalculationLineWidget::CalculationLineWidget(MWidget *parent)
 	  :MWidgetController(new CalculationLineWidgetModel, parent)
-{}
+{
+	setFocusPolicy(Qt::StrongFocus);
+	setFlag(QGraphicsItem::ItemIsFocusable);
+}
 
 CalculationLineWidget::~CalculationLineWidget()
 {

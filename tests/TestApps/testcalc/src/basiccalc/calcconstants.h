@@ -19,13 +19,13 @@
 #define TXT_CALC_DEL_CONFIRM_ALL	 qtTrId("qtn_esse_calc_del_confirm_all")
 #define TXT_CALC_DEL_LIST		 qtTrId("qtn_esse_calc_del_list")
 #define TXT_CALC_DEL_NOTE_ALL		 qtTrId("qtn_esse_calc_del_note_all")
-#define TXT_CALC_DEL_ONE_CONF		 qtTrId("qtn_esse_calc_del_one_conf")
+#define TXT_CALC_DEL_ONE_CONF		 qtTrId("qtn_esse_calc_svd_del_conf")
 #define TXT_CALC_DEL_SEL_CONF		 qtTrId("qtn_esse_calc_del_sel_conf")
 #define TXT_CALC_DIVIDE			 qtTrId("qtn_esse_calc_dvd")
 #define TXT_CALC_EQUAL			 qtTrId("qtn_esse_calc_eql")
 #define TXT_CALC_HISTORY_BLANK		 qtTrId("qtn_esse_calc_hist_blank")
 #define TXT_CALC_HISTORY_DEL_CONF	 qtTrId("qtn_esse_calc_hist_del_conf")
-#define TXT_CALC_HISTORY_TITLE		 qtTrId("qtn_esse_calc_hist_title")
+#define TXT_CALC_HISTORY_TITLE		 qtTrId("qtn_esse_calc_history")
 #define TXT_CALC_HISTORY		 qtTrId("qtn_esse_calc_history")
 #define TXT_CALC_MULTIPLY		 qtTrId("qtn_esse_calc_mult")
 #define TXT_CALC_NOTE_CALC_LIMIT	 qtTrId("qtn_esse_calc_note_cal_limit")
@@ -34,6 +34,7 @@
 #define TXT_CALC_NOTE_TYPING		 qtTrId("qtn_esse_calc_note_typ")
 #define TXT_CALC_PASTE			 qtTrId("qtn_esse_calc_paste")
 #define TXT_CALC_RENAME			 qtTrId("qtn_esse_calc_rename_note")
+#define TXT_CALC_RENAME_BUTTON         qtTrId("qtn_comm_command_rename")
 #define TXT_CALC_SAVE_ME		 qtTrId("qtn_esse_calc_save")
 #define TXT_CALC_SAVE_DEF		 qtTrId("qtn_esse_calc_save_def")
 #define TXT_CALC_SAVE_EXCEED		 qtTrId("qtn_esse_calc_save_exd")
@@ -65,12 +66,8 @@
 
 
 #define CALC_ENGINE_PROGRAM	"osso_calculator_engine"
-// BACKING OFF FAST LAUNCH
-#if 0
-#define CALCULATOR_APPNAME	QString("essentials.launch")
-#endif
-#define CALCULATOR_APPNAME	QString("testcalc")
-#define CALC_HIDDENDIR		QString(".testcalc")
+#define CALCULATOR_APPNAME	QString("essentials")
+#define CALC_HIDDENDIR		QString(".essentials")
 
 #define MAX_VALUE_LENGTH 15
 #define MAX_DISPLAY_VALUE 100
@@ -83,6 +80,8 @@
 #define CALCULATOR_HISTORY "history.xml"
 #define CALCULATOR_SAVED "savedcalculations.xml"
 
+
+#define RANDOM_PRIME_VALUE QString("23768741896345550770650537601358309")
 
 
 #endif

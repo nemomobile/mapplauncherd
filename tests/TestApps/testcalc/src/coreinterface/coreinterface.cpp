@@ -41,10 +41,16 @@ CoreInterface::CoreInterface()
 }
 
 void CoreInterface::calculate()
-{	
+{
     QString calculationLineValue("777");
+    emit result( calculationLineValue );
+}
 
-/*
+#if 0
+void CoreInterface::calculate()
+{	
+    QString calculationLineValue;
+
     QString cmd;
     stack->generateCalculationCommand( cmd );
     
@@ -67,10 +73,10 @@ void CoreInterface::calculate()
     }
 
     calculationLineValue = calculationLineValue.simplified();
-*/
 
     emit result( calculationLineValue );
 }
+#endif
 
 CalculationStack* CoreInterface::calculationStack()
 {

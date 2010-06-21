@@ -11,6 +11,6 @@ install(PROGRAMS libhelloworld.so DESTINATION /usr/bin RENAME fala_ft_hello.laun
 install(PROGRAMS scripts/fala_ft_hello DESTINATION /usr/bin/)
 install(PROGRAMS scripts/qhelloworld DESTINATION /usr/bin/)
 
-# Install symlinks so that /usr/bin/helloworld_X launches /usr/bin/helloworld_X.launch
+# Install symlinks so that /usr/bin/helloworldX launches /usr/bin/helloworldX.launch
 install(SCRIPT scripts/create_links.cmake)
 
