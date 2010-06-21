@@ -427,7 +427,9 @@ int main(int argc, char *argv[])
     else
     {
         /* Called with a different name, old way of using invoker */
-        die(1, "wrong way of using, don't use symlinks");
+        die(1,
+            "Incorrect use of invoker, don't use symlinks. "
+            "Run invoker explicitly from e.g. a D-Bus service file instead.\n");
     }
 
     if (!prog_name)
