@@ -7,10 +7,7 @@
 
     <set name="applauncherd-functional-tests" description="Launcher functional tests" feature="AF Basic Launcher daemon support" requirement="300168">   
       <pre_steps>
-        <step>export DISPLAY=:0</step>
-        <step>source /tmp/session_bus_address.user</step>
-        <step>sleep 20</step>
-        <!-- step>other pre steps</step -->
+          <step>/usr/bin/waitloadavg.rb -l 1.0 -p 1.0 -t 120</step>
       </pre_steps>
 
 

@@ -42,7 +42,7 @@ Description: applauncherd unit tests
 Package: applauncherd-functional-tests
 Section: extra
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, libmeegotouchcore0, libmeegotouchviews0, libmeegotouchextensions0, libmeegotouchsettings0, testrunner, applauncherd, ci-testing, matti, libcreds2 [arm armel], libcreds2-tools [arm armel]
+Depends: ${shlibs:Depends}, ${misc:Depends}, libmeegotouchcore0, libmeegotouchviews0, libmeegotouchextensions0, libmeegotouchsettings0, testrunner, applauncherd, ci-testing, matti, libcreds2 [arm armel], libcreds2-tools [arm armel], meego-env, mcetools (>= 1.10.40) 
 XB-Maemo-CI-Packages: applauncherd
 XB-Maemo-CI-Stage: fast, staging, acceptance, validation
 Description: applauncherd functional tests
@@ -51,7 +51,7 @@ Description: applauncherd functional tests
 Package: applauncherd-performance-tests
 Section: extra
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, libmeegotouchcore0, libmeegotouchviews0, libmeegotouchextensions0, libmeegotouchsettings0, testrunner, applauncherd, ci-testing
+Depends: ${shlibs:Depends}, ${misc:Depends}, libmeegotouchcore0, libmeegotouchviews0, libmeegotouchextensions0, libmeegotouchsettings0, testrunner, applauncherd, ci-testing, meego-env, mcetools (>= 1.10.40)
 XB-Maemo-CI-Packages: applauncherd
 XB-Maemo-CI-Stage: fast, acceptance, validation
 Description: applauncherd performance tests
