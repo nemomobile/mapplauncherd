@@ -26,8 +26,19 @@ add_subdirectory(perftests)
 # Sub build: functests
 add_subdirectory(functests)
 
-# Sub build: creds
+# Sub build: art-tests 
+add_subdirectory(art-tests)
+
+# Sub build: Staging 
+add_subdirectory(Staging)
+
+# Sub build: TestScripts
+add_subdirectory(TestScripts)
+
+# Sub build: TestApps
 add_subdirectory(TestApps/creds)
 
-# Sub build: creds
+# Sub build: TestApps
 add_subdirectory(TestApps/testapp)
+# Sub build: TestApps
+add_subdirectory(TestApps/testcalc)

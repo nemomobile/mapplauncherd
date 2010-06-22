@@ -10,15 +10,6 @@
           <step>/usr/bin/waitloadavg.rb -l 1.0 -p 1.0 -t 120</step>
       </pre_steps>
 
-
-      <case name="launcher-exist" type="Functional" description="To test if the launcher exists and is executable or not" timeout="120" level="System">
-          <step expected_result="0">source /tmp/session_bus_address.user; DISPLAY=:0 `pyversions -d` /usr/share/applauncherd-functional-tests/test-func-launcher.py test_001_launcher_exist</step>
-      </case>
-
-      <case name="launchable-app-exist" type="Functional" description="test_launchable_application_exists " timeout="120" level="System">
-          <step expected_result="0">source /tmp/session_bus_address.user; DISPLAY=:0 `pyversions -d` /usr/share/applauncherd-functional-tests/test-func-launcher.py test_002_applications_exist</step>
-      </case>
-
       <case name="zombie-state" type="Functional" description="To test that process exits after the application is killed" timeout="120" level="System">
           <step expected_result="0">source /tmp/session_bus_address.user; DISPLAY=:0 `pyversions -d` /usr/share/applauncherd-functional-tests/test-func-launcher.py test_003_zombie_state</step>
       </case>
