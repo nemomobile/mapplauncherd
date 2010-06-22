@@ -30,7 +30,8 @@ class TC_PRESTARTLAUNCHTESTS < Test::Unit::TestCase
 
     # method called before any test case
     def setup
-	    @sut = MATTI.sut(:Id=>ARGV[0] || 'sut_qt_maemo')    
+        system "mcetool --set-tklock-mode=unlocked"
+        @sut = MATTI.sut(:Id=>ARGV[0] || 'sut_qt_maemo')    
     end
     
     # method called after any test case for cleanup purposes
