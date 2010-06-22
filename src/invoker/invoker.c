@@ -253,12 +253,6 @@ static bool invoker_send_end(int fd)
     return true;
 }
 
-static void version(void)
-{
-    printf("%s (%s) %s\n", PROG_NAME, PACKAGE, VERSION);
-    exit(0);
-}
-
 static void usage(int status)
 {
     printf("\nUsage: %s [options] [--type=TYPE]  [file] [args]\n"
@@ -269,7 +263,6 @@ static void usage(int status)
            "  qt                  Launch a Qt application.\n\n"
            "Options:\n"
            "  --delay SECS        After invoking sleep for SECS seconds (default %d).\n"
-           "  --version           Print program version.\n"
            "  --help              Print this help message.\n\n"
            "Example: %s --type=m /usr/bin/helloworld \n",
            PROG_NAME, DEFAULT_DELAY, PROG_NAME);
@@ -350,12 +343,7 @@ int main(int argc, char *argv[])
         }
         else if (argc == 2)
         {
-            /* just print some info and exit, no need to launch an application */
-            if (strcmp(argv[1], "--version") == 0)
-            {
-                version();
-            }
-            else if (strcmp(argv[1], "--creds") == 0)
+            if (strcmp(argv[1], "--creds") == 0)
             {
                 show_credentials();
             }
@@ -379,10 +367,6 @@ int main(int argc, char *argv[])
                 {
                     delay = get_delay(argv[i]);
                 }
-            }
-            else if (strcmp(argv[i], "--version") == 0)
-            {
-                continue;
             }
             else if (strcmp(argv[i], "--help") == 0)
             {

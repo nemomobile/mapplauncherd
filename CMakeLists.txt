@@ -24,8 +24,7 @@ if (EXISTS ${CREDS_H})
     message(STATUS "checking for libcreds")
     find_library(LIBCREDS NAMES creds)
     if (EXISTS ${LIBCREDS})
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DHAVE_CREDS")
-        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DHAVE_CREDS")
+        add_definitions(-DHAVE_CREDS)
         link_libraries(${LIBCREDS})
 	    message(STATUS "  found: " ${LIBCREDS})
     else (EXISTS ${LIBCREDS})
@@ -36,7 +35,7 @@ else (EXISTS ${CREDS_H})
 endif (EXISTS ${CREDS_H})
 
 if ($ENV{DISABLE_VERIFICATION})
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DDISABLE_VERIFICATION")
+    add_definitions(-DDISABLE_VERIFICATION)
 endif ($ENV{DISABLE_VERIFICATION})
 
 # Sub build: applauncherd

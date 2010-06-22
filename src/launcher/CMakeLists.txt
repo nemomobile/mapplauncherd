@@ -12,7 +12,7 @@ message(STATUS "checking for mcomponentcache.h")
 find_file(M_COMPONENT_CACHE NAMES mcomponentcache.h PATHS ${MEEGOTOUCH_INCLUDE_DIRS})
 if (EXISTS ${M_COMPONENT_CACHE})
     message(STATUS "  found")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DHAVE_MCOMPONENTCACHE")
+    add_definitions(-DHAVE_MCOMPONENTCACHE)
 else (EXISTS ${M_COMPONENT_CACHE})
     message(STATUS "  not found")
 endif (EXISTS ${M_COMPONENT_CACHE})
@@ -21,16 +21,17 @@ endif (EXISTS ${M_COMPONENT_CACHE})
 set(SRC appdata.cpp booster.cpp connection.cpp daemon.cpp mbooster.cpp logger.cpp main.cpp qtbooster.cpp)
 
 # Set the program name define used in daemon.cpp
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DPROG_NAME=\\\"applauncherd\\\"")
+add_definitions(-DPROG_NAME="applauncherd")
 
 # Find libdl
 find_library(LIBDL NAMES dl)
 
+# Set libraries to be linked
 link_libraries(${QT_LIBRARIES} ${MEEGOTOUCH_LIBRARIES} ${LIBDL})
 
 # Set executable
 add_executable(applauncherd.bin ${SRC})
 
-# Install rules
+# Add install rule
 install(PROGRAMS applauncherd.bin scripts/applauncherd DESTINATION /usr/bin/)
 
