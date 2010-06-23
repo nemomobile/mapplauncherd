@@ -85,11 +85,11 @@ binary-arch: build install
 ifeq ($(DEB_HOST_ARCH), arm)
 	aegis-deb-add -control debian/applauncherd-launcher/DEBIAN/control .. debian/applauncherd-launcher.aegis=_aegis
 	aegis-deb-add -control debian/applauncherd-invoker/DEBIAN/control .. debian/applauncherd-invoker.aegis=_aegis
-	aegis-deb-add -control debian/applauncherd-functional-tests/DEBIAN/control .. debian/applauncherd-functional-tests.aegis=_aegis
+	aegis-deb-add -control debian/applauncherd-testapps/DEBIAN/control .. debian/applauncherd-testapps.aegis=_aegis
 else ifeq ($(DEB_HOST_ARCH), armel)
 	aegis-deb-add -control debian/applauncherd-launcher/DEBIAN/control .. debian/applauncherd-launcher.aegis=_aegis
 	aegis-deb-add -control debian/applauncherd-invoker/DEBIAN/control .. debian/applauncherd-invoker.aegis=_aegis
-	aegis-deb-add -control debian/applauncherd-functional-tests/DEBIAN/control .. debian/applauncherd-functional-tests.aegis=_aegis
+	aegis-deb-add -control debian/applauncherd-testapps/DEBIAN/control .. debian/applauncherd-testapps.aegis=_aegis
 endif
 
 binary: binary-indep binary-arch

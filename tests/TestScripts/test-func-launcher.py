@@ -250,8 +250,8 @@ class launcher_tests (unittest.TestCase):
 
         # required common caps
         caps = ['UID::user', 'GID::users', 'SRC::com.nokia.maemo',
-                'applauncherd-functional-tests::applauncherd-functional-tests',
-                'AID::com.nokia.maemo.applauncherd-functional-tests.']
+                'applauncherd-testapps::applauncherd-testapps',
+                'AID::com.nokia.maemo.applauncherd-testapps.']
 
         # required caps for fala_ft_creds1
         cap1 = ['tcb', 'drm', 'Telephony', 'CAP::setuid', 'CAP::setgid',
