@@ -3,9 +3,9 @@
 
 <!-- Test suite, name mandatory - the same as test package name -->
   <!-- Schema: https://projects.maemo.org/docs/testing/xml-definition.html -->
-  <suite name="applauncherd-functional-tests" domain="Application framework"> 
+  <suite name="applauncherd-bug-tests" domain="Application framework"> 
 
-    <set name="applauncherd-functional-tests" description="Launcher functional tests" feature="AF Basic Launcher daemon support" requirement="300168">   
+    <set name="applauncherd-bug-tests" description="Launcher functional tests" feature="AF Basic Launcher daemon support" requirement="300168">   
       <pre_steps>
           <step>/usr/bin/waitloadavg.rb -l 1.0 -p 1.0 -t 120</step>
       </pre_steps>
@@ -14,11 +14,11 @@
           <step expected_result="0">source /tmp/session_bus_address.user; DISPLAY=:0 `pyversions -d` /usr/share/applauncherd-testscripts/test-func-launcher.py test_007_no_aegis_Bug170905</step>
       </case>
 
-      <case name="invoker-creds" type="Functional" description="Test that launcher and invoker have correct credentials" timeout="120" level="System">
+      <case name="invoker-creds" type="Functional" description="Test that launcher and invoker have correct credentials" timeout="120" level="System" insignificant="true">
           <step expected_result="0">source /tmp/session_bus_address.user; DISPLAY=:0 `pyversions -d` /usr/share/applauncherd-testscripts/test-func-launcher.py test_008_invoker_creds</step>
       </case>
 
-      <case name="launch-multi-app-cont" type="Functional" description="Test that launcher and invoker have correct credentials" timeout="120" level="System">
+      <case name="launch-multi-app-cont" type="Functional" description="Test that launcher and invoker have correct credentials" timeout="120" level="System" insignificant="true">
           <step expected_result="0">source /tmp/session_bus_address.user; DISPLAY=:0 `pyversions -d` /usr/share/applauncherd-testscripts/test-func-launcher.py test_009_launch_multiple_apps_cont</step>
       </case>
       <environments>

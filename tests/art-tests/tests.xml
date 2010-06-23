@@ -3,9 +3,9 @@
 
 <!-- Test suite, name mandatory - the same as test package name -->
   <!-- Schema: https://projects.maemo.org/docs/testing/xml-definition.html -->
-  <suite name="applauncherd-testscripts" domain="Application framework"> 
+  <suite name="applauncherd-art-tests" domain="Application framework"> 
 
-    <set name="applauncherd-testscripts" description="Launcher functional tests" feature="AF Basic Launcher daemon support" requirement="300168">   
+    <set name="applauncherd-art-tests" description="Launcher functional tests" feature="AF Basic Launcher daemon support" requirement="300168">   
       <pre_steps>
           <step>/usr/bin/waitloadavg.rb -l 1.0 -p 1.0 -t 120</step>
       </pre_steps>
