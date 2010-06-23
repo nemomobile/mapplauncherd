@@ -1,10 +1,13 @@
+project(Applauncherd)
+
+cmake_minimum_required(VERSION 2.6)
+cmake_policy(VERSION 2.6)
+
 set(CMAKE_VERBOSE_MAKEFILE ON)
 
 # Set default C++ flags
 #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -W -Wall -g -Wno-long-long -O2 -Wextra -Wpointer-arith -Wwrite-strings -Wold-style-cast -Woverloaded-virtual -Wundef")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -W -Wall -Wextra -g -O2")
-
-cmake_minimum_required(VERSION 2.6)
 
 # By default only QtCore and QtGui modules are enabled
 #set(QT_USE_QTDBUS TRUE)
