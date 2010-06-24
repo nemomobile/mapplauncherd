@@ -127,9 +127,14 @@ set(QT_USE_QTSVG TRUE)
 set(QT_USE_QTDBUS TRUE)
 include(${QT_USE_FILE})
 
-add_executable(testcalc ${testcalc_SRCS} ${testcalc_MOC_SRCS} ${testcalc_MGEN_SOURCES})
+set(APPLICATION_NAME "fala_calc")
 
-set_target_properties(testcalc PROPERTIES
+add_executable(${APPLICATION_NAME} ${testcalc_SRCS} ${testcalc_MOC_SRCS} ${testcalc_MGEN_SOURCES})
+
+set_target_properties(${APPLICATION_NAME} PROPERTIES
   COMPILE_FLAGS "-fPIC -fvisibility=hidden -fvisibility-inlines-hidden"
   LINK_FLAGS "-pie -rdynamic"
-  COMPILE_DEFINITIONS M_APPLICATION_NAME="testcalc")
+  COMPILE_DEFINITIONS M_APPLICATION_NAME="${APPLICATION_NAME}")
+
+install(PROGRAMS ${APPLICATION_NAME} DESTINATION /usr/bin)
+
