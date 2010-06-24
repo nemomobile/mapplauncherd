@@ -42,7 +42,7 @@ Description: applauncherd unit tests
 Package: applauncherd-testscripts
 Section: extra
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, applauncherd-testapps-tests, testrunner, applauncherd, ci-testing, matti, libcreds2 [arm armel], libcreds2-tools [arm armel], meego-env, mcetools (>= 1.10.40) 
+Depends: ${shlibs:Depends}, ${misc:Depends}, applauncherd-testapps, testrunner, applauncherd, ci-testing, matti, libcreds2 [arm armel], libcreds2-tools [arm armel], meego-env, mcetools (>= 1.10.40) 
 XB-Maemo-CI-Packages: applauncherd
 XB-Maemo-CI-Stage: fast, staging, acceptance, validation
 Description: applauncherd testscripts
@@ -60,7 +60,7 @@ Description: applaunched testapps
 Package: applauncherd-functional-tests
 Section: extra
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, applauncherd-testapps-tests, applauncherd-testscripts-tests 
+Depends: ${shlibs:Depends}, ${misc:Depends}, applauncherd-testapps, applauncherd-testscripts 
 XB-Maemo-CI-Packages: applauncherd
 XB-Maemo-CI-Stage: fast, staging, acceptance, validation
 Description: applauncherd functional tests
@@ -69,25 +69,25 @@ Description: applauncherd functional tests
 Package: applauncherd-art-tests
 Section: extra
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, applauncherd-testapps-tests, applauncherd-testscripts-tests 
+Depends: ${shlibs:Depends}, ${misc:Depends}, applauncherd-testapps, applauncherd-testscripts 
 XB-Maemo-CI-Packages: applauncherd
 XB-Maemo-CI-Stage: fast, staging, acceptance, validation
 Description: applauncherd art tests
  Art tests for testing applauncherd.
 
-Package: applauncherd-staging-tests
+Package: applauncherd-bug-tests
 Section: extra
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, applauncherd-testapps-tests, applauncherd-testscripts-tests 
+Depends: ${shlibs:Depends}, ${misc:Depends}, applauncherd-testapps, applauncherd-testscripts 
 XB-Maemo-CI-Packages: applauncherd
 XB-Maemo-CI-Stage: fast, staging, acceptance, validation
-Description: applauncherd staging tests
- Staging tests for testing applauncherd.
+Description: applauncherd bug tests
+ Tests related to bugs for testing applauncherd.
 
 Package: applauncherd-performance-tests
 Section: extra
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, applauncherd-testapps-tests, applauncherd-testscripts-tests 
+Depends: ${shlibs:Depends}, ${misc:Depends}, applauncherd-testapps, applauncherd-testscripts 
 XB-Maemo-CI-Packages: applauncherd
 XB-Maemo-CI-Stage: fast, acceptance, validation
 Description: applauncherd performance tests

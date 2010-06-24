@@ -154,7 +154,7 @@ class launcher_tests (unittest.TestCase):
 
         self.kill_process(path)
 
-        return op.split("\n")
+        return op.split("\n"), pid
 
     #Testcases
     def test_001_launcher_exist(self):
@@ -242,23 +242,22 @@ class launcher_tests (unittest.TestCase):
         Test that the fala_ft_creds* applications have the correct
         credentials set (check aegis file included in the debian package)
         """
-        op1 = self.get_creds('/usr/bin/fala_ft_creds1')
-        op2 = self.get_creds('/usr/bin/fala_ft_creds2')
+        op1, pid1 = self.get_creds('/usr/bin/fala_ft_creds1')
+        op2, pid2 = self.get_creds('/usr/bin/fala_ft_creds2')
 
         debug("fala_ft_creds1 has %s" % ', '.join(op1))
         debug("fala_ft_creds2 has %s" % ', '.join(op2))
 
         # required common caps
         caps = ['UID::user', 'GID::users', 'SRC::com.nokia.maemo',
-                'applauncherd-functional-tests::applauncherd-functional-tests',
-                'AID::com.nokia.maemo.applauncherd-functional-tests.']
+                'applauncherd-testapps::applauncherd-testapps']
 
         # required caps for fala_ft_creds1
-        cap1 = ['tcb', 'drm', 'Telephony', 'CAP::setuid', 'CAP::setgid',
+        cap1 = ['Retrieving credentials for pid: %s' %pid1, 'tcb', 'drm', 'Telephony', 'CAP::setuid', 'CAP::setgid',
                 'CAP::setfcap'] + caps
 
         # required caps for fala_ft_creds2
-        cap2 = ['Cellular'] + caps
+        cap2 = ['Retrieving credentials for pid: %s' %pid2, 'Cellular'] + caps
 
         # check that all required creds are there
         for cap in cap1:
