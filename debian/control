@@ -12,17 +12,36 @@ Description: Meta package for applauncherd and invoker
  Launcher daemon and invoker to speed up launches. 
  Special boosters for MeeGo Touch and Qt.
 
+Package: applauncherd-dbg
+Architecture: any
+Depends: applauncherd-invoker-dbg, applauncherd-launcher-dbg
+Description: Meta package for applauncherd and invoker debug symbols
+
 Package: applauncherd-invoker
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}, applauncherd-launcher (= ${Source-Version}), libcreds2 [arm armel]
 Description: Invoker part of applauncherd
  Invoker part of applauncherd.
+
+Package: applauncherd-invoker-dbg
+Section: debug
+Architecture: any
+Depends: applauncherd-invoker (= ${Source-Version})
+Description: Invoker debug package
+ Debug symbols for invoker
  
 Package: applauncherd-launcher
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}, libcreds2 [arm armel]
 Description: Launcher part of applauncherd
  Launcher part of applauncherd.
+
+Package: applauncherd-launcher-dbg
+Section: debug
+Architecture: any
+Depends: applauncherd-launcher (= ${Source-Version})
+Description: Launcher debug package
+ Debug symbols for launcher
 
 Package: applauncherd-dev
 Architecture: all
@@ -56,6 +75,14 @@ XB-Maemo-CI-Packages: applauncherd
 XB-Maemo-CI-Stage: fast, staging, acceptance, validation
 Description: applaunched testapps 
  Test applications for testing  applauncherd.
+
+Package: applauncherd-testapps-dbg
+Section: debug
+Architecture: any
+Depends: applauncherd-testapps
+XB-Maemo-CI-Packages: applauncherd
+XB-Maemo-CI-Stage: fast, staging, acceptance, validation
+Description: debug symbols for applauncherd testapps 
 
 Package: applauncherd-functional-tests
 Section: extra
