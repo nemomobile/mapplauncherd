@@ -184,6 +184,9 @@ bool Daemon::forkBooster(char type, int pipefd[2])
             Logger::logErrorAndDie(EXIT_FAILURE, "Unknown booster type \n");
         }
 
+        // Drop priority (nice = 10)
+        booster->pushPriority(10);
+
         // Preload stuff
         booster->preload();
 
@@ -193,9 +196,11 @@ bool Daemon::forkBooster(char type, int pipefd[2])
         // Rename launcher process to booster
         booster->renameProcess(m_initialArgc, m_initialArgv);
 
-        Logger::logNotice("Wait for message from invoker");
+        // Restore priority
+        booster->popPriority();
 
         // Wait and read commands from the invoker
+        Logger::logNotice("Wait for message from invoker");
         booster->readCommand();
 
         // Give to the process an application specific name
