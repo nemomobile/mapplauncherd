@@ -70,7 +70,9 @@ binary-arch: build install
 #	dh_installinfo
 #	dh_installman
 	dh_link
-	dh_strip 
+	dh_strip -p applauncherd-launcher --dbg-package=applauncherd-launcher-dbg
+	dh_strip -p applauncherd-invoker --dbg-package=applauncherd-invoker-dbg
+	dh_strip -p applauncherd-testapps --dbg-package=applauncherd-testapps-dbg
 	dh_compress
 	dh_fixperms
 #	dh_perl
@@ -85,11 +87,11 @@ binary-arch: build install
 ifeq ($(DEB_HOST_ARCH), arm)
 	aegis-deb-add -control debian/applauncherd-launcher/DEBIAN/control .. debian/applauncherd-launcher.aegis=_aegis
 	aegis-deb-add -control debian/applauncherd-invoker/DEBIAN/control .. debian/applauncherd-invoker.aegis=_aegis
-	aegis-deb-add -control debian/applauncherd-functional-tests/DEBIAN/control .. debian/applauncherd-functional-tests.aegis=_aegis
+	aegis-deb-add -control debian/applauncherd-testapps/DEBIAN/control .. debian/applauncherd-testapps.aegis=_aegis
 else ifeq ($(DEB_HOST_ARCH), armel)
 	aegis-deb-add -control debian/applauncherd-launcher/DEBIAN/control .. debian/applauncherd-launcher.aegis=_aegis
 	aegis-deb-add -control debian/applauncherd-invoker/DEBIAN/control .. debian/applauncherd-invoker.aegis=_aegis
-	aegis-deb-add -control debian/applauncherd-functional-tests/DEBIAN/control .. debian/applauncherd-functional-tests.aegis=_aegis
+	aegis-deb-add -control debian/applauncherd-testapps/DEBIAN/control .. debian/applauncherd-testapps.aegis=_aegis
 endif
 
 binary: binary-indep binary-arch

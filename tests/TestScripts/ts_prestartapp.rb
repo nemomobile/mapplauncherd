@@ -46,39 +46,43 @@ class TC_PRESTARTLAUNCHTESTS < Test::Unit::TestCase
 	end
 	sleep 2    
 	verify_equal(false,2,"Application is Prestarted"){
-		system "pidof #{@appname}"}
+		system "pgrep #{@appname}"}
 	sleep 2
 
 	string = `export DISPLAY=:0; source /tmp/session_bus_address.user;dbus-send --dest=com.nokia.#{@appname} --type="method_call" /org/maemo/m com.nokia.MApplicationIf.ping`
 	sleep 1
 
 	verify_equal(true,2,"Application is not Prestarted"){
-		system "pidof #{@appname}"}
-	pid = string = `pidof #{@appname}`
+		system "pgrep #{@appname}"}
+	pid = string = `pgrep #{@appname}`
 	sleep 1
 
 	string = `export DISPLAY=:0; source /tmp/session_bus_address.user;dbus-send --dest=com.nokia.#{@appname} --type="method_call" /org/maemo/m com.nokia.MApplicationIf.launch`
 	@app = @sut.application( :name => 'fala_testapp' ) 
 	@app.MButton( :name => 'CloseButton' ).tap
-	newid = string = `pidof #{@appname}`
+	newid = string = `pgrep #{@appname}`
 	verify_true(30,"The application is not prestarted"){pid == newid}
 	sleep 1
-	system "kill -9 `pidof #{@appname}`"
+	system "kill -9 `pgrep #{@appname}`"
     end
   
     def test_themes
-        @appname = 'testcalc'
+        @appname = 'fala_calc'
         #start application without launcher
         system "#{@appname}&"
-        @app = @sut.application( :name => 'testcalc')
-
+        app_pid = string = `pgrep #{@appname}`
+        @app = @sut.application( :name => 'fala_calc')
+        
         wo_l_c_1 = @app.BasicCalc( :name => 'calcpage' ).MLabel(:text => '1').attribute('color')
         wo_l_c_4 = @app.BasicCalc( :name => 'calcpage' ).MLabel(:text => '4').attribute('color')
         wo_l_c_9 = @app.BasicCalc( :name => 'calcpage' ).MLabel(:text => '9').attribute('color')
         @app.MButton( :name => 'CloseButton' ).tap
+        sleep 2 
+        app_pid = string = `pgrep #{@appname}`
+        assert_equal("", app_pid, "The Application is still running")
 
         system "invoker --type=m #{@appname}&"
-        @app_l = @sut.application( :name => 'applauncherd.bin')
+        @app_l = @sut.application( :name => 'fala_calc')
         w_l_c_1 = @app_l.BasicCalc( :name => 'calcpage' ).MLabel(:text => '1').attribute('color')
         w_l_c_4 = @app_l.BasicCalc( :name => 'calcpage' ).MLabel(:text => '4').attribute('color')
         w_l_c_9 = @app_l.BasicCalc( :name => 'calcpage' ).MLabel(:text => '9').attribute('color')
