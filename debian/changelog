@@ -1,8 +1,8 @@
 applauncherd (0.7.0~1) unstable; urgency=low
 
-  * Invoker waits for launched process to exit. Can be overridden with --no-wait.
+  * Invoker waits for launched process to terminate when run with --wait-term
 
- -- Jussi Lind <jussi.lind@nokia.com>  Fri, 02 Jul 2010 14:40:03 +0300
+ -- Antti Kervinen <ask@farmi.nmp.nokia.com>  Mon, 05 Jul 2010 10:50:29 +0300
 
 applauncherd (0.6.0-1) stable; urgency=low
 
