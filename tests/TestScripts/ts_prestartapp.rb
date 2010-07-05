@@ -25,6 +25,11 @@ require 'date'
 require 'test/unit'
 include MattiVerify
 
+# When run by testrunner in scratchbox, the PATH environment variable
+# is missing some vital entries ...
+if ENV.has_key?('_SBOX_DIR')
+    ENV['PATH'] += ":" + ENV['_SBOX_DIR'] + "/tools/bin"
+end
 
 class TC_PRESTARTLAUNCHTESTS < Test::Unit::TestCase
 

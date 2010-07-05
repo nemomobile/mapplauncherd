@@ -181,6 +181,30 @@ class launcher_tests (unittest.TestCase):
                 failed_apps.append(temp)
         self.assert_(failed_apps == [], "Some applications do not have the launch files, list: %s" % str(failed_apps))
 
+    def wait_for_app(self, app = None, timeout = 5, sleep = 0.5):
+        """
+        Waits for an application to start. Checks periodically if
+        the app is running for a maximum wait set in timeout.
+        
+        Returns the pid of the application if it was running before
+        the timeout finished, otherwise None is returned.
+        """
+
+        pid = None
+        start = time.time()
+
+        while pid == None and time.time() < start + timeout:
+            pid = self.get_pid(app)
+            
+            if pid != None:
+                break
+
+            print "waiting %s secs for %s" % (sleep, app)
+
+            time.sleep(sleep)
+
+        return pid
+
     def test_003_zombie_state(self):
         """
         To test that no Zombie process exist after the application is killed
@@ -190,18 +214,22 @@ class launcher_tests (unittest.TestCase):
         #kill the application (pid = p.pid)
         #check if pgrep appname should be nothing
         #self.kill_process(LAUNCHER_BINARY)
+
         process_handle = self.run_app_with_launcher(PREFERED_APP)
-        process_id = self.get_pid(PREFERED_APP)
+        process_id = self.wait_for_app(PREFERED_APP, 5)
         print process_id
         self.kill_process(PREFERED_APP)
         time.sleep(4)
+
         process_handle = self.run_app_with_launcher(PREFERED_APP)
-        process_id1 = self.get_pid(PREFERED_APP)
+        process_id1 = self.wait_for_app(PREFERED_APP, 5)
         print process_id1
         self.kill_process(PREFERED_APP)
         time.sleep(4)
+
         process_id1 = self.get_pid(PREFERED_APP)
         print process_id1
+
         self.assert_(process_id != process_id1 , "New Process not launched")
         self.assert_(process_id1 == None , "Process still running")
     
@@ -347,6 +375,11 @@ class launcher_tests (unittest.TestCase):
 
 # main
 if __name__ == '__main__':
+    # When run with testrunner, for some reason the PATH doesn't include
+    # the tools/bin directory
+    if os.getenv('_SBOX_DIR') != None:
+        os.environ['PATH'] = os.getenv('PATH') + ":" + os.getenv('_SBOX_DIR') + '/tools/bin'
+
     check_prerequisites()
     start_launcher_daemon()
     tests = sys.argv[1:]
