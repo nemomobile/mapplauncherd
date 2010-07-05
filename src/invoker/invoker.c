@@ -277,7 +277,7 @@ static void usage(int status)
            "Options:\n"
            "  --creds             Print Aegis security credentials (if enabled).\n"
            "  --delay SECS        After invoking sleep for SECS seconds (default %d).\n"
-           "  --no-wait           Don't wait for launched process to exit.\n"
+           "  --wait-term         Wait for launched process to terminate.\n"
            "  --help              Print this help message.\n\n"
            "Example: %s --type=m /usr/bin/helloworld \n",
            PROG_NAME, DEFAULT_DELAY, PROG_NAME);
@@ -308,7 +308,7 @@ static unsigned int get_delay(char *delay_arg)
 }
 
 static void invoke(int prog_argc, char **prog_argv, char *prog_name,
-                   enum APP_TYPE app_type, int magic_options, bool no_wait)
+                   enum APP_TYPE app_type, int magic_options, bool wait_term)
 {
     if (prog_name && prog_argv)
     {
@@ -337,7 +337,7 @@ static void invoke(int prog_argc, char **prog_argv, char *prog_name,
         }
 
         // Wait for launched process to exit
-        if (!no_wait)
+        if (wait_term)
         {
             char dummy_buf = 0;
             recv(fd, (void *)&dummy_buf, 0, MSG_WAITALL);
@@ -352,7 +352,7 @@ int main(int argc, char *argv[])
     enum APP_TYPE app_type      = UNKNOWN_APP;
     int           prog_argc     = 0;
     int           magic_options = 0;
-    bool          no_wait       = false;
+    bool          wait_term     = false;
     unsigned int  delay         = DEFAULT_DELAY;
     char        **prog_argv     = NULL;
     char         *prog_name     = NULL;
@@ -400,9 +400,9 @@ int main(int argc, char *argv[])
             {
                 continue;
             }
-            else if (strcmp(argv[i], "--no-wait") == 0)
+            else if (strcmp(argv[i], "--wait-term") == 0)
             {
-                no_wait = true;
+                wait_term = true;
             }
             else if (strcmp(argv[i], "--type=m") == 0)
             {
@@ -454,7 +454,7 @@ int main(int argc, char *argv[])
 
     // Send commands to the launcher daemon
     info("Invoking execution: '%s'\n", prog_name);
-    invoke(prog_argc, prog_argv, prog_name, app_type, magic_options, no_wait);
+    invoke(prog_argc, prog_argv, prog_name, app_type, magic_options, wait_term);
 
     // Sleep for delay before exiting
     if (delay)
