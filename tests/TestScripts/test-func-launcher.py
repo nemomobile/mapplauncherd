@@ -317,7 +317,7 @@ class launcher_tests (unittest.TestCase):
         get any funny credentials.
         """
 
-        creds = self.get_creds('/usr/bin/fala_ft_hello')
+        creds, pid = self.get_creds('/usr/bin/fala_ft_hello')
         debug("fala_ft_hello has %s" % ', '.join(creds))
 
         req_creds = ['UID::nobody', 'GID::nogroup']
