@@ -25,27 +25,31 @@
 #include <MApplicationPage>
 #include <MApplicationWindow>
 #include <QDebug>
+#include <MExport>
 
 #ifdef HAVE_MCOMPONENTCACHE
 #include <mcomponentcache.h>
 #endif
 
-extern "C" __attribute__((visibility("default"))) int main(int, char**);
+M_EXPORT int main(int, char**);
 
 int main(int argc, char ** argv)
 {
-    #ifdef HAVE_MCOMPONENTCACHE
+#ifdef HAVE_MCOMPONENTCACHE
     MApplication *app = MComponentCache::mApplication(argc, argv);
-    #else
+    MApplicationWindow *window = MComponentCache::mApplicationWindow();
+#else
     MApplication *app = new MApplication(argc, argv);
-    #endif
+    MApplicationWindow *window = new MApplicationWindow;
+#endif
     MApplicationPage mainPage;
-    MApplicationWindow window;
 
-    window.show();
+    window->show();
 
     mainPage.setTitle("Hello World! (Now supports Launcher)");
-    mainPage.appear();
+
+    // Explicitly state where to appear, just to be sure :-)
+    mainPage.appear(window);
   
     return app->exec();
 }
