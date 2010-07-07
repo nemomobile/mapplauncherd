@@ -77,24 +77,38 @@ class TC_Theming < Test::Unit::TestCase
         #pid = `pgrep -n #{app_name}`
 
         app = @sut.application(:name => app_name)
+        widget = app.MWidget(:name => 'centralWidget')
 
         original_theme = get_theme()
         alternative_theme = 'plankton'
 
         if original_theme == alternative_theme
-            alternative_theme = 'dev'
+            alternative_theme = 'blanco'
         end
 
-        app.capture_screen('PNG', '/home/testshot1.png', true)
+        widget.capture_screen('PNG', '/home/testshot1.png', true)
 
         change_theme(alternative_theme)
 
-        app.capture_screen('PNG', '/home/testshot2.png', true)
+        widget.capture_screen('PNG', '/home/testshot2.png', true)
 
         change_theme(original_theme)
 
-        app.capture_screen('PNG', '/home/testshot3.png', true)
+        widget.capture_screen('PNG', '/home/testshot3.png', true)
 
         system("pkill #{app_name}")
+
+        # diff returns an error when files are different
+        verify_equal(false, 1, "Shots 1 & 2 should differ!") {
+            system("diff /home/testshot1.png /home/testshot2.png")
+        }
+
+        # diff returns success when files are the same
+        verify_equal(true, 1, "Shots 1 & 3 should be the same!") {
+            system("diff /home/testshot1.png /home/testshot3.png")
+        }
+
+        File.delete("/home/testshot1.png", "/home/testshot2.png",
+                    "/home/testshot3.png")
     end
 end
