@@ -1,8 +1,11 @@
-applauncherd (0.7.0~1) unstable; urgency=low
+applauncherd (0.7.0-1) stable; urgency=low
 
   * Invoker waits for launched process to terminate when run with --wait-term
-
- -- Antti Kervinen <ask@farmi.nmp.nokia.com>  Mon, 05 Jul 2010 10:50:29 +0300
+  * Dbg packages added: applauncherd-dbg, applauncherd-invoker-dbg, applauncherd-launcher-dbg and applauncherd-testapps-dbg	
+  * Fixes: NB#177439, invoker starts reloading cache too soon
+  * Implemented: SWP#DUI-3384
+	
+ -- Antti Kervinen <ask@farmi.nmp.nokia.com>  Tue, 07 Jul 2010 10:10:29 +0300
 
 applauncherd (0.6.0-1) stable; urgency=low
 
