@@ -26,6 +26,11 @@
 #include <MApplicationWindow>
 #include <QDebug>
 #include <MExport>
+#include <MButton>
+#include <MLabel>
+#include <MSlider>
+#include <MLayout>
+#include <MLinearLayoutPolicy>
 
 #ifdef HAVE_MCOMPONENTCACHE
 #include <mcomponentcache.h>
@@ -42,14 +47,23 @@ int main(int argc, char ** argv)
     MApplication *app = new MApplication(argc, argv);
     MApplicationWindow *window = new MApplicationWindow;
 #endif
-    MApplicationPage mainPage;
+
+    MApplicationPage *mainPage = new MApplicationPage;
+    mainPage->setTitle("Hello World! (Now supports Launcher)");
+    mainPage->centralWidget()->setObjectName("centralWidget");
+
+    MLayout *layout = new MLayout(mainPage->centralWidget());
+    MLinearLayoutPolicy *linearPolicy = new MLinearLayoutPolicy(layout,
+        Qt::Vertical);
+
+    linearPolicy->addItem(new MLabel("I'm a label"));
+    linearPolicy->addItem(new MButton("Click me!"));
+    linearPolicy->addItem(new MSlider);
 
     window->show();
 
-    mainPage.setTitle("Hello World! (Now supports Launcher)");
-
     // Explicitly state where to appear, just to be sure :-)
-    mainPage.appear(window);
+    mainPage->appear(window);
   
     return app->exec();
 }
