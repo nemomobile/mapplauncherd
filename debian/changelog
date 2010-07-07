@@ -1,3 +1,9 @@
+applauncherd (0.7.0-2) stable; urgency=low
+
+  * Fixes: NB#176326 -  Conndlgs launched using Applauncherd respawns until respawn limit
+	
+ -- Antti Kervinen <ask@farmi.nmp.nokia.com>  Tue, 07 Jul 2010 12:21:29 +0300
+
 applauncherd (0.7.0-1) stable; urgency=low
 
   * Invoker waits for launched process to terminate when run with --wait-term
