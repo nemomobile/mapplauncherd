@@ -49,10 +49,16 @@
     #include <sys/creds.h>
 #endif
 
+// Delay before exit
 static const int DEFAULT_DELAY = 0;
 
+// Enumeration of possible application types:
+// M_APP: MeeGo Touch application
+// QT_APP: Qt/generic application
+//
 enum APP_TYPE { M_APP, QT_APP, UNKNOWN_APP };
 
+// Environment
 extern char ** environ;
 
 /*
@@ -75,7 +81,7 @@ static void show_credentials(void)
     }
     creds_free(creds);
 #else
-    printf("credentials information isn't available \n");
+    printf("Security credential information isn't available.\n");
 #endif
 
     exit(0);
@@ -85,16 +91,16 @@ static bool invoke_recv_ack(int fd)
 {
     uint32_t action;
 
-    /* Receive ACK. */
+    // Receive ACK.
     invoke_recv_msg(fd, &action);
 
     if (action == INVOKER_MSG_BAD_CREDS)
     {
-        die(1, "credentials check failed \n");
+        die(1, "Security credential check failed.\n");
     }
     else if (action != INVOKER_MSG_ACK)
     {
-        die(1, "receiving wrong ack (%08x)\n", action);
+        die(1, "Received wrong ack (%08x)\n", action);
     }
 
     return true;
@@ -107,7 +113,9 @@ static int invoker_init(enum APP_TYPE app_type)
 
     fd = socket(PF_UNIX, SOCK_STREAM, 0);
     if (fd < 0)
-        die(1, "opening invoker socket\n");
+    {
+        die(1, "Failed to open invoker socket.\n");
+    }
 
     sun.sun_family = AF_UNIX;  //AF_FILE;
 
@@ -122,20 +130,22 @@ static int invoker_init(enum APP_TYPE app_type)
     }
     else
     {
-        die(1, "unknown type of application: %d \n", app_type);
+        die(1, "Unknown type of application: %d\n", app_type);
     }
 
     sun.sun_path[maxSize] = '\0';
 
     if (connect(fd, (struct sockaddr *)&sun, sizeof(sun)) < 0)
-        die(1, "connecting to the launcher\n");
+    {
+        die(1, "Failed to initiate connect on the socket.\n");
+    }
 
     return fd;
 }
 
 static bool invoker_send_magic(int fd, int options)
 {
-    /* Send magic. */
+    // Send magic.
     invoke_send_msg(fd, INVOKER_MSG_MAGIC | INVOKER_MSG_MAGIC_VERSION | options);
     invoke_recv_ack(fd);
 
@@ -144,7 +154,7 @@ static bool invoker_send_magic(int fd, int options)
 
 static bool invoker_send_name(int fd, char *name)
 {
-    /* Send action. */
+    // Send action.
     invoke_send_msg(fd, INVOKER_MSG_NAME);
     invoke_send_str(fd, name);
     invoke_recv_ack(fd);
@@ -154,7 +164,7 @@ static bool invoker_send_name(int fd, char *name)
 
 static bool invoker_send_exec(int fd, char *exec)
 {
-    /* Send action. */
+    // Send action.
     invoke_send_msg(fd, INVOKER_MSG_EXEC);
     invoke_send_str(fd, exec);
     invoke_recv_ack(fd);
@@ -166,7 +176,7 @@ static bool invoker_send_args(int fd, int argc, char **argv)
 {
     int i;
 
-    /* Send action. */
+    // Send action.
     invoke_send_msg(fd, INVOKER_MSG_ARGS);
     invoke_send_msg(fd, argc);
     for (i = 0; i < argc; i++)
@@ -181,7 +191,7 @@ static bool invoker_send_args(int fd, int argc, char **argv)
 
 static bool invoker_send_prio(int fd, int prio)
 {
-    /* Send action. */
+    // Send action.
     invoke_send_msg(fd, INVOKER_MSG_PRIO);
     invoke_send_msg(fd, prio);
 
@@ -194,14 +204,17 @@ static bool invoker_send_env(int fd)
 {
     int i, n_vars;
 
-    /* Count the amount of environment variables. */
+    // Count the amount of environment variables.
     for (n_vars = 0; environ[n_vars] != NULL; n_vars++) ;
 
-    /* Send action. */
+    // Send action.
     invoke_send_msg(fd, INVOKER_MSG_ENV);
     invoke_send_msg(fd, n_vars);
+
     for (i = 0; i < n_vars; i++)
+    {
         invoke_send_str(fd, environ[i]);
+    }
 
     return true;
 }
@@ -246,7 +259,7 @@ static bool invoker_send_io(int fd)
 
 static bool invoker_send_end(int fd)
 {
-    /* Send action. */
+    // Send action.
     invoke_send_msg(fd, INVOKER_MSG_END);
     invoke_recv_ack(fd);
 
@@ -262,7 +275,9 @@ static void usage(int status)
            "  m                   Launch a MeeGo Touch application.\n"
            "  qt                  Launch a Qt application.\n\n"
            "Options:\n"
+           "  --creds             Print Aegis security credentials (if enabled).\n"
            "  --delay SECS        After invoking sleep for SECS seconds (default %d).\n"
+           "  --wait-term         Wait for launched process to terminate.\n"
            "  --help              Print this help message.\n\n"
            "Example: %s --type=m /usr/bin/helloworld \n",
            PROG_NAME, DEFAULT_DELAY, PROG_NAME);
@@ -276,13 +291,13 @@ static unsigned int get_delay(char *delay_arg)
 
     if (delay_arg)
     {
-        errno = 0;    /* To distinguish success/failure after call */
+        errno = 0; // To distinguish success/failure after call
         delay = strtoul(delay_arg, NULL, 10);
 
-        /* Check for various possible errors */
+        // Check for various possible errors
         if ((errno == ERANGE && delay == ULONG_MAX) || delay == 0)
         {
-            report(report_error, "wrong value of delay parameter: %s \n", delay_arg);
+            report(report_error, "Wrong value of delay parameter: %s\n", delay_arg);
             usage(1);
         }
     }
@@ -293,7 +308,7 @@ static unsigned int get_delay(char *delay_arg)
 }
 
 static void invoke(int prog_argc, char **prog_argv, char *prog_name,
-                   enum APP_TYPE app_type, int magic_options)
+                   enum APP_TYPE app_type, int magic_options, bool wait_term)
 {
     if (prog_name && prog_argv)
     {
@@ -317,7 +332,16 @@ static void invoke(int prog_argc, char **prog_argv, char *prog_name,
         invoker_send_end(fd);
 
         if (prog_name)
+        {
             free(prog_name);
+        }
+
+        // Wait for launched process to exit
+        if (wait_term)
+        {
+            char dummy_buf = 0;
+            recv(fd, (void *)&dummy_buf, 0, MSG_WAITALL);
+        }
 
         close(fd);
     }
@@ -328,17 +352,17 @@ int main(int argc, char *argv[])
     enum APP_TYPE app_type      = UNKNOWN_APP;
     int           prog_argc     = 0;
     int           magic_options = 0;
+    bool          wait_term     = false;
     unsigned int  delay         = DEFAULT_DELAY;
     char        **prog_argv     = NULL;
     char         *prog_name     = NULL;
-    // char         *delay_str     = NULL;
 
     if (strstr(argv[0], PROG_NAME))
     {
-        /* Check application type to start */
+        // Check application type to start
         if (argc < 2)
         {
-            report(report_error, "parameters are missing \n");
+            report(report_error, "Parameters are missing.\n");
             usage(1);
         }
         else if (argc == 2)
@@ -353,7 +377,7 @@ int main(int argc, char *argv[])
             }
             else
             {
-                report(report_error, "application name or type is missing \n");
+                report(report_error, "Application name or type is missing.\n");
                 usage(1);
             }
         }
@@ -376,6 +400,10 @@ int main(int argc, char *argv[])
             {
                 continue;
             }
+            else if (strcmp(argv[i], "--wait-term") == 0)
+            {
+                wait_term = true;
+            }
             else if (strcmp(argv[i], "--type=m") == 0)
             {
                 app_type = M_APP;
@@ -386,7 +414,7 @@ int main(int argc, char *argv[])
             }
             else if (strncmp(argv[i], "--", 2) == 0)
             {
-                report(report_error, "unknown parameter %s \n", argv[i]);
+                report(report_error, "Unknown parameter %s.\n", argv[i]);
                 usage(1);
             }
             else
@@ -394,7 +422,7 @@ int main(int argc, char *argv[])
                 prog_name = search_program(argv[i]);
                 if (!prog_name)
                 {
-                    report(report_error, "can't find application to invoke\n");
+                    report(report_error, "Can't find application to invoke.\n");
                     usage(0);
                 }
 
@@ -413,7 +441,7 @@ int main(int argc, char *argv[])
     }
     else
     {
-        /* Called with a different name, old way of using invoker */
+        // Called with a different name, old way of using invoker
         die(1,
             "Incorrect use of invoker, don't use symlinks. "
             "Run invoker explicitly from e.g. a D-Bus service file instead.\n");
@@ -421,17 +449,18 @@ int main(int argc, char *argv[])
 
     if (!prog_name)
     {
-        die(1, "application's name is unknown \n");
+        die(1, "Application's name is unknown.\n");
     }
 
-    /* Send commands to the launcher daemon */
-    info("invoking execution: '%s'\n", prog_name);
-    invoke(prog_argc, prog_argv, prog_name, app_type, magic_options);
+    // Send commands to the launcher daemon
+    info("Invoking execution: '%s'\n", prog_name);
+    invoke(prog_argc, prog_argv, prog_name, app_type, magic_options, wait_term);
 
+    // Sleep for delay before exiting
     if (delay)
     {
-        /* DBUS cannot cope some times if the invoker exits too early. */
-        debug("delaying exit for %d seconds\n", delay);
+        // DBUS cannot cope some times if the invoker exits too early.
+        debug("Delaying exit for %d seconds..\n", delay);
         sleep(delay);
     }
 

@@ -116,10 +116,16 @@ class launcher_tests (unittest.TestCase):
         else:
             return None
     
-    def kill_process(self, appname):
-        temp = basename(appname)[:14]
-        st, op = commands.getstatusoutput("pkill -9 %s" % temp)
-        os.wait()
+    def kill_process(self, appname=None, apppid=None):
+        if apppid and appname: 
+            return None
+        else:
+	    if apppid: 
+		st, op = commands.getstatusoutput("kill -9 %s" % str(apppid)) 
+	    if appname: 
+		temp = basename(appname)[:14]
+		st, op = commands.getstatusoutput("pkill -9 %s" % temp)
+	        os.wait()
 
     def process_state(self, processid):
         st, op = commands.getstatusoutput('cat /proc/%s/stat' %processid)
@@ -154,7 +160,7 @@ class launcher_tests (unittest.TestCase):
 
         self.kill_process(path)
 
-        return op.split("\n")
+        return op.split("\n"), pid
 
     #Testcases
     def test_001_launcher_exist(self):
@@ -175,6 +181,30 @@ class launcher_tests (unittest.TestCase):
                 failed_apps.append(temp)
         self.assert_(failed_apps == [], "Some applications do not have the launch files, list: %s" % str(failed_apps))
 
+    def wait_for_app(self, app = None, timeout = 5, sleep = 0.5):
+        """
+        Waits for an application to start. Checks periodically if
+        the app is running for a maximum wait set in timeout.
+        
+        Returns the pid of the application if it was running before
+        the timeout finished, otherwise None is returned.
+        """
+
+        pid = None
+        start = time.time()
+
+        while pid == None and time.time() < start + timeout:
+            pid = self.get_pid(app)
+            
+            if pid != None:
+                break
+
+            print "waiting %s secs for %s" % (sleep, app)
+
+            time.sleep(sleep)
+
+        return pid
+
     def test_003_zombie_state(self):
         """
         To test that no Zombie process exist after the application is killed
@@ -184,18 +214,22 @@ class launcher_tests (unittest.TestCase):
         #kill the application (pid = p.pid)
         #check if pgrep appname should be nothing
         #self.kill_process(LAUNCHER_BINARY)
+
         process_handle = self.run_app_with_launcher(PREFERED_APP)
-        process_id = self.get_pid(PREFERED_APP)
+        process_id = self.wait_for_app(PREFERED_APP, 5)
         print process_id
         self.kill_process(PREFERED_APP)
         time.sleep(4)
+
         process_handle = self.run_app_with_launcher(PREFERED_APP)
-        process_id1 = self.get_pid(PREFERED_APP)
+        process_id1 = self.wait_for_app(PREFERED_APP, 5)
         print process_id1
         self.kill_process(PREFERED_APP)
         time.sleep(4)
+
         process_id1 = self.get_pid(PREFERED_APP)
         print process_id1
+
         self.assert_(process_id != process_id1 , "New Process not launched")
         self.assert_(process_id1 == None , "Process still running")
     
@@ -242,23 +276,22 @@ class launcher_tests (unittest.TestCase):
         Test that the fala_ft_creds* applications have the correct
         credentials set (check aegis file included in the debian package)
         """
-        op1 = self.get_creds('/usr/bin/fala_ft_creds1')
-        op2 = self.get_creds('/usr/bin/fala_ft_creds2')
+        op1, pid1 = self.get_creds('/usr/bin/fala_ft_creds1')
+        op2, pid2 = self.get_creds('/usr/bin/fala_ft_creds2')
 
         debug("fala_ft_creds1 has %s" % ', '.join(op1))
         debug("fala_ft_creds2 has %s" % ', '.join(op2))
 
         # required common caps
         caps = ['UID::user', 'GID::users', 'SRC::com.nokia.maemo',
-                'applauncherd-functional-tests::applauncherd-functional-tests',
-                'AID::com.nokia.maemo.applauncherd-functional-tests.']
+                'applauncherd-testapps::applauncherd-testapps']
 
         # required caps for fala_ft_creds1
-        cap1 = ['tcb', 'drm', 'Telephony', 'CAP::setuid', 'CAP::setgid',
+        cap1 = ['Retrieving credentials for pid: %s' %pid1, 'tcb', 'drm', 'Telephony', 'CAP::setuid', 'CAP::setgid',
                 'CAP::setfcap'] + caps
 
         # required caps for fala_ft_creds2
-        cap2 = ['Cellular'] + caps
+        cap2 = ['Retrieving credentials for pid: %s' %pid2, 'Cellular'] + caps
 
         # check that all required creds are there
         for cap in cap1:
@@ -284,7 +317,7 @@ class launcher_tests (unittest.TestCase):
         get any funny credentials.
         """
 
-        creds = self.get_creds('/usr/bin/fala_ft_hello')
+        creds, pid = self.get_creds('/usr/bin/fala_ft_hello')
         debug("fala_ft_hello has %s" % ', '.join(creds))
 
         req_creds = ['UID::nobody', 'GID::nogroup']
@@ -301,26 +334,28 @@ class launcher_tests (unittest.TestCase):
         """
 
         INVOKER_BINARY='/usr/bin/invoker'
-        FAKE_INVOKER_BINARY='/usr/bin/invoker2'
+        FAKE_INVOKER_BINARY='/usr/bin/faulty_inv'
+        
+        #test application used for testing invoker
+        Testapp = '/usr/bin/fala_ft_hello.launch'
 
-        op1 = self.get_creds(INVOKER_BINARY)
-        debug("/usr/bin/invoker has %s" % ', '.join(op1))
-
-        # required custom caps
-        caps = ['applauncherd-launcher::access']
-
-        for cap in caps:
-            self.assert_(cap in op1, "%s not set for invoker" % cap)
-
-        st, op = commands.getstatusoutput("cp %s %s" % (INVOKER_BINARY, FAKE_INVOKER_BINARY))
-        self.assert_(st == 0, "can't make copy of invoker")
-
-        op2 = self.get_creds(FAKE_INVOKER_BINARY)
-        debug("fake invoker has %s" % ', '.join(op2))
-
-        for cap in caps:
-            self.assert_(not (cap in op2), "%s is set for fake invoker" % cap)
-
+        #launching the testapp with actual invoker
+        st = os.system('%s --type=m %s'%(INVOKER_BINARY, Testapp))
+        pid = self.get_pid(Testapp.replace('.launch', ''))
+        self.assert_((st == 0), "Application was not launched using launcher")
+        self.assert_(not (pid == None), "Application was not launched using launcher: actual pid%s" %pid)
+        print pid
+        #self.kill_process(Testapp.replace('.launch', ''))       
+        self.kill_process(apppid=pid)  
+        pid = self.get_pid(Testapp.replace('.launch', '')) 
+        self.assert_((pid == None), "Application still running")        
+        
+        #launching the testapp with fake invoker
+        st = os.system('%s --type=m %s'%(FAKE_INVOKER_BINARY, Testapp)) 
+        pid = self.get_pid(Testapp.replace('.launch', ''))
+        self.assert_(not (st == 0), "Application was launched using fake launcher")
+        self.assert_((pid == None), "Application was launched using fake launcher")
+        
     def test_009_launch_multiple_apps_cont(self):
         """
         To test that more than one applications are launched by the launcher 
@@ -340,6 +375,11 @@ class launcher_tests (unittest.TestCase):
 
 # main
 if __name__ == '__main__':
+    # When run with testrunner, for some reason the PATH doesn't include
+    # the tools/bin directory
+    if os.getenv('_SBOX_DIR') != None:
+        os.environ['PATH'] = os.getenv('PATH') + ":" + os.getenv('_SBOX_DIR') + '/tools/bin'
+
     check_prerequisites()
     start_launcher_daemon()
     tests = sys.argv[1:]

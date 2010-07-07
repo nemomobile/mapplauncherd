@@ -101,6 +101,12 @@ public:
      */
     virtual char boosterType() const = 0;
 
+    //! Set nice value and store the old priority. Return true on success.
+    bool pushPriority(int nice);
+
+    //! Restore the old priority stored by the previous successful setPriority().
+    bool popPriority();
+
 protected:
 
     /*!
@@ -125,7 +131,9 @@ private:
     void* loadMain();
     AppData m_app;
 
-    int  m_argvArraySize;
+    int m_argvArraySize;
+    int m_oldPriority;
+    bool m_oldPriorityOk;
 
 #ifdef UNIT_TEST
     friend class Ut_Booster;

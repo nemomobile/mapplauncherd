@@ -29,8 +29,8 @@ add_subdirectory(functests)
 # Sub build: art-tests 
 add_subdirectory(art-tests)
 
-# Sub build: Staging 
-add_subdirectory(Staging)
+# Sub build: bug-tests 
+add_subdirectory(bug-tests)
 
 # Sub build: TestScripts
 add_subdirectory(TestScripts)

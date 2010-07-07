@@ -53,11 +53,10 @@ void Ut_Daemon::testInitialArguments()
     QCOMPARE(m_subject->m_initialArgv[2], "--123");
 }
 
-
 void Ut_Daemon::testParseArgs()
 {
     int argc = 4;
-    char **argv    = new char * [argc];
+    char **argv = new char * [argc];
 
     argv[0] = strdup("app");
     argv[1] = strdup("--daemon");

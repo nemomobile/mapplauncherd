@@ -37,7 +37,10 @@
     #include <sys/creds.h>
 #endif
 
-Booster::Booster() : m_argvArraySize(0)
+Booster::Booster() :
+    m_argvArraySize(0),
+    m_oldPriority(0),
+    m_oldPriorityOk(false)
 {}
 
 Booster::~Booster()
@@ -188,4 +191,32 @@ void* Booster::loadMain()
         Logger::logErrorAndDie(EXIT_FAILURE, "loading symbol 'main': '%s'\n", error_s);
 
     return module;
+}
+
+bool Booster::pushPriority(int nice)
+{
+    errno = 0;
+    m_oldPriorityOk = true;
+    m_oldPriority   = getpriority(PRIO_PROCESS, getpid());
+
+    if (errno)
+    {
+        m_oldPriorityOk = false;
+    }
+    else
+    {
+        return setpriority(PRIO_PROCESS, getpid(), nice) != -1;
+    }
+
+    return false;
+}
+
+bool Booster::popPriority()
+{
+    if (m_oldPriorityOk)
+    {
+        return setpriority(PRIO_PROCESS, getpid(), m_oldPriority) != -1;
+    }
+
+    return false;
 }

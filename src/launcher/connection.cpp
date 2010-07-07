@@ -67,9 +67,7 @@ Connection::Connection(const string socketId) :
 }
 
 Connection::~Connection()
-{
-    closeConn();
-}
+{}
 
 int Connection::findSocket(const string socketId)
 {
@@ -496,4 +494,3 @@ bool Connection::receiveApplicationData(AppData & rApp)
 
     return true;
 }
-
