@@ -1,3 +1,9 @@
+applauncherd (3.0.3) stable; urgency=low
+
+  * Fixes: NB#300401 - Revert all changes back to 14-1 state
+
+ -- Kari Karvonen <ext-kari.k.karvonen@nokia.com>  Tue, 08 May 2012 15:50:58 +0200
+
 applauncherd (3.0.1) stable; urgency=low
 
   * Changes: Adds new test for applauncherd re-exec. Checking state of running application when it is updated.
